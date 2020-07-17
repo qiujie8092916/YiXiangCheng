@@ -1,0 +1,9 @@
+{
+  "name": "YiXiangCheng",
+  "version": "0.0.1",
+  "main": "app.js",
+  "repository": "git@github.com:qiujie8092916/YiXiangCheng.git",
+  "author": "qiujie <qiujieee_empty@outlook.com>",
+  "license": "MIT",
+  "private": false
+}
