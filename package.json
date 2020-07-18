@@ -6,7 +6,5 @@
   "author": "qiujie <qiujieee_empty@outlook.com>",
   "license": "MIT",
   "private": false,
-  "dependencies": {
-    "wx-server-sdk": "^2.1.2"
-  }
+  "dependencies": {}
 }
