@@ -1,0 +1,38 @@
+<!--miniprogram/pages/home/home.wxml-->
+<view class="header rowcc">
+    <view class="colct">
+        <view class="rowlt" style="margin-bottom: 25rpx;">
+            <image class="logo" src="/images/logo.png" mode="aspectFill" />
+            <view class="colct">
+                <view class="rowlb">
+                    <text class="name">享易程</text>
+                    <text class="eng">EY.Life</text>
+                </view>
+                <text class="desc">专注高端用车服务</text>
+            </view>
+        </view>
+        <text class="info">服务使用奔驰E系、宝马5系及同等级别车型</text>
+    </view>
+</view>
+<view class="biz-block rowcc">
+    <view class="rowsc">
+        <view class="collt fx-1">
+            <text class="biz-name">包车</text>
+            <text class="biz-desc">专属司机，随走随停</text>
+        </view>
+        <button class="btn" hover-class="act-btn">预订</button>
+    </view>
+</view>
+<view class="biz-block rowcc">
+    <view class="rowsc">
+        <view class="collt fx-1">
+            <text class="biz-name">通勤接送</text>
+            <text class="biz-desc">专属司机，随走随停</text>
+        </view>
+        <button class="btn" hover-class="act-btn">预订</button>
+    </view>
+</view>
+<view class="biz-block rowcc">
+    <text class="feat">陆续开通中。。。</text>
+</view>
+<image class="slogan" src="/images/slogan.png" />
