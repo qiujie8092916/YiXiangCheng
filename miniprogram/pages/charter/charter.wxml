@@ -10,4 +10,8 @@
       <text class="order">订单</text>
     </view>
   </view>
+
+  <view class="poi-time">
+    <button bindtap="choosePoi">地址</button>
+  </view>
 </view>
