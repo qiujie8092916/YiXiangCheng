@@ -1,16 +1,6 @@
 <!--miniprogram/pages/charter/charter.wxml-->
 <view class="content">
-  <view class="header flex-center">
-    <view class="logo-con rowlc">
-      <image class="logo" src="/images/logo.png" />
-      <view class="title">享易程</view>
-    </view>
-    <view>
-      <text class="iconfont wodedingdan"></text>
-      <text class="order">订单</text>
-    </view>
-  </view>
-
+  <logo-header />
   <view class="poi-time">
     <button bindtap="choosePoi">地址</button>
   </view>
