@@ -1,4 +1,6 @@
 /**app.wxss**/
+@import "./fonts/iconfont.wxss"
+
 /** init demo（后期可删）start */
 .container {
   display: flex;
@@ -399,6 +401,12 @@ page {
 .colcs {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-center {
+  display: flex;
   justify-content: space-between;
   align-items: center;
 }
