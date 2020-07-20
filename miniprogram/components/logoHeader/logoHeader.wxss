@@ -1,4 +1,6 @@
 /* components/logoHeader/logoHeader.wxss */
+@import "../../fonts/iconfont.wxss";
+
 .header {
   padding: 45rpx 56rpx 91rpx 71rpx;
 }
