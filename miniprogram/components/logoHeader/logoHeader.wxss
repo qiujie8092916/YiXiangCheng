@@ -1,0 +1,41 @@
+/* components/logoHeader/logoHeader.wxss */
+@import "../../fonts/iconfont.wxss";
+@import "../../app.wxss";
+
+.header {
+  padding: 45rpx 56rpx 91rpx 71rpx;
+}
+
+.logo-con {
+  width: 262rpx;
+}
+
+.title {
+  width: 120rpx;
+  height: 50rpx;
+  font-size: 36rpx;
+  font-weight: 500;
+  line-height: 49rpx;
+  text-align: center;
+  font-family: PingFangSC-Medium, PingFang SC;
+  color: rgba(73, 74, 76, 1);
+}
+
+.logo {
+  width: 103rpx;
+  height: 100rpx;
+}
+
+.order {
+  font-size: 22rpx;
+  padding-left: 8rpx;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(66, 66, 66, 1);
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

@@ -1,0 +1,11 @@
+<!--components/logoHeader/logoHeader.wxml-->
+<view class="header flex-between">
+  <view class="logo-con rowlc">
+    <image class="logo" src="/images/logo.png" />
+    <view class="title">享易程</view>
+  </view>
+  <view>
+    <text class="iconfont wodedingdan"></text>
+    <text class="order">订单</text>
+  </view>
+</view>

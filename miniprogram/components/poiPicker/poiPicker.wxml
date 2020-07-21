@@ -1,0 +1,5 @@
+<!--components/poiPicker/poiPicker.wxml-->
+<view class="poi flex-center">
+  <view class="iconfont dizhi"></view>
+  <view class="poi-con rowlc" bindtap="choosePoi">{{poi}}</view>
+</view>

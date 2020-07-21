@@ -1,0 +1,15 @@
+/* components/datePicker/datePicker.wxss */
+@import "../../fonts/iconfont.wxss";
+@import "../../app.wxss";
+
+.time {
+  width: 100%;
+}
+.time-con {
+  width: 529rpx;
+  margin-left: 34rpx;
+  font-size:27rpx;
+  font-family:Helvetica;
+  color:rgba(33,43,54,1);
+  background:rgba(255,255,255,1);
+}

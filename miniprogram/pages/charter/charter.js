@@ -1,14 +1,12 @@
 // miniprogram/pages/charter/charter.js
 // 包车下单页
-import { poiConfig } from "../../config";
-
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    startPoi: '您在哪里上车'
   },
 
   /**
@@ -65,15 +63,5 @@ Page({
    */
   onShareAppMessage: function () {
 
-  },
-
-  // 地图选点
-  choosePoi() {
-    const key = poiConfig.key;
-    const referer = poiConfig.referer;
-
-    wx.navigateTo({
-      url: `plugin://chooseLocation/index?key=${key}&referer=${referer}`
-    });
   }
 })
