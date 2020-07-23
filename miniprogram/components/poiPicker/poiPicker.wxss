@@ -7,15 +7,24 @@
   margin-bottom: 42rpx;
 }
 .poi-con {
-  width:505rpx;
-  height:65rpx;
+  width: 450rpx;
+  height: 65rpx;
   padding-left: 24rpx;
+  padding-right: 24rpx;
   margin-left: 34rpx;
-  font-size:27rpx;
-  font-family:Helvetica;
-  color:rgba(33,43,54,1);
-  background:rgba(255,255,255,1);
-  box-shadow:0rpx 2rpx 4rpx 0rpx rgba(102,113,123,0.21),0rpx 0rpx 0rpx 2rpx rgba(102,113,123,0.25);
-  border-radius:5rpx;
-  border:2rpx solid rgba(196,205,213,1);
+  font-size: 27rpx;
+  font-family: Helvetica;
+  color: rgba(33, 43, 54, 1);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0rpx 2rpx 0rpx 0rpx rgba(22, 29, 37, 0.05);
+  border-radius: 5rpx;
+  border: 2rpx solid rgba(196, 205, 213, 1);
+}
+
+.icon {
+  font-size: 40rpx;
+}
+
+.jiantou {
+  font-size: 22rpx;
 }

@@ -6,10 +6,33 @@
   width: 100%;
 }
 .time-con {
-  width: 529rpx;
+  width: 498rpx;
   margin-left: 34rpx;
-  font-size:27rpx;
-  font-family:Helvetica;
-  color:rgba(33,43,54,1);
-  background:rgba(255,255,255,1);
+  font-size: 27rpx;
+  font-family: Helvetica;
+  color: rgba(33, 43, 54, 1);
+  background: rgba(255, 255, 255, 1);
+}
+
+.picker {
+  width: 215rpx;
+  height: 65rpx;
+  padding-left: 24rpx;
+  padding-right: 24rpx;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(249, 250, 251, 1) 100%
+  );
+  box-shadow: 0rpx 2rpx 0rpx 0rpx rgba(22, 29, 37, 0.05);
+  border-radius: 5rpx;
+  border: 2rpx solid rgba(196, 205, 213, 1);
+}
+
+.jiantou {
+  font-size: 22rpx;
+}
+
+.jiantou {
+  font-size: 22rpx;
 }
