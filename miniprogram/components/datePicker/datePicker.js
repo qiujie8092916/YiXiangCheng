@@ -67,8 +67,8 @@ Component({
           Object.keys(this.properties.dateEnd).length === 0
             ? dateFormat(nextMonth(), "YMD")
             : dateFormat(this.properties.dateEnd, "YMD"),
-        curDefaultTime: dateFormat(this.properties.timeStart, "HM"),
-        curStartTime: dateFormat(this.properties.timeStart, "HM"),
+        curDefaultTime: dateFormat(this.properties.timeStart, "Hm"),
+        curStartTime: dateFormat(this.properties.timeStart, "Hm"),
       });
     },
   },

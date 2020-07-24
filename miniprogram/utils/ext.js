@@ -10,8 +10,8 @@ export const dateFormat = function (date = new Date(), type) {
     case "YMD":
       return moment(date).format("YYYY-MM-DD");
       break;
-    case "HM":
-      return moment(date).format("HH:MM");
+    case "Hm":
+      return moment(date).format("HH:mm");
       break;
     default:
       return moment(date);
