@@ -2,3 +2,7 @@
 .content {
   background: #fff;
 }
+
+.poi-time {
+  padding-bottom: 30rpx;
+}

@@ -5,8 +5,13 @@
 .time {
   width: 100%;
 }
+
+.icon {
+  font-size: 40rpx;
+}
+
 .time-con {
-  width: 498rpx;
+  width: 500rpx;
   margin-left: 34rpx;
   font-size: 27rpx;
   font-family: Helvetica;
@@ -15,7 +20,7 @@
 }
 
 .picker {
-  width: 215rpx;
+  width: 190rpx;
   height: 65rpx;
   padding-left: 24rpx;
   padding-right: 24rpx;
@@ -27,6 +32,10 @@
   box-shadow: 0rpx 2rpx 0rpx 0rpx rgba(22, 29, 37, 0.05);
   border-radius: 5rpx;
   border: 2rpx solid rgba(196, 205, 213, 1);
+}
+
+.time-picker {
+  margin-left: 20rpx;
 }
 
 .jiantou {

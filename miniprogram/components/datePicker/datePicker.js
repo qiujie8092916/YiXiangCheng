@@ -14,15 +14,26 @@ Component({
       type: Object,
       value: {}, // 默认取当前时间的一个月后
     },
+    timeStart: {
+      type: Object,
+      value: new Date(),
+    },
+    timeEnd: {
+      type: Object,
+      value: {},
+    },
   },
 
   /**
    * 组件的初始数据
    */
   data: {
-    curDefaultDate: "", // 格式化当前选择时间
-    curStartDate: "", // 格式化开始时间
-    curEndDate: "", // 格式化结束时间
+    curDefaultDate: "", // 格式化当前选择日期
+    curDefaultTime: "", // 格式换开始时间
+    curStartDate: "", // 格式化开始日期
+    curEndDate: "", // 格式化结束日期
+    curStartTime: "", // 格式化开始时间
+    curEndTime: "", // 格式化结束时间
   },
 
   // 生命周期函数，可以为函数，或一个在methods段中定义的方法名
@@ -41,6 +52,12 @@ Component({
       });
       this.triggerEvent("changeDate", e.detail.value);
     },
+    bindTimeChange(e) {
+      this.setData({
+        curDefaultTime: e.detail.value,
+      });
+      this.triggerEvent("changeTime", e.detail.value);
+    },
     formatDateAndTime() {
       this.setData({
         curDefaultDate: dateFormat(this.properties.dateStart, "MD"),
@@ -49,6 +66,8 @@ Component({
           Object.keys(this.properties.dateEnd).length === 0
             ? dateFormat(nextMonth(), "YMD")
             : dateFormat(this.properties.dateEnd, "YMD"),
+        curDefaultTime: dateFormat(this.properties.timeStart, "HM"),
+        curStartTime: dateFormat(this.properties.timeStart, "HM"),
       });
     },
   },

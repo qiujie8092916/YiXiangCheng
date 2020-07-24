@@ -1,19 +1,17 @@
 const moment = require("./moment");
 
-moment.locale("zh-cn", {
-  longDateFormat: {
-    L: "MMM Do",
-    LT: "YYYY-MM-DD",
-  },
-});
+moment.locale("zh-cn");
 
 export const dateFormat = function (date = new Date(), type) {
   switch (type) {
     case "MD":
-      return moment(date).format("L");
+      return moment(date).format("MMM Do");
       break;
     case "YMD":
-      return moment(date).format("LT");
+      return moment(date).format("YYYY-MM-DD");
+      break;
+    case "HM":
+      return moment(date).format("HH:MM");
       break;
     default:
       return moment(date);

@@ -14,5 +14,17 @@
         <view class="iconfont shangxiajiantou- jiantou"></view>
       </view>
     </picker>
+    <picker
+      mode="time"
+      value="{{curStartTime}}"
+      start="{{curStartTime}}"
+      end="{{curEndTime}}"
+      bindchange="bindTimeChange"
+    >
+      <view class="picker flex-between time-picker">
+        <view>{{curDefaultTime}}</view>
+        <view class="iconfont shangxiajiantou- jiantou"></view>
+      </view>
+    </picker>
   </view>
 </view>
