@@ -5,7 +5,7 @@
     <view class="title">享易程</view>
   </view>
   <view>
-    <text class="iconfont wodedingdan"></text>
+    <text class="iconfont wodedingdan order-icon"></text>
     <text class="order">订单</text>
   </view>
 </view>

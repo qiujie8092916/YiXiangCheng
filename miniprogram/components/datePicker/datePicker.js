@@ -51,6 +51,7 @@ Component({
         curDefaultDate: dateFormat(e.detail.value, "MD"),
       });
       this.triggerEvent("changeDate", e.detail.value);
+      // todo 日期改变需解除时间限制
     },
     bindTimeChange(e) {
       this.setData({

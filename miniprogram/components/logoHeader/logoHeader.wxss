@@ -10,6 +10,10 @@
   width: 262rpx;
 }
 
+.order-icon {
+  font-size: 36rpx;
+}
+
 .title {
   width: 120rpx;
   height: 50rpx;
@@ -27,7 +31,7 @@
 }
 
 .order {
-  font-size: 22rpx;
+  font-size: 28rpx;
   padding-left: 8rpx;
   font-family: PingFangSC-Medium, PingFang SC;
   font-weight: 500;
