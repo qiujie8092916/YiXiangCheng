@@ -4,7 +4,7 @@
     <image class="logo" src="/images/logo.png" />
     <view class="title">享易程</view>
   </view>
-  <view>
+  <view class="flex-center">
     <text class="iconfont wodedingdan order-icon"></text>
     <text class="order">订单</text>
   </view>

@@ -2,7 +2,7 @@
 <view class="poi flex-center">
   <view class="iconfont dizhi icon"></view>
   <view class="poi-con flex-between" bindtap="choosePoi">
-    <view>{{poi}}</view>
+    <view class="poi-name">{{poi}}</view>
     <view class="iconfont shangxiajiantou- jiantou"></view>
   </view>
 </view>
