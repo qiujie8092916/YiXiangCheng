@@ -19,7 +19,7 @@
       <text class="biz-name">包车</text>
       <text class="biz-desc">专属司机，随走随停</text>
     </view>
-    <button class="btn" hover-class="act-btn">预订</button>
+    <view class="btn flex-center" hover-class="act-btn">预订</view>
   </view>
 </view>
 <view class="biz-block rowcc">
@@ -28,7 +28,7 @@
       <text class="biz-name">通勤接送</text>
       <text class="biz-desc">专属司机，随走随停</text>
     </view>
-    <button class="btn" hover-class="act-btn">预订</button>
+    <view class="btn flex-center" hover-class="act-btn">预订</view>
   </view>
 </view>
 <view class="biz-block rowcc">
