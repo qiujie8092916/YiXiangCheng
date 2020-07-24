@@ -19,3 +19,7 @@ export const dateFormat = function (date = new Date(), type) {
       return moment(date);
   }
 };
+
+export const nextMonth = function () {
+  return moment().add(1, "month").format();
+};

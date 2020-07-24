@@ -4,12 +4,13 @@
   <view class="time-con rowlc">
     <picker
       mode="date"
-      value="{{dateStart}}"
-      start="{{dateStart}}"
+      value="{{curStartDate}}"
+      start="{{curStartDate}}"
+      end="{{curEndDate}}"
       bindchange="bindDateChange"
     >
       <view class="picker flex-between">
-        <view>{{dateDefault}}</view>
+        <view>{{curDefaultDate}}</view>
         <view class="iconfont shangxiajiantou- jiantou"></view>
       </view>
     </picker>
