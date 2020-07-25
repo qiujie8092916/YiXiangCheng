@@ -14,7 +14,9 @@
     "pages/im/im",
     "pages/im/room/room",
     "pages/home/home",
-    "pages/charter/charter"
+    "pages/charter/charter",
+    "pages/commute/commute",
+    "pages/orderList/orderList"
   ],
   "window": {
     "backgroundColor": "#F2F2F7",
@@ -29,6 +31,10 @@
     "chooseLocation": {
       "version": "1.0.4",
       "provider": "wx76a9a06e5b4e693e"
+    },
+    "routePlan": {
+      "version": "1.0.6",
+      "provider": "wx50b5593e81dd937a"
     }
   },
   "permission": {
