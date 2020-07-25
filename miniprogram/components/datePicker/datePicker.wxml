@@ -16,13 +16,13 @@
     </picker>
     <picker
       mode="time"
-      value="{{curStartTime}}"
+      value="{{timeDefaultValue}}"
       start="{{curStartTime}}"
       end="{{curEndTime}}"
       bindchange="bindTimeChange"
     >
       <view class="picker flex-between time-picker">
-        <view>{{curDefaultTime}}</view>
+        <view>{{curShowTime}}</view>
         <view class="iconfont shangxiajiantou- jiantou"></view>
       </view>
     </picker>

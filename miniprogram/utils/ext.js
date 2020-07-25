@@ -21,3 +21,15 @@ export const dateFormat = function (date = new Date(), type) {
 export const nextMonth = function () {
   return moment().add(1, "month").format();
 };
+
+export const isSameDay = function (date) {
+  return moment().isSame(date, "day");
+};
+
+export const isBefore = function (date) {
+  return moment(date).isBefore();
+};
+
+export const isAfter = function (date) {
+  return moment(date).isAfter();
+};
