@@ -3,7 +3,8 @@
 @import "../../app.wxss";
 
 .header {
-  padding: 45rpx 56rpx 91rpx 71rpx;
+  background-color: #ffffff;
+  padding: 45rpx 60rpx 45rpx 60rpx;
 }
 
 .logo-con {
@@ -11,7 +12,7 @@
 }
 
 .order-icon {
-  font-size: 36rpx;
+  font-size: 40rpx;
 }
 
 .title {
@@ -31,7 +32,7 @@
 }
 
 .order {
-  font-size: 28rpx;
+  font-size: 22rpx;
   padding-left: 8rpx;
   font-family: PingFangSC-Medium, PingFang SC;
   font-weight: 500;
@@ -42,4 +43,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.order-count {
+  top: 0;
+  right: 0;
+  color: #ffffff;
+  font-size: 22rpx;
+  padding: 0 12rpx;
+  line-height: 30rpx;
+  border-radius: 14rpx;
+  background: rgba(63, 141, 233, 1);
+  transform: translate(50%, -50%);
 }

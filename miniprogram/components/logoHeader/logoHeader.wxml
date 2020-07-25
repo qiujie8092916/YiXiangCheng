@@ -4,8 +4,10 @@
     <image class="logo" src="/images/logo.png" />
     <view class="title">享易程</view>
   </view>
-  <view class="flex-center">
+  <view class="rlt rowlb" hover-class="act-btn" catchtap="goOrderList">
     <text class="iconfont wodedingdan order-icon"></text>
     <text class="order">订单</text>
+    <view class="order-count abs" hidden="{{!orderCount}}">{{orderCount}}</view>
+    <!--    <view class="order-count abs">{{orderCount}}</view>-->
   </view>
 </view>
