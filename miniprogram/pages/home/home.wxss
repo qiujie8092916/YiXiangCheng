@@ -6,6 +6,7 @@ page {
 }
 
 .header {
+  width: 100vw;
   height: 260rpx;
   background: #ffffff;
   margin-bottom: 40rpx;

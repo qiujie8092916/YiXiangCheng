@@ -197,7 +197,6 @@ page {
 }
 
 .rowlt {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -205,7 +204,6 @@ page {
 }
 
 .rowlc {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -213,7 +211,6 @@ page {
 }
 
 .rowlb {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -221,7 +218,6 @@ page {
 }
 
 .rowls {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -229,7 +225,6 @@ page {
 }
 
 .rowrt {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -237,7 +232,6 @@ page {
 }
 
 .rowrc {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -245,7 +239,6 @@ page {
 }
 
 .rowrb {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -253,7 +246,6 @@ page {
 }
 
 .rowrs {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -261,7 +253,6 @@ page {
 }
 
 .rowct {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -269,7 +260,6 @@ page {
 }
 
 .rowcc {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -277,7 +267,6 @@ page {
 }
 
 .rowcb {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -285,7 +274,6 @@ page {
 }
 
 .rowcs {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -293,7 +281,6 @@ page {
 }
 
 .rowst {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -301,7 +288,6 @@ page {
 }
 
 .rowsc {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -309,7 +295,6 @@ page {
 }
 
 .rowsb {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -317,7 +302,6 @@ page {
 }
 
 .rowss {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -418,6 +402,15 @@ page {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/** 定位 */
+.rlt {
+  position: relative;
+}
+
+.abs {
+  position: absolute;
 }
 
 /** 全局常用样式 end */

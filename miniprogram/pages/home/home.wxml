@@ -14,21 +14,33 @@
   </view>
 </view>
 <view class="biz-block rowcc">
-  <view class="rowsc">
-    <view class="collt fx-1">
+  <view class="rowsc fx-1">
+    <view class="collc fx-1">
       <text class="biz-name">包车</text>
       <text class="biz-desc">专属司机，随走随停</text>
     </view>
-    <view class="btn flex-center" hover-class="act-btn">预订</view>
+    <view
+      class="btn flex-center"
+      hover-class="act-btn"
+      data-biz="charter"
+      catchtap="goBizBooking"
+      >预订</view
+    >
   </view>
 </view>
 <view class="biz-block rowcc">
-  <view class="rowsc">
-    <view class="collt fx-1">
+  <view class="rowsc fx-1">
+    <view class="collc fx-1">
       <text class="biz-name">通勤接送</text>
       <text class="biz-desc">专属司机，随走随停</text>
     </view>
-    <view class="btn flex-center" hover-class="act-btn">预订</view>
+    <view
+      class="btn flex-center"
+      hover-class="act-btn"
+      data-biz="commute"
+      catchtap="goBizBooking"
+      >预订</view
+    >
   </view>
 </view>
 <view class="biz-block rowcc">

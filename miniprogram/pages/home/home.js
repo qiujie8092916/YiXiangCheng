@@ -44,4 +44,16 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {},
+
+  goBizBooking({ currentTarget }) {
+    const { biz } = currentTarget.dataset;
+    switch (biz) {
+      case "charter":
+        //包车
+        return wx.navigateTo({ url: "/pages/charter/charter" });
+      case "commute":
+        //通勤
+        return wx.navigateTo({ url: "/pages/commute/commute" });
+    }
+  },
 });

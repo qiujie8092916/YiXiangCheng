@@ -2,7 +2,7 @@
 <view class="content">
   <logo-header />
   <view class="poi-time">
-    <poi-picker />
+    <poi-picker bindchoosePoi="choosePoi" />
     <date-picker />
   </view>
 </view>
