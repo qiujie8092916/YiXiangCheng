@@ -10,7 +10,7 @@
       bindchange="bindDateChange"
     >
       <view class="picker flex-between">
-        <view>{{curDefaultDate}}</view>
+        <view>{{curShowDate}}</view>
         <view class="iconfont shangxiajiantou- jiantou"></view>
       </view>
     </picker>

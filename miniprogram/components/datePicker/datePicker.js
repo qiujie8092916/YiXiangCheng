@@ -35,7 +35,7 @@ Component({
    * 组件的初始数据
    */
   data: {
-    curDefaultDate: "", // 格式化当前选择日期
+    curShowDate: "", // 格式化当前选择日期
     curShowTime: "", // 格式换开始时间
     curStartDate: "", // 格式化开始日期
     curEndDate: "", // 格式化结束日期
@@ -56,7 +56,7 @@ Component({
   methods: {
     bindDateChange(e) {
       this.setData({
-        curDefaultDate: dateFormat(e.detail.value, "MD"),
+        curShowDate: dateFormat(e.detail.value, "MD"),
       });
       this.triggerEvent("changeDate", e.detail.value);
       if (isSameDay(e.detail.value)) {
@@ -91,7 +91,7 @@ Component({
     },
     formatDateAndTime() {
       this.setData({
-        curDefaultDate: dateFormat(this.properties.dateStart, "MD"),
+        curShowDate: dateFormat(this.properties.dateStart, "MD"),
         curStartDate: dateFormat(this.properties.dateStart, "YMD"),
         curEndDate:
           Object.keys(this.properties.dateEnd).length === 0
