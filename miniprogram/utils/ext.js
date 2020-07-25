@@ -33,3 +33,7 @@ export const isBefore = function (date) {
 export const isAfter = function (date) {
   return moment(date).isAfter();
 };
+
+export const joinTime = function (time) {
+  return moment().format("YYYY-MM-DD") + " " + time;
+};

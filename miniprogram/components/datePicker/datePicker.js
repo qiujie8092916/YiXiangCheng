@@ -5,6 +5,7 @@ import {
   isSameDay,
   isBefore,
   isAfter,
+  joinTime,
 } from "../../utils/ext";
 
 Component({
@@ -60,12 +61,25 @@ Component({
       this.triggerEvent("changeDate", e.detail.value);
       if (isSameDay(e.detail.value)) {
         // 已选时间在当前时间之前则重置显示时间/时间默认值/开始时间到当前最新时间
-        // todo
+        if (isBefore(joinTime(this.data.curShowTime))) {
+          this.setData({
+            curShowTime: dateFormat(new Date(), "Hm"),
+            timeDefaultValue: dateFormat(new Date(), "Hm"),
+            curStartTime: dateFormat(new Date(), "Hm"),
+          });
+        }
         // 已选时间在当前时间之后则显示时间/时间默认值不动/开始时间到当前最新时间
-        // todo
+        if (isAfter(joinTime(this.data.curShowTime))) {
+          this.setData({
+            curStartTime: dateFormat(new Date(), "Hm"),
+          });
+        }
       } else {
-        // 显示时间不动 开始时间为全时间段 时间默认值为已选时间
-        // todo
+        // 显示时间不动/开始时间为全时间段/时间默认值为已选时间
+        this.setData({
+          curStartTime: "",
+          timeDefaultValue: this.data.timeDefaultValue,
+        });
       }
     },
     bindTimeChange(e) {
