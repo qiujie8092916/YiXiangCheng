@@ -5,7 +5,17 @@ Page({
    * 页面的初始数据
    */
   data: {
-    startPoi: "您在哪里上车",
+    duration: [
+      {
+        key: "four",
+        value: "4小时",
+      },
+      {
+        key: "eight",
+        value: "8小时",
+      },
+    ],
+    activeDuration: "four",
   },
 
   /**
@@ -50,5 +60,11 @@ Page({
 
   choosePoi({ detail }) {
     console.log(detail);
+  },
+
+  changeDuration(duration) {
+    this.setData({
+      activeDuration: duration.currentTarget.dataset.duration,
+    });
   },
 });

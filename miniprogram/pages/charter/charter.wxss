@@ -1,8 +1,46 @@
 /* miniprogram/pages/charter/charter.wxss */
+page {
+  height: 100%;
+}
+
 .content {
   background: #fff;
+  height: 100%;
 }
 
 .poi-time {
-  padding-bottom: 30rpx;
+  padding-bottom: 35rpx;
+  margin-top: 60rpx;
+}
+
+.duration-con {
+  padding-left: 185rpx;
+  padding-right: 138rpx;
+}
+
+.duration-it {
+  width: 190rpx;
+  height: 80rpx;
+  border-radius: 7rpx;
+  border: 2rpx solid rgba(214, 214, 214, 1);
+}
+
+.duration-it:first-child {
+  margin-right: 47rpx;
+}
+
+.duration-active {
+  width: 190rpx;
+  height: 80rpx;
+  position: relative;
+  color: #3f8de9;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 7rpx;
+  border: 2rpx solid rgba(63, 141, 233, 1);
+}
+
+.duration-selected {
+  position: absolute;
+  right: -1rpx;
+  bottom: -2rpx;
 }

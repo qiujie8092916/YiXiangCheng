@@ -5,4 +5,18 @@
     <poi-picker bindchoosePoi="choosePoi" />
     <date-picker />
   </view>
+  <view class="duration flex-center">
+    <view class="duration-con flex-between">
+      <view
+        wx:for="{{duration}}"
+        wx:key="key"
+        class="duration-it flex-center {{activeDuration === item.key ? 'duration-active' : ''}}"
+        data-duration="{{item.key}}"
+        bindtap="changeDuration"
+      >
+        <text>{{item.value}}</text>
+        <view class="iconfont youxiajiaogouxuan duration-selected"></view>
+      </view>
+    </view>
+  </view>
 </view>
