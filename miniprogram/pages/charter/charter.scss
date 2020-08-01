@@ -1,6 +1,6 @@
-@charset "UTF-8";
 /* miniprogram/pages/charter/charter.wxss */
-/*! 主题蓝 */
+@import '../../style/preset.scss';
+
 page {
   height: 100%;
 }
@@ -24,7 +24,7 @@ page {
   width: 190rpx;
   height: 80rpx;
   border-radius: 7rpx;
-  border: 2rpx solid #d6d6d6;
+  border: 2rpx solid rgba(214, 214, 214, 1);
 }
 
 .duration-it:first-child {
@@ -35,10 +35,10 @@ page {
   width: 190rpx;
   height: 80rpx;
   position: relative;
-  color: #3184c7;
-  background: white;
+  color: $blue;
+  background: rgba(255, 255, 255, 1);
   border-radius: 7rpx;
-  border: 2rpx solid #3184c7;
+  border: 2rpx solid $blue;
 }
 
 .duration-selected {

@@ -1,6 +1,6 @@
-@charset "UTF-8";
 /* miniprogram/pages/home/home.wxss */
-/*! 主题蓝 */
+@import '../../style/preset.scss';
+
 page {
   align-items: center;
   font-family: PingFangSC-Medium, PingFang SC;
@@ -24,7 +24,7 @@ page {
   font-weight: 500;
   line-height: 87rpx;
   margin-right: 10rpx;
-  color: #494a4c;
+  color: rgba(73, 74, 76, 1);
 }
 
 .eng {
@@ -32,21 +32,21 @@ page {
   font-size: 43rpx;
   font-weight: 500;
   line-height: 60rpx;
-  color: #494a4c;
+  color: rgba(73, 74, 76, 1);
 }
 
 .desc {
   font-size: 25rpx;
   font-weight: 500;
   line-height: 36rpx;
-  color: #494a4c;
+  color: rgba(73, 74, 76, 1);
 }
 
 .info {
   font-size: 22rpx;
   font-weight: 500;
   line-height: 31rpx;
-  color: #797b7f;
+  color: rgba(121, 123, 127, 1);
 }
 
 .biz-block {
@@ -60,7 +60,7 @@ page {
 }
 
 .biz-name {
-  color: #3184c7;
+  color: $blue;
   font-size: 51rpx;
   font-weight: 500;
   line-height: 72rpx;
@@ -70,7 +70,7 @@ page {
   font-size: 33rpx;
   font-weight: 500;
   line-height: 45rpx;
-  color: #676767;
+  color: rgba(103, 103, 103, 1);
 }
 
 .btn {
@@ -79,14 +79,14 @@ page {
   font-size: 30rpx;
   font-weight: 500;
   border-radius: 6rpx;
-  background-color: #3184c7;
-  color: white;
+  background-color: $blue;
+  color: rgba(255, 255, 255, 1);
 }
 
 .feat {
   font-size: 29rpx;
   font-weight: 500;
-  color: #848282;
+  color: rgba(132, 130, 130, 1);
 }
 
 .slogan {
