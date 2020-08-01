@@ -8,7 +8,19 @@ Page({
   /**
    * 页面的初始数据
    */
-  data: {},
+  data: {
+    current: "goHome",
+    tabs: [
+      {
+        key: "goHome",
+        title: "享回家",
+      },
+      {
+        key: "goWork",
+        title: "享上班",
+      },
+    ],
+  },
 
   /**
    * 生命周期函数--监听页面加载
@@ -58,4 +70,10 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {},
+
+  onTabsChange(e) {
+    this.setData({
+      current: e.detail.key,
+    });
+  },
 });

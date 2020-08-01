@@ -1,0 +1,27 @@
+/* miniprogram/pages/commute/commute.wxss */
+@import '../../style/preset.scss';
+
+page {
+  background-color: #ffffff !important;
+}
+
+.tab-item{
+  color: #637381 !important;
+}
+
+.tab-item.wux-tabs__tab--current {
+  color: #212B36 !important;
+}
+
+.tab-item .wux-tabs__tab-bar {
+  height: 8rpx !important;
+  background: $blue !important;
+}
+
+.tab-cotainer {
+  width: 590rpx !important;
+  margin: 40rpx 80rpx 40rpx;
+  border-bottom: 1px solid #DFE3E8;
+}
+
+
