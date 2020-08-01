@@ -5,7 +5,7 @@
       <image class="logo" src="/images/logo.png" mode="aspectFill" />
       <view class="colct">
         <view class="rowlb">
-          <text class="name">享易程</text><text class="eng">EY.Life</text>
+          <text class="name">小享兽</text><text class="eng">EY.Life</text>
         </view>
         <text class="desc">专注高端用车服务</text>
       </view>

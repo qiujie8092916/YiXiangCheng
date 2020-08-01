@@ -2,7 +2,7 @@
 <view class="header flex-between">
   <view class="logo-con rowlc">
     <image class="logo" src="/images/logo.png" />
-    <view class="title">享易程</view>
+    <view class="title">小享兽</view>
   </view>
   <view class="rlt rowlb" hover-class="act-btn" catchtap="goOrderList">
     <text class="iconfont wodedingdan order-icon"></text>
