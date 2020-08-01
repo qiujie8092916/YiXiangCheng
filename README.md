@@ -10,11 +10,11 @@
 
 - [云开发文档](https://developers.weixin.qq.com/miniprogram/dev/wxcloud/basis/getting-started.html)
 
-#### ChangeLog - 2020.07.30
+## ChangeLog - 2020.07.30
 - LOGO更换：独角兽🦄 + 指纹
 - 主题蓝：R:49 G:129 B:199 (#3184C7)
 
-#### ChangeLog - 2020.07.28
+## ChangeLog - 2020.07.28
 - 设计风格：突出“享受”
 - 中文名: 小享兽
 - 英文名: EY.Life
