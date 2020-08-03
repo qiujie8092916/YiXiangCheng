@@ -19,4 +19,11 @@
       </view>
     </view>
   </view>
+  <view class="price colcc">
+    <view class="price-detail">一口价：￥320元</view>
+    <view class="price-desc">车型：奔驰E系列 乘坐人数：4人</view>
+  </view>
+  <view class="pay flex-center">
+    <view class="pay-btn">去支付</view>
+  </view>
 </view>

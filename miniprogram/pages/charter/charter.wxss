@@ -46,3 +46,29 @@ page {
   right: -1rpx;
   bottom: -2rpx;
 }
+
+.price {
+  margin-top: 286rpx;
+  margin-bottom: 91rpx;
+}
+
+.price-detail {
+  font-size: 40rpx;
+  color: #3184c7;
+}
+
+.price-desc {
+  font-size: 28rpx;
+  color: #3184c7;
+}
+
+.pay-btn {
+  width: 609rpx;
+  height: 101rpx;
+  font-size: 33rpx;
+  border-radius: 5rpx;
+  text-align: center;
+  line-height: 101rpx;
+  background: #3184c7;
+  color: #fff;
+}
