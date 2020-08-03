@@ -1,5 +1,7 @@
 {
   "usingComponents": {
-    "logo-header": "/components/logoHeader/logoHeader"
+    "logo-header": "/components/logoHeader/logoHeader",
+    "poi-picker": "../../components/poiPicker/poiPicker",
+    "date-picker": "../../components/datePicker/datePicker"
   }
 }
