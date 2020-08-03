@@ -13,7 +13,15 @@
           {{item.title}}
         </view>
     </view>
-    <view class="tab-content" wx:if="{{current === 'goHome'}}">goHome</view>
-    <view class="tab-content" wx:elif="{{current === 'goWork'}}">goWork</view>
   </view>
+    <view class="tab-content" wx:if="{{current === 'goHome'}}">
+        <poi-picker icon="dalou" />
+        <poi-picker icon="chakantiezidingwei" bindchoosePoi="choosePoi" />
+        <date-picker />
+    </view>
+    <view class="tab-content" wx:elif="{{current === 'goWork'}}">
+        <poi-picker icon="chakantiezidingwei" bindchoosePoi="choosePoi" />
+        <poi-picker icon="dalou" />
+        <date-picker />
+    </view>
 </view>

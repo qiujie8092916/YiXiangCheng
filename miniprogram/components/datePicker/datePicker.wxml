@@ -1,6 +1,6 @@
 <!--components/datePicker/datePicker.wxml-->
 <view class="time flex-center">
-  <view class="iconfont shijian icon"></view>
+  <view class="iconfont shijian00 icon"></view>
   <view class="time-con rowlc">
     <picker
       mode="date"

@@ -6,7 +6,16 @@ Component({
   /**
    * 组件的属性列表
    */
-  properties: {},
+  properties: {
+    icon: {
+      type: String,
+      default: 'chakantiezidingwei',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    }
+  },
 
   /**
    * 组件的初始数据

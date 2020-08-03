@@ -71,6 +71,10 @@ Page({
    */
   onShareAppMessage: function () {},
 
+  choosePoi({ detail }) {
+    console.log(detail);
+  },
+
   onTabsChange({ currentTarget }) {
     this.setData({
       current: currentTarget.dataset.key,
