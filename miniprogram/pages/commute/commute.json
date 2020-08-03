@@ -1,7 +1,5 @@
 {
   "usingComponents": {
-    "logo-header": "/components/logoHeader/logoHeader",
-    "wux-tab": "/miniprogram_npm/wux-weapp/tab/index",
-    "wux-tabs": "/miniprogram_npm/wux-weapp/tabs/index"
+    "logo-header": "/components/logoHeader/logoHeader"
   }
 }

@@ -5,22 +5,38 @@ page {
   background-color: #ffffff !important;
 }
 
-.tab-item{
-  color: #637381 !important;
+.container {
+  width: 750rpx;
+  padding: 0 80rpx;
 }
 
-.tab-item.wux-tabs__tab--current {
-  color: #212B36 !important;
+.tab-item {
+  color: #637381;
+  padding: 30rpx 0;
+  position: relative;
 }
 
-.tab-item .wux-tabs__tab-bar {
-  height: 8rpx !important;
-  background: $blue !important;
+.tab-item.current {
+  color: #212B36;
+}
+
+.tab-item.current::after {
+  left: 0;
+  bottom: 0;
+  content: '';
+  width: 100%;
+  height: 8rpx;
+  display: block;
+  background: $blue;
+  position: absolute;
 }
 
 .tab-cotainer {
-  width: 590rpx !important;
-  margin: 40rpx 80rpx 40rpx;
+  display: flex;
+  width: 590rpx;
+  align-items: center;
+  margin: 40rpx 0rpx 40rpx;
+  justify-content: space-around;
   border-bottom: 1px solid #DFE3E8;
 }
 

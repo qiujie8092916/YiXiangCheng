@@ -5,21 +5,37 @@ page {
   background-color: #ffffff !important;
 }
 
+.container {
+  width: 750rpx;
+  padding: 0 80rpx;
+}
+
 .tab-item {
-  color: #637381 !important;
+  color: #637381;
+  padding: 30rpx 0;
+  position: relative;
 }
 
-.tab-item.wux-tabs__tab--current {
-  color: #212b36 !important;
+.tab-item.current {
+  color: #212B36;
 }
 
-.tab-item .wux-tabs__tab-bar {
-  height: 8rpx !important;
-  background: #3184c7 !important;
+.tab-item.current::after {
+  left: 0;
+  bottom: 0;
+  content: '';
+  width: 100%;
+  height: 8rpx;
+  display: block;
+  background: #3184C7;
+  position: absolute;
 }
 
 .tab-cotainer {
-  width: 590rpx !important;
-  margin: 40rpx 80rpx 40rpx;
-  border-bottom: 1px solid #dfe3e8;
+  display: flex;
+  width: 590rpx;
+  align-items: center;
+  margin: 40rpx 0rpx 40rpx;
+  justify-content: space-around;
+  border-bottom: 1px solid #DFE3E8;
 }

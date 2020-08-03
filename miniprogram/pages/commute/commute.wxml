@@ -1,21 +1,19 @@
 <!--miniprogram/pages/commute/commute.wxml-->
 <view>
   <logo-header />
-  <wux-tabs
-    wux-class="tab-cotainer"
-    controlled
-    current="{{ current }}"
-    bindchange="onTabsChange"
-  >
-    <block wx:for="{{ tabs }}" wx:key="key">
-      <wux-tab
-        wux-class="tab-item"
-        key="{{ item.key }}"
-        title="{{ item.title }}"
-      >
-      </wux-tab>
-    </block>
-  </wux-tabs>
-  <view class="tab-content" wx:if="{{current === 'goHome'}}">goHome</view>
-  <view class="tab-content" wx:elif="{{current === 'goWork'}}">goWork</view>
+  <view class="container">
+    <view class="tab-cotainer">
+        <view
+          wx:for="{{ tabs }}"
+          wx:key="key"
+          data-key="{{item.key}}"
+          catchtap="onTabsChange"
+          class="{{['tab-item', current === item.key ? 'current' : '']}}"
+        >
+          {{item.title}}
+        </view>
+    </view>
+    <view class="tab-content" wx:if="{{current === 'goHome'}}">goHome</view>
+    <view class="tab-content" wx:elif="{{current === 'goWork'}}">goWork</view>
+  </view>
 </view>

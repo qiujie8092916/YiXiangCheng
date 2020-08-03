@@ -71,9 +71,9 @@ Page({
    */
   onShareAppMessage: function () {},
 
-  onTabsChange(e) {
+  onTabsChange({ currentTarget }) {
     this.setData({
-      current: e.detail.key,
+      current: currentTarget.dataset.key,
     });
   },
 });

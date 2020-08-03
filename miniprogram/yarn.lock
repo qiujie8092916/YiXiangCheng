@@ -2,6 +2,3 @@
 # yarn lockfile v1
 
 
-wux-weapp@^3.8.6:
-  version "3.8.6"
-  resolved "https://registry.npmjs.org/wux-weapp/-/wux-weapp-3.8.6.tgz#d12f0764cf21193465859877b4712b3054c4ef1b"
