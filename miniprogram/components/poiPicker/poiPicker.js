@@ -9,12 +9,12 @@ Component({
   properties: {
     icon: {
       type: String,
-      default: 'chakantiezidingwei',
+      default: "chakantiezidingwei",
     },
     disabled: {
       type: Boolean,
       default: false,
-    }
+    },
   },
 
   /**
@@ -28,7 +28,9 @@ Component({
     // 生命周期函数，可以为函数，或一个在methods段中定义的方法名
     attached: function () {},
     moved: function () {},
-    detached: function () {},
+    detached: function () {
+      chooseLocation.setLocation(null);
+    },
   },
 
   // 生命周期函数，可以为函数，或一个在methods段中定义的方法名
