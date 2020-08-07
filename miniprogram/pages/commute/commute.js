@@ -34,6 +34,8 @@ Page({
         console.log(res);
       },
     });
+
+    this.init();
   },
 
   /**
@@ -70,6 +72,16 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {},
+
+  init() {
+    wx.cloud.callFunction({
+      name: "getAllCompanyAddress",
+      data: {},
+      success: (res) => {
+        console.log(res.result);
+      },
+    });
+  },
 
   choosePoi({ detail }) {
     console.log(detail);
