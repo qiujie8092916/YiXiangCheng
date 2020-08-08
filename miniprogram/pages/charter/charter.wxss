@@ -23,6 +23,7 @@ page {
 .duration-it {
   width: 190rpx;
   height: 80rpx;
+  position: relative;
   border-radius: 7rpx;
   border: 2rpx solid #d6d6d6;
 }
