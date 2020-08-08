@@ -3,25 +3,25 @@
   <logo-header />
   <view class="container">
     <view class="tab-cotainer">
-        <view
-          wx:for="{{ tabs }}"
-          wx:key="key"
-          data-key="{{item.key}}"
-          catchtap="onTabsChange"
-          class="{{['tab-item', current === item.key ? 'current' : '']}}"
-        >
-          {{item.title}}
-        </view>
+      <view
+        wx:for="{{ tabs }}"
+        wx:key="key"
+        data-key="{{item.key}}"
+        catchtap="onTabsChange"
+        class="{{['tab-item', current === item.key ? 'current' : '']}}"
+      >
+        {{item.title}}
+      </view>
     </view>
   </view>
-    <view class="tab-content" wx:if="{{current === 'goHome'}}">
-        <poi-picker icon="dalou" />
-        <poi-picker icon="chakantiezidingwei" bindchoosePoi="choosePoi" />
-        <date-picker />
-    </view>
-    <view class="tab-content" wx:elif="{{current === 'goWork'}}">
-        <poi-picker icon="chakantiezidingwei" bindchoosePoi="choosePoi" />
-        <poi-picker icon="dalou" />
-        <date-picker />
-    </view>
+  <view class="tab-content" wx:if="{{current === 'goHome'}}">
+    <poi-picker icon="dalou" />
+    <poi-picker icon="chakantiezidingwei" bindchoosePoi="choosePoi" />
+    <date-picker />
+  </view>
+  <view class="tab-content" wx:elif="{{current === 'goWork'}}">
+    <poi-picker icon="chakantiezidingwei" bindchoosePoi="choosePoi" />
+    <poi-picker icon="dalou" />
+    <date-picker />
+  </view>
 </view>
