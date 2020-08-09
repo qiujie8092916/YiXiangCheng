@@ -91,15 +91,7 @@ Page({
    */
   onShareAppMessage: function () {},
 
-  init() {
-    wx.cloud.callFunction({
-      name: "getAddress",
-      data: {},
-      success: (res) => {
-        console.log(res.result);
-      },
-    });
-  },
+  init() {},
 
   choosePoi({ detail }) {
     console.log(detail);
