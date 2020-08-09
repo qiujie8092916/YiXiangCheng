@@ -17,7 +17,8 @@
     "pages/charter/charter",
     "pages/commute/commute",
     "pages/orderList/orderList",
-    "pages/orderDetail/orderDetail"
+    "pages/orderDetail/orderDetail",
+    "pages/register/register"
   ],
   "window": {
     "backgroundColor": "#F2F2F7",
