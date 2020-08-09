@@ -1,0 +1,68 @@
+/* components/orderItem/orderItem.wxss */
+@import "../../fonts/iconfont.wxss";
+@import "../../app.wxss";
+
+.order-item {
+  width: 707rpx;
+  height: 304rpx;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 11rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.order-header {
+  width: calc(100% - 76rpx);
+  height: 96rpx;
+  font-size: 33rpx;
+  padding: 0 38rpx;
+}
+
+.cancel-item {
+  color: rgba(176, 176, 176, 1);
+}
+
+.pay-item .order-desc,
+.order-money {
+  color: #3184c7;
+}
+
+.done-item .order-desc {
+  color: #000;
+}
+
+.done-item .order-money {
+  color: #3184c7;
+}
+
+.cancel-item .order-money {
+  color: rgba(176, 176, 176, 1);
+}
+
+.order-border {
+  width: 676rpx;
+  height: 2rpx;
+  background: rgba(221, 221, 221, 1);
+}
+
+.order-detail {
+  width: calc(100% - 76rpx);
+  padding: 25rpx 38rpx;
+}
+
+.order-line {
+  height: 109rpx;
+  font-size: 36rpx;
+  font-weight: 400;
+  padding-bottom: 25rpx;
+}
+
+.order-bottom {
+  color: rgba(136, 136, 136, 1);
+  font-size: 25rpx;
+}
+
+.split-tag {
+  padding: 0 10rpx;
+}

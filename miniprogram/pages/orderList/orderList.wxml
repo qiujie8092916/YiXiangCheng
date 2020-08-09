@@ -1,2 +1,4 @@
 <!--miniprogram/pages/orderList/orderList.wxml-->
-<text>miniprogram/pages/orderList/orderList.wxml</text>
+<view class="order-list">
+  <order-item></order-item>
+</view>

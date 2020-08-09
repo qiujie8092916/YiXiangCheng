@@ -1,0 +1,26 @@
+<!--components/orderItem/orderItem.wxml-->
+<view
+  class="order-item {{status === 2 ? 'cancel-item' : status === 1 ? 'done-item' : 'pay-item'}}"
+>
+  <view class="order-header flex-between">
+    <view class="order-desc">{{orderStatusMap[status]}}</view>
+    <view class="order-money">¥{{money}}</view>
+  </view>
+  <view class="order-border"></view>
+  <view class="order-detail">
+    <view wx:if="{{type === 'charter'}}" class="order-line">
+      <text>{{charterdepart}}</text>
+      <text class="split-tag">-</text>
+      <text>{{chartertime}}小时</text>
+    </view>
+    <view wx:else>
+      <text>{{commutedepart}}</text>
+      <text class="split-tag">-></text>
+      <text>{{commutedestination}}</text>
+    </view>
+    <view class="order-bottom flex-between">
+      <view class="order-time">06-27 08:00</view>
+      <view class="order-type">{{travelType[type]}}</view>
+    </view>
+  </view>
+</view>

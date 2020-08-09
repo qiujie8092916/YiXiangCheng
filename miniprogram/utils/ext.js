@@ -1,4 +1,4 @@
-const moment = require("./moment");
+const moment = require("../vendor/moment");
 
 moment.locale("zh-cn");
 

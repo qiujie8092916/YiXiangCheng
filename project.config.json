@@ -71,8 +71,8 @@
 					"scene": null
 				},
 				{
-					"id": -1,
-					"name": "charter",
+					"id": 2,
+					"name": "包车",
 					"pathName": "pages/charter/charter",
 					"query": "",
 					"scene": null
@@ -81,6 +81,14 @@
 					"id": -1,
 					"name": "通勤",
 					"pathName": "pages/commute/commute",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "订单列表",
+					"pathName": "pages/orderList/orderList",
+					"query": "",
 					"scene": null
 				}
 			]
