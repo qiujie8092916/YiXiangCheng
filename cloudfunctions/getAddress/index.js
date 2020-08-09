@@ -5,13 +5,13 @@
  *
  * ```
  * interface AddressStructure {
- *     name: string,  //地址名称
- *     address: sring,  //详细地址
- *     coordinate: array, //经纬度
- *     province: string, //省份
- *     city: string,  //城市
- *     district: string,  //地区
- *     area?: string,  //园区
+ *     name: string,  // 地址名称
+ *     address: sring,  // 详细地址
+ *     coordinate: array, // 经纬度
+ *     province: string, // 省份
+ *     city: string,  // 城市
+ *     district: string,  // 地区
+ *     area?: string,  // 园区
  * }
  * ```
  */
