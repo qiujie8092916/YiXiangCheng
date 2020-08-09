@@ -93,7 +93,7 @@ Page({
 
   init() {
     wx.cloud.callFunction({
-      name: "getAllCompanyAddress",
+      name: "getAddress",
       data: {},
       success: (res) => {
         console.log(res.result);
