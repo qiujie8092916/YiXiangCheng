@@ -1,0 +1,48 @@
+<!--miniprogram/pages/orderDetail/orderDetail.wxml-->
+<view class="order-detail">
+  <view class="order-header flex-between">
+    <view class="order-status">已接单</view>
+    <view class="order-custom flex-center">
+      <text class="iconfont tubiao- customer"></text>
+      <text>客服</text>
+    </view>
+  </view>
+  <view class="order-desc">
+    <view class="desc-item">
+      <view class="desc-one">总额：</view>
+      <view class="desc-two">¥230元</view>
+    </view>
+    <view class="desc-item">
+      <view class="desc-one">联系人：</view>
+      <view class="desc-two">
+        <text class="concact">唐师傅</text>
+        <text class="concact">18356032765</text>
+        <text class="iconfont dianhua phone"></text>
+      </view>
+    </view>
+    <view class="desc-item">
+      <view class="desc-one">服务类型：</view>
+      <view class="desc-two">从公司接</view>
+    </view>
+    <view class="desc-item">
+      <view class="desc-one">目的地：</view>
+      <view class="desc-two">科大讯分语音产业基地</view>
+    </view>
+    <view class="desc-item">
+      <view class="desc-one">时间：</view>
+      <view class="desc-two">11月11日 13：30</view>
+    </view>
+    <view class="desc-item">
+      <view class="desc-one">车型：</view>
+      <view class="desc-two">宝马5系</view>
+    </view>
+    <view class="desc-item">
+      <view class="desc-one">套餐：</view>
+      <view class="desc-two">8小时</view>
+    </view>
+  </view>
+  <view class="order-control flex-between">
+    <view class="order-more flex-center">再来一单</view>
+    <view class="order-cancel">我要取消</view>
+  </view>
+</view>

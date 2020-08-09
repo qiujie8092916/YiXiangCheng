@@ -1,5 +1,6 @@
 <!--components/orderItem/orderItem.wxml-->
 <view
+  bindtap="chooseCurOrder"
   class="order-item {{status === 2 ? 'cancel-item' : status === 1 ? 'done-item' : 'pay-item'}}"
 >
   <view class="order-header flex-between">

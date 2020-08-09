@@ -5,6 +5,7 @@
 .order-item {
   width: 707rpx;
   height: 304rpx;
+  margin: 30rpx 25rpx;
   background: rgba(255, 255, 255, 1);
   border-radius: 11rpx;
   display: flex;
