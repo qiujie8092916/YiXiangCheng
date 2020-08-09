@@ -40,4 +40,37 @@ page {
   border-bottom: 1px solid #DFE3E8;
 }
 
+.type {
+  margin: 35rpx 150rpx 45rpx;
+  display: grid;
+  grid-template: 1 2;
+}
+
+.type-it {
+  width: 190rpx;
+  height: 80rpx;
+  border-radius: 7rpx;
+  border: 2rpx solid rgba(214, 214, 214, 1);
+}
+
+.type-it:first-child {
+  margin-right: 47rpx;
+}
+
+.type-active {
+  width: 190rpx;
+  height: 80rpx;
+  position: relative;
+  color: $blue;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 7rpx;
+  border: 2rpx solid $blue;
+}
+
+.type-selected {
+  position: absolute;
+  right: -1rpx;
+  bottom: -2rpx;
+}
+
 

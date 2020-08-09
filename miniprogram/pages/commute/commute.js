@@ -10,6 +10,11 @@ Page({
    */
   data: {
     current: "goHome",
+    companyAddress: {
+      area: "凌空SOHO",
+      name: "Sky Bridge HQ天会",
+      address: "上海市长宁区金钟路968号",
+    },
     tabs: [
       {
         key: "goHome",
@@ -20,20 +25,33 @@ Page({
         title: "享上班",
       },
     ],
+    type: [
+      {
+        key: "sharing",
+        value: "拼车",
+      },
+      {
+        key: "individual",
+        value: "独享",
+      },
+    ],
+    activeType: "sharing",
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    qqmapsdk.direction({
+    /* qqmapsdk.direction({
       mode: "driving",
       from: "31.265786,121.434803",
       to: "31.221023,121.354423",
       success: (res) => {
         console.log(res);
       },
-    });
+    });*/
+
+    //TODO 更新skecth表结构
 
     this.init();
   },
@@ -90,6 +108,12 @@ Page({
   onTabsChange({ currentTarget }) {
     this.setData({
       current: currentTarget.dataset.key,
+    });
+  },
+
+  changeType({ currentTarget }) {
+    this.setData({
+      activeType: currentTarget.dataset.type,
     });
   },
 });

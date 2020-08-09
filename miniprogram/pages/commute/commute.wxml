@@ -1,5 +1,6 @@
 <!--miniprogram/pages/commute/commute.wxml-->
 <view>
+  <!-- logo -->
   <logo-header />
   <view class="container">
     <view class="tab-cotainer">
@@ -14,14 +15,35 @@
       </view>
     </view>
   </view>
+
+  <!-- 标签 -->
   <view class="tab-content" wx:if="{{current === 'goHome'}}">
-    <poi-picker icon="dalou" />
+    <company-address disabled address="{{companyAddress}}" />
     <poi-picker icon="chakantiezidingwei" bindchoosePoi="choosePoi" />
     <date-picker />
   </view>
   <view class="tab-content" wx:elif="{{current === 'goWork'}}">
     <poi-picker icon="chakantiezidingwei" bindchoosePoi="choosePoi" />
-    <poi-picker icon="dalou" />
+    <company-address disabled address="{{companyAddress}}" />
     <date-picker />
+  </view>
+
+  <!-- 拼车 独享 -->
+  <view class="type">
+    <view class="type-con flex-between">
+      <view
+        wx:for="{{type}}"
+        wx:key="key"
+        class="type-it flex-center {{activeType === item.key ? 'type-active' : ''}}"
+        data-type="{{item.key}}"
+        catchtap="changeType"
+      >
+        <text>{{item.value}}</text>
+        <view
+          wx:if="{{activeType === item.key}}"
+          class="iconfont youxiajiaogouxuan type-selected"
+        />
+      </view>
+    </view>
   </view>
 </view>

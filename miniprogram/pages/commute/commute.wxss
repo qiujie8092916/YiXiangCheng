@@ -17,17 +17,17 @@ page {
 }
 
 .tab-item.current {
-  color: #212B36;
+  color: #212b36;
 }
 
 .tab-item.current::after {
   left: 0;
   bottom: 0;
-  content: '';
+  content: "";
   width: 100%;
   height: 8rpx;
   display: block;
-  background: #3184C7;
+  background: #3184c7;
   position: absolute;
 }
 
@@ -37,5 +37,37 @@ page {
   align-items: center;
   margin: 40rpx 0rpx 40rpx;
   justify-content: space-around;
-  border-bottom: 1px solid #DFE3E8;
+  border-bottom: 1px solid #dfe3e8;
+}
+
+.type-con {
+  padding-left: 185rpx;
+  padding-right: 138rpx;
+}
+
+.type-it {
+  width: 190rpx;
+  height: 80rpx;
+  border-radius: 7rpx;
+  border: 2rpx solid #d6d6d6;
+}
+
+.type-it:first-child {
+  margin-right: 47rpx;
+}
+
+.type-active {
+  width: 190rpx;
+  height: 80rpx;
+  position: relative;
+  color: #3184c7;
+  background: white;
+  border-radius: 7rpx;
+  border: 2rpx solid #3184c7;
+}
+
+.type-selected {
+  position: absolute;
+  right: -1rpx;
+  bottom: -2rpx;
 }
