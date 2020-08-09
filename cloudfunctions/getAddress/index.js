@@ -1,20 +1,25 @@
 /**
+ * ```
+ * interface AddrInfo {
+ *     name: string,  // 地址名称
+ *     address: sring,  // 详细地址
+ *     coordinate: array, // 经纬度
+ *     province: string, // 省份
+ *     city: string,  // 城市
+ *     district: string,  // 地区
+ *     area?: string,  // 园区
+ * }
+ *
+ * interface AddressStructure {
+ *     addrInfo: AddrInfo; // 地址基本信息
+ *     isCompany: boolean; // 是否是公司地址
+ *     isPick: boolean; // 是否是指定上下车地址
+ * }
+ * ```
+ *
  * @params {-1|0|1} isCompany 是否是公司地址 -1-无论是否是公司 0-不是公司 1-是公司
  * @params {-1|0|1} isPick 是否是上下车地址 -1-无论是否是上下车地址 0-不是上下车地址 1-是上下车地址
  * @returns {promise<AddressStructure>}
- *
- * ```
- * interface AddressStructure {
- *
- *     name: string,  //地址名称
- *     address: sring,  //详细地址
- *     coordinate: array, //经纬度
- *     province: string, //省份
- *     city: string,  //城市
- *     district: string,  //地区
- *     area?: string,  //园区
- * }
- * ```
  */
 // 云函数入口文件
 const cloud = require("wx-server-sdk");
@@ -81,27 +86,33 @@ const generateSql = (request = {}) => {
     .collection("address")
     .aggregate()
     .addFields({
-      area: "$area",
-      city: "$city",
-      name: "$name",
-      address: "$address",
-      province: "$province",
-      district: "$district",
+      id: "$_id",
+      isPick: "$is_pick",
+      isCompany: "$is_company",
       coordinates: "$coordinate.coordinates",
     })
     .addFields({
       addrInfo: {
+        area: "$area",
+        city: "$city",
+        name: "$name",
+        address: "$address",
+        province: "$province",
+        district: "$district",
         coordinates: "$coordinates",
       },
     })
     .match(queryFilter)
     .project({
+      _id: 0,
       area: 0,
       city: 0,
       name: 0,
+      is_pick: 0,
       address: 0,
       province: 0,
       district: 0,
+      is_company: 0,
       coordinate: 0,
       coordinates: 0,
       create_time: 0,
