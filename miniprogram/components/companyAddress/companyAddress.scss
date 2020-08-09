@@ -1,0 +1,51 @@
+/* components/companyAddress/companyAddress.wxss */
+@import "../../fonts/iconfont.wxss";
+@import "../../app.wxss";
+
+.address {
+  width: 100%;
+  margin-bottom: 42rpx;
+}
+.address-con {
+  width: 450rpx;
+  height: 65rpx;
+  padding-left: 24rpx;
+  padding-right: 24rpx;
+  margin-left: 34rpx;
+  font-size: 27rpx;
+  font-family: Helvetica;
+  color: rgba(33, 43, 54, 1);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0rpx 2rpx 0rpx 0rpx rgba(22, 29, 37, 0.05);
+  border-radius: 5rpx;
+  border: 2rpx solid rgba(214, 214, 214, 1);
+
+  &.disabld {
+    border: none;
+    box-shadow: none;
+  }
+}
+
+.icon {
+  font-size: 40rpx;
+}
+
+.jiantou {
+  font-size: 22rpx;
+}
+
+.address-name {
+  font-size:28rpx;
+  font-weight:500;
+  line-height:40rpx;
+  color:rgba(69,78,86,1);
+  font-family:PingFangSC-Medium,PingFang SC;
+}
+
+.address-desc {
+  font-size:20rpx;
+  font-weight:500;
+  line-height:25rpx;
+  color:rgba(69,78,86,1);
+  font-family:PingFangSC-Medium,PingFang SC;
+}

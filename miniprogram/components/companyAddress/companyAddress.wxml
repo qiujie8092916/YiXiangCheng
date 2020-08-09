@@ -1,0 +1,19 @@
+<!--components/companyAddress/companyAddress.wxml-->
+<view class="address flex-center">
+  <view class="{{['iconfont', 'icon', 'dalou']}}"></view>
+  <block wx:if="{{!disabled}}">
+    <view class="address-con flex-between">
+      <view class="address-name">{{address.name}}</view>
+      <view class="iconfont shangxiajiantou- jiantou"></view>
+    </view>
+  </block>
+  <block wx:else>
+    <view class="address-con collt disabld">
+      <view class="address-name overflow-ellipsis"
+        ><block wx:if="{{address.area}}">{{address.area}} | </block>{{
+        address.name}}</view
+      >
+      <view class="address-desc overflow-ellipsis">{{address.address}}</view>
+    </view>
+  </block>
+</view>
