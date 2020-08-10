@@ -13,15 +13,20 @@ button:focus {
   outline: 0;
 }
 
-button::after {
-  border: none;
-}
+/*button::after {*/
+/*  content: none;*/
+/*  border: none;*/
+/*}*/
 
 page {
   height: 100%;
   background-color: #f2f2f7;
   color: rgba(34, 34, 34, 1);
   font-family: PingFangSC-Regular, PingFang SC;
+}
+
+.full {
+  width: 100%;
 }
 
 /* 单行文本溢出省略 */
