@@ -1,2 +1,73 @@
 <!--miniprogram/pages/register/register.wxml-->
-<text>miniprogram/pages/register/register.wxml</text>
+<!-- logo -->
+<logo-header is-show-order="{{false}}" />
+<view class="collt" style="margin-top: 30rpx;">
+  <!--    <view class="title rowcc full">用户注册</view>-->
+
+  <view class="block collt full">
+    <view class="label">手机号</view>
+    <view class="rowst full">
+      <input
+        class="input disabled fx-1 rowlc"
+        placeholder-class="placeholder"
+        value="{{ phone }}"
+        placeholder="请授权手机号"
+        disabled
+      />
+      <button
+        class="authorization-btn rowcc"
+        hover-class="act-btn"
+        open-type="getPhoneNumber"
+      >
+        授权
+      </button>
+    </view>
+  </view>
+  <view class="block collt full">
+    <view class="label">姓名</view>
+    <input
+      class="input fx-1 rowlc"
+      placeholder-class="placeholder"
+      value="{{ name }}"
+      placeholder="请输入姓名"
+      bindinput="handlerName"
+    />
+  </view>
+  <view class="block collt full">
+    <view class="label">选择公司</view>
+    <picker
+      mode="multiSelector"
+      range="{{company_array}}"
+      bindchange="submitCompay"
+      bindcolumnchange="changeCompany"
+    >
+      <view class="poi-con flex-between">
+        <view wx:if="{{selected_company}}"
+          >{{ company_address[company_index[0]].area }} | {{
+          company_address[company_index[0]].address[company_index[1]].name
+          }}</view
+        >
+        <view wx:else class="placeholder">请选择公司</view>
+        <view class="iconfont shangxiajiantou- jiantou"></view>
+      </view>
+    </picker>
+  </view>
+
+  <!-- 上传工作证明 -->
+  <image
+    class="upload-image"
+    src="{{employment_certificate || '/images/code-cloud-callback-config.png'}}"
+    catchtap="chooseImg"
+  />
+
+  <!-- 免责声明 -->
+  <view class="block rowlc">
+    <checkbox-group class="checkbox-group" bindchange="checkboxChange">
+      <checkbox class="checkbox" checked="{{ !!is_protocol }}" />
+    </checkbox-group>
+    <view class="protocol-desc">免责申明</view>
+  </view>
+
+  <!-- 提交 -->
+  <button class="submit rowcc">确认无误，提交</button>
+</view>
