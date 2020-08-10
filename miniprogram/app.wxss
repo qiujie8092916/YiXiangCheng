@@ -18,12 +18,9 @@ button::after {
 }
 
 page {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
+  height: 100%;
   background-color: #f2f2f7;
   color: rgba(34, 34, 34, 1);
-  justify-content: flex-start;
   font-family: PingFangSC-Regular, PingFang SC;
 }
 

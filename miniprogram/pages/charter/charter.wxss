@@ -73,3 +73,43 @@ page {
   background: #3184c7;
   color: #fff;
 }
+
+.register-info {
+  margin-top: 45rpx;
+}
+
+.user-name {
+  margin-bottom: 30rpx;
+  font-size:27rpx;
+  font-family:Helvetica;
+  color:rgba(33,43,54,1);
+}
+
+.user-phone {
+  font-size:27rpx;
+  font-family:Helvetica;
+  color:rgba(33,43,54,1);
+}
+
+.input-con {
+  padding-left: 20rpx;
+}
+
+.phone-input, .name-input {
+  width: 450rpx;
+  height: 65rpx;
+  padding-left: 24rpx;
+  padding-right: 24rpx;
+  margin-left: 34rpx;
+  font-size: 27rpx;
+  font-family: Helvetica;
+  color: rgba(33, 43, 54, 1);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0rpx 2rpx 0rpx 0rpx rgba(22, 29, 37, 0.05);
+  border-radius: 5rpx;
+  border: 2rpx solid rgba(214, 214, 214, 1);
+}
+
+.icon {
+  font-size: 40rpx;
+}

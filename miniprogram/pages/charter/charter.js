@@ -25,6 +25,7 @@ Page({
     }, // money map
     activeDuration: "four", // 套餐时长
     charterMoney: 0, // 当前时间
+    icon:  "chakantiezidingwei",
   },
 
   /**

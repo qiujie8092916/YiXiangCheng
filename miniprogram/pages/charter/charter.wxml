@@ -22,6 +22,21 @@
       </view>
     </view>
   </view>
+  <!-- <view class="register-info">
+    <view class="user-name flex-center">
+      <view class="{{['iconfont', 'icon', icon]}}"></view>
+      <view class="input-con">
+        <input class="name-input" maxlength="10" placeholder="请输入乘车人姓名" />
+      </view>
+    </view>
+    <view class="user-phone flex-center">
+      <view class="{{['iconfont', 'icon', icon]}}"></view>
+      <view class="input-con">
+        <input class="phone-input" maxlength="10" placeholder="请输入乘车人手机号" />
+      </view>
+      <view>授权</view>
+    </view>
+  </view> -->
   <view class="price colcc">
     <view class="price-detail">一口价：￥{{charterMoney}}元</view>
     <view class="price-desc">车型：奔驰E系列 乘坐人数：4人</view>
