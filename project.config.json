@@ -25,8 +25,9 @@
 			"outputPath": ""
 		},
 		"useIsolateContext": true,
-		"useCompilerModule": true,
-		"userConfirmedUseCompilerModuleSwitch": false
+		"useCompilerModule": false,
+		"userConfirmedUseCompilerModuleSwitch": false,
+		"bundle": false
 	},
 	"appid": "wx94d678914b78155d",
 	"projectname": "YiXiangCheng",

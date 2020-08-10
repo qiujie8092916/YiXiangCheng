@@ -1,0 +1,12 @@
+{
+  "name": "YiXiangCheng",
+  "version": "0.0.1",
+  "main": "app.js",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mobx-miniprogram": "^4.13.2",
+    "mobx-miniprogram-bindings": "^1.2.1"
+  }
+}
