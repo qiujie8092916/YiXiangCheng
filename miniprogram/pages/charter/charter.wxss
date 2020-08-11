@@ -48,6 +48,51 @@ page {
   bottom: -2rpx;
 }
 
+.register-info {
+  margin-top: 45rpx;
+  padding-left: 162rpx;
+  padding-right: 95rpx;
+}
+
+.label {
+  font-size: 27rpx;
+  line-height: 36rpx;
+  margin-bottom: 8rpx;
+  font-family: Helvetica;
+  color: #212b36;
+}
+
+.input {
+  font-size: 27rpx;
+  height: 65rpx;
+  border-radius: 5rpx;
+  padding-left: 20rpx;
+  background: #ffffff;
+  border: 2rpx solid #d6d6d6;
+}
+
+.input.disabled {
+  background: #f8f8f8;
+}
+
+.authorization-btn {
+  height: 66rpx;
+  min-width: 0rpx;
+  font-size: 27rpx;
+  font-weight: 500;
+  background: #3184c7;
+  border-radius: 5rpx;
+  width: 180rpx !important;
+  color: white;
+  min-height: 66rpx !important;
+  margin-left: 20rpx !important;
+  font-family: PingFangSC-Medium, PingFang SC;
+}
+
+.marginbot {
+  margin-bottom: 20rpx;
+}
+
 .price {
   margin-top: 286rpx;
   margin-bottom: 91rpx;
@@ -63,6 +108,10 @@ page {
   color: #3184c7;
 }
 
+.pay {
+  padding-bottom: 50rpx;
+}
+
 .pay-btn {
   width: 609rpx;
   height: 101rpx;
@@ -72,44 +121,4 @@ page {
   line-height: 101rpx;
   background: #3184c7;
   color: #fff;
-}
-
-.register-info {
-  margin-top: 45rpx;
-}
-
-.user-name {
-  margin-bottom: 30rpx;
-  font-size:27rpx;
-  font-family:Helvetica;
-  color:rgba(33,43,54,1);
-}
-
-.user-phone {
-  font-size:27rpx;
-  font-family:Helvetica;
-  color:rgba(33,43,54,1);
-}
-
-.input-con {
-  padding-left: 20rpx;
-}
-
-.phone-input, .name-input {
-  width: 450rpx;
-  height: 65rpx;
-  padding-left: 24rpx;
-  padding-right: 24rpx;
-  margin-left: 34rpx;
-  font-size: 27rpx;
-  font-family: Helvetica;
-  color: rgba(33, 43, 54, 1);
-  background: rgba(255, 255, 255, 1);
-  box-shadow: 0rpx 2rpx 0rpx 0rpx rgba(22, 29, 37, 0.05);
-  border-radius: 5rpx;
-  border: 2rpx solid rgba(214, 214, 214, 1);
-}
-
-.icon {
-  font-size: 40rpx;
 }

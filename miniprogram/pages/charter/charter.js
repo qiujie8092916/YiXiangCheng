@@ -1,7 +1,6 @@
 // miniprogram/pages/charter/charter.js
 // 包车下单页
-import { createStoreBindings } from "mobx-miniprogram-bindings";
-import { userStore as store } from "../../store/index";
+import Storage from "../../utils/storage";
 
 Page({
   /**
@@ -25,7 +24,6 @@ Page({
     }, // money map
     activeDuration: "four", // 套餐时长
     charterMoney: 0, // 当前时间
-    icon:  "chakantiezidingwei",
   },
 
   /**
@@ -53,9 +51,7 @@ Page({
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
-    this.storeBindings.destroyStoreBindings();
-  },
+  onUnload: function () {},
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
@@ -83,10 +79,10 @@ Page({
    * 改变套餐
    */
   changeDuration(duration) {
-    console.log(this.data.userInfo.nickName, "userInfo");
+    let _duration =  duration.currentTarget.dataset.duration
     this.setData({
-      activeDuration: duration.currentTarget.dataset.duration,
-      charterMoney: this.data.moneyMap[duration.currentTarget.dataset.duration],
+      activeDuration: _duration,
+      charterMoney: this.data.moneyMap[_duration],
     });
   },
 
@@ -94,20 +90,23 @@ Page({
    * 获取用户信息
    */
   getCloudUserInfo() {
-    const userInfo = this.data.userInfo;
-    if (userInfo && userInfo.phoneNumber) {
+    const userInfo = Storage.getStorage("userInfo");
+    if (userInfo && userInfo.user_phone) {
       // 已经注册过无需再授权
+      console.log(userInfo);
     } else {
       wx.cloud
         .callFunction({
-          name: "openapi",
+          name: "userControl",
           data: {
             action: "getUserInfo",
           },
         })
         .then((res) => {
-          console.log("res: ", res);
-          this.updateUserInfo(res);
+          res &&
+            res.result &&
+            res.result.data &&
+            Storage.setStorage("userInfo", res.result.data[0]);
         });
     }
   },
@@ -115,28 +114,30 @@ Page({
   /**
    * 去支付
    */
-  gotoPayforOrder(e) {
-    console.log(JSON.stringify(e));
+  gotoPayforOrder() {},
+
+  /**
+   * 获取手机号并注册
+   */
+  getPhoneNumber(e) {
     wx.cloud
-      .callFunction({
-        name: "openapi",
-        data: {
-          action: "getCellphone",
-          id: e.detail.cloudID,
-        },
-      })
-      .then((res) => {
-        console.log("res: ", res);
-      });
-  },
-  // 初始化操作
-  init() {
-    // 初始化store
-    this.storeBindings = createStoreBindings(this, {
-      store,
-      fields: ["userInfo"],
-      actions: ["updateUserInfo"],
+    .callFunction({
+      name: "userCommon",
+      data: {
+        action: "getCellphone",
+        id: e.detail.cloudID,
+      },
+    })
+    .then((res) => {
+      console.log("res: ", res);
+      // todo 注册
     });
+  },
+
+  /**
+   * 初始化
+   */
+  init() {
     // 获取注册信息
     this.getCloudUserInfo();
     // 初始化套餐价格

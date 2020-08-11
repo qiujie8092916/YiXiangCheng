@@ -3,6 +3,8 @@ const cloud = require("wx-server-sdk");
 
 cloud.init();
 
+const db = cloud.database();
+
 // 云函数入口函数
 exports.main = async (event, context) => {
   console.log(event);
@@ -15,15 +17,6 @@ exports.main = async (event, context) => {
     }
     case "getWXACode": {
       return getWXACode(event);
-    }
-    case "getOpenData": {
-      return getOpenData(event);
-    }
-    case "getCellphone": {
-      return getCellphone(event);
-    }
-    case "getUserInfo": {
-      return getUserInfo(event);
     }
     default: {
       return;
@@ -82,23 +75,4 @@ async function getWXACode(event) {
   }
 
   return uploadResult.fileID;
-}
-
-async function getOpenData(event) {
-  return cloud.getOpenData({
-    list: event.openData.list,
-  });
-}
-
-// 获取手机号
-async function getCellphone(event) {
-  const res = await cloud.getOpenData({
-    list: [event.id],
-  });
-  return { res, event };
-}
-
-// 查询是否已注册
-async function getUserInfo(event) {
-  const { OPENID } = cloud.getWXContext();
 }
