@@ -24,6 +24,8 @@ Page({
     }, // money map
     activeDuration: "four", // 套餐时长
     charterMoney: 0, // 当前时间
+    phone: "", // 手机号
+    name: "", // 姓名
   },
 
   /**
@@ -79,7 +81,7 @@ Page({
    * 改变套餐
    */
   changeDuration(duration) {
-    let _duration =  duration.currentTarget.dataset.duration
+    let _duration = duration.currentTarget.dataset.duration;
     this.setData({
       activeDuration: _duration,
       charterMoney: this.data.moneyMap[_duration],
@@ -93,7 +95,10 @@ Page({
     const userInfo = Storage.getStorage("userInfo");
     if (userInfo && userInfo.user_phone) {
       // 已经注册过无需再授权
-      console.log(userInfo);
+      this.setData({
+        phone: userInfo.user_phone,
+        name: userInfo.user_name,
+      });
     } else {
       wx.cloud
         .callFunction({
@@ -106,6 +111,10 @@ Page({
           res &&
             res.result &&
             res.result.data &&
+            this.setData({
+              phone: res.result.data[0].user_phone,
+              name: res.result.data[0].user_name,
+            }) &&
             Storage.setStorage("userInfo", res.result.data[0]);
         });
     }
@@ -121,17 +130,17 @@ Page({
    */
   getPhoneNumber(e) {
     wx.cloud
-    .callFunction({
-      name: "userCommon",
-      data: {
-        action: "getCellphone",
-        id: e.detail.cloudID,
-      },
-    })
-    .then((res) => {
-      console.log("res: ", res);
-      // todo 注册
-    });
+      .callFunction({
+        name: "userCommon",
+        data: {
+          action: "getCellphone",
+          id: e.detail.cloudID,
+        },
+      })
+      .then((res) => {
+        console.log("res: ", res);
+        // todo 注册
+      });
   },
 
   /**

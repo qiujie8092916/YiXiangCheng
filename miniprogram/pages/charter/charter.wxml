@@ -1,13 +1,13 @@
 <!--miniprogram/pages/charter/charter.wxml-->
 <view class="content">
   <!-- logo -->
-  <logo-header />
-  <!-- 地址时间选择 --> 
+  <logo-header isShowOrder="true" />
+  <!-- 地址时间选择 -->
   <view class="poi-time">
-    <poi-picker icon="chakantiezidingwei" bindchoosePoi="choosePoi"/>
+    <poi-picker icon="chakantiezidingwei" bindchoosePoi="choosePoi" />
     <date-picker />
   </view>
-  <!-- 套餐选择 --> 
+  <!-- 套餐选择 -->
   <view class="duration flex-center">
     <view class="duration-con flex-between">
       <view
@@ -25,14 +25,20 @@
       </view>
     </view>
   </view>
-  <!-- 注册信息 --> 
+  <!-- 注册信息 -->
   <view class="register-info colcc">
     <view class="collt marginbot full">
       <view class="label">手机号</view>
       <view class="rowst full">
-        <input class="input disabled fx-1 rowlc" placeholder="请授权手机号" disabled />
+        <input
+          class="input disabled fx-1 rowlc"
+          placeholder="请授权手机号"
+          disabled
+          value="{{phone}}"
+        />
         <button
           class="authorization-btn rowcc"
+          disabled="{{phone}}"
           hover-class="act-btn"
           open-type="getPhoneNumber"
         >
@@ -42,15 +48,19 @@
     </view>
     <view class="collt marginbot full">
       <view class="label">姓名</view>
-      <input class="input fx-1 rowlc"  placeholder="请输入姓名" />
+      <input
+        class="input fx-1 rowlc"
+        placeholder="请输入姓名"
+        value="{{name}}"
+      />
     </view>
   </view>
-  <!-- 价格信息 --> 
+  <!-- 价格信息 -->
   <view class="price colcc">
     <view class="price-detail">一口价：￥{{charterMoney}}元</view>
     <view class="price-desc">车型：奔驰E系列 乘坐人数：4人</view>
   </view>
-  <!-- 支付按钮 --> 
+  <!-- 支付按钮 -->
   <view class="pay flex-center">
     <view class="pay-btn" bindtap="gotoPayforOrder">去支付</view>
   </view>
