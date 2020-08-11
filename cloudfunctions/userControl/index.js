@@ -1,4 +1,5 @@
 // 云函数入口文件
+const fs = require("fs");
 const cloud = require("wx-server-sdk");
 
 cloud.init();
@@ -17,6 +18,9 @@ exports.main = async (event, context) => {
     }
     case "getUserInfo": {
       return getUserInfo(event);
+    }
+    case "registerCommute": {
+      return registerCommute(event);
     }
     default: {
       return;
@@ -49,4 +53,86 @@ async function getUserInfo(event) {
     .get();
 
   return result;
+}
+
+// 通勤注册
+async function registerCommute(request) {
+  if (!request.phone) {
+    return {
+      resultCode: -1,
+      resultData: null,
+      errMsg: "phone不能为空",
+    };
+  }
+
+  if (!request.name) {
+    return {
+      resultCode: -2,
+      resultData: null,
+      errMsg: "name不能为空",
+    };
+  }
+
+  if (!request.company) {
+    return {
+      resultCode: -3,
+      resultData: null,
+      errMsg: "company不能为空",
+    };
+  }
+
+  if (!request.file) {
+    return {
+      resultCode: -4,
+      resultData: null,
+      errMsg: "文件流不能为空",
+    };
+  }
+
+  try {
+    const { fileID: employment_certificate } = await cloud.uploadFile({
+      cloudPath: `employmentCertificate/${request.file.name}`, // 上传至云端的路径
+      fileContent: Buffer.alloc(
+        request.file.size,
+        request.file.content,
+        "base64"
+      ), // 小程序临时文件路径
+    });
+    try {
+      const { OPENID, UNIONID } = cloud.getWXContext();
+      await db.collection("user_info").add({
+        data: [
+          {
+            status: 0,
+            user_type: 1,
+            user_id: OPENID,
+            union_id: UNIONID,
+            employment_certificate,
+            user_name: request.name,
+            user_phone: request.phone,
+            adress_id: request.company,
+            create_time: db.serverDate(),
+            update_time: db.serverDate(),
+          },
+        ],
+      });
+      return {
+        resultCode: 0,
+        resultData: true,
+      };
+    } catch (e) {
+      return {
+        resultCode: -5,
+        resultData: null,
+        errMsg: e,
+      };
+    }
+  } catch (e) {
+    console.error(e);
+    return {
+      resultCode: -6,
+      resultData: null,
+      errMsg: e,
+    };
+  }
 }
