@@ -1,6 +1,6 @@
-@charset "UTF-8";
 /* miniprogram/pages/register/register.wxss */
-/*! 主题蓝 */
+@import '../../style/preset.scss';
+
 page {
   display: flex;
   flex-direction: column;
@@ -17,35 +17,36 @@ page {
   color: $blue;
   font-family:PingFangSC-Medium,PingFang SC;
 }*/
+
 .block {
   box-sizing: border-box;
   padding: 0 70rpx 50rpx;
 }
 
 .label {
-  font-size: 27rpx;
-  line-height: 36rpx;
+  font-size:27rpx;
+  line-height:36rpx;
   margin-bottom: 8rpx;
-  font-family: Helvetica;
-  color: #212b36;
+  font-family:Helvetica;
+  color:rgba(33,43,54,1);
 }
 
 .input {
-  font-size: 27rpx;
+  font-size:27rpx;
   height: 65rpx;
-  border-radius: 5rpx;
+  border-radius:5rpx;
   padding-left: 20rpx;
   background: #ffffff;
-  border: 1rpx solid #d6d6d6;
-}
+  border: 1rpx solid rgba(214, 214, 214, 1);
 
-.input.disabled {
-  background: #f8f8f8;
-}
+  &.disabled {
+    background: #f8f8f8;
+  }
 
-.input.error {
-  background: #fbeae5;
-  border-color: 1rgba 222, 54, 23, 1;
+  &.error {
+    background: rgba(251,234,229,1);
+    border-color:1rgba(222,54,23,1);
+  }
 }
 
 .authorization-btn {
@@ -53,13 +54,13 @@ page {
   min-width: 0rpx;
   font-size: 27rpx;
   font-weight: 500;
-  background: #3184c7;
+  background: $blue;
   border-radius: 5rpx;
   width: 180rpx !important;
-  color: white;
+  color: rgba(255,255,255,1);
   min-height: 66rpx !important;
   margin-left: 20rpx !important;
-  font-family: PingFangSC-Medium, PingFang SC;
+  font-family:PingFangSC-Medium,PingFang SC;
 }
 
 .upload-image {
@@ -72,27 +73,27 @@ page {
   transform: scale(0.6, 0.6) translateX(-30%);
 }
 
-.protocol-desc {
-  font-size: 27rpx;
+.protocol-desc{
+  font-size:27rpx;
   text-indent: -16rpx;
-  font-family: Helvetica;
-  color: #212b36;
+  font-family:Helvetica;
+  color:rgba(33,43,54,1);
 }
 
-.submit {
+.submit{
   height: 100rpx;
   min-width: 0rpx;
   font-size: 27rpx;
   font-weight: 500;
-  background: #3184c7;
+  background: $blue;
   border-radius: 5rpx;
   width: 610rpx !important;
-  color: white;
+  color: rgba(255,255,255,1);
   min-height: 100rpx !important;
-  font-family: PingFangSC-Medium, PingFang SC;
+  font-family:PingFangSC-Medium,PingFang SC;
 }
 
-.poi-con {
+.poi-con{
   width: 610rpx;
   height: 65rpx;
   font-size: 27rpx;
@@ -101,9 +102,9 @@ page {
   padding-right: 24rpx;
   box-sizing: border-box;
   font-family: Helvetica;
-  color: #212b36;
-  background: white;
-  border: 1rpx solid #d6d6d6;
+  color: rgba(33, 43, 54, 1);
+  background: rgba(255, 255, 255, 1);
+  border: 1rpx solid rgba(214, 214, 214, 1);
   box-shadow: 0rpx 2rpx 0rpx 0rpx rgba(22, 29, 37, 0.05);
 }
 
@@ -111,6 +112,6 @@ page {
   font-size: 22rpx;
 }
 
-.placeholder {
+.placeholder{
   color: #8a8a8a;
 }
