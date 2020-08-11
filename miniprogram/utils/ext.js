@@ -37,3 +37,36 @@ export const isAfter = function (date) {
 export const joinTime = function (time) {
   return moment().format("YYYY-MM-DD") + " " + time;
 };
+
+export const throttle = function (fn, delay) {
+  let timer = null,
+    start = Date.now();
+
+  return function () {
+    let now = Date.now(),
+      cxt = this,
+      remaining = delay - (now - start);
+
+    clearTimeout(timer);
+    if (remaining <= 0) {
+      fn.apply(cxt, arguments);
+      start = Date.now();
+    } else {
+      timer = setTimeout(fn, remaining);
+    }
+  };
+};
+
+export const debounce = function (fn, delay) {
+  let timer = null;
+
+  return function () {
+    let cxt = this,
+      args = arguments;
+
+    timer && clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.apply(cxt, args);
+    }, delay);
+  };
+};

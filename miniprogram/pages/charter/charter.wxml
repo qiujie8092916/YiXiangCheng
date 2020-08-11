@@ -51,6 +51,7 @@
       <input
         class="input fx-1 rowlc"
         placeholder="请输入姓名"
+        bindinput="inputUserName"
         value="{{name}}"
       />
     </view>
@@ -62,6 +63,10 @@
   </view>
   <!-- 支付按钮 -->
   <view class="pay flex-center">
-    <view class="pay-btn" bindtap="gotoPayforOrder">去支付</view>
+    <view
+      class="pay-btn {{!departure || !phone || !name ? 'pay-disabled' : ''}}"
+      bindtap="gotoPayforOrder"
+      >去支付</view
+    >
   </view>
 </view>

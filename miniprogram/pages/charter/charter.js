@@ -7,6 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    departure: "", // 上车地点
     duration: [
       {
         key: "four",
@@ -74,7 +75,10 @@ Page({
    * 选择位置
    */
   choosePoi({ detail }) {
-    console.log(detail);
+    detail &&
+      this.setData({
+        departure: detail.address,
+      });
   },
 
   /**
@@ -120,6 +124,14 @@ Page({
     }
   },
 
+  /**
+   * 用户名监听
+   */
+  inputUserName(e) {
+    this.setData({
+      name: e.detail.value,
+    });
+  },
   /**
    * 去支付
    */

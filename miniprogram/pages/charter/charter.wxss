@@ -122,3 +122,9 @@ page {
   background: #3184c7;
   color: #fff;
 }
+
+.pay-disabled {
+  pointer-events: none;
+  background: #f7f7f7;
+  color: rgba(0, 0, 0, 0.3);
+}
