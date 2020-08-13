@@ -25,6 +25,9 @@ exports.main = async (event, context) => {
     case "doRegisterCommute": {
       return doRegisterCommute(event);
     }
+    case "registerCharter": {
+      return registerCharter(event);
+    }
     default: {
       return;
     }
@@ -49,13 +52,64 @@ async function getCellphone(event) {
 async function getUserInfo(event) {
   const { OPENID } = cloud.getWXContext();
   const userInfoDb = db.collection("user_info");
-  const result = await userInfoDb
-    .where({
-      user_id: OPENID,
-    })
-    .get();
+  try {
+    const result = await userInfoDb
+      .where({
+        user_id: OPENID,
+      })
+      .get();
 
-  return result;
+    return {
+      resultCode: 0,
+      resultData: result.data[0] ? result.data[0] : null,
+    };
+  } catch (e) {
+    return {
+      resultCode: -1,
+      resultData: null,
+    };
+  }
+}
+
+// 包车注册
+async function registerCharter(request) {
+  if (!request.phone) {
+    return {
+      resultCode: -1,
+      resultData: null,
+      errMsg: "phone不能为空",
+    };
+  }
+
+  try {
+    const { OPENID, UNIONID } = cloud.getWXContext();
+    await db.collection("user_info").add({
+      data: [
+        {
+          status: 0,
+          user_type: 1,
+          user_id: OPENID,
+          union_id: UNIONID,
+          employment_certificate: "",
+          user_name: "",
+          user_phone: request.phone,
+          adress_id: "",
+          create_time: db.serverDate(),
+          update_time: db.serverDate(),
+        },
+      ],
+    });
+    return {
+      resultCode: 0,
+      resultData: true,
+    };
+  } catch (e) {
+    return {
+      resultCode: -5,
+      resultData: null,
+      errMsg: e,
+    };
+  }
 }
 
 /**

@@ -128,3 +128,12 @@ page {
   background: #f7f7f7;
   color: rgba(0, 0, 0, 0.3);
 }
+
+.error,
+.error .wx-checkbox-input {
+  border: 1rpx solid red;
+}
+
+.checkbox.error {
+  border: initial;
+}
