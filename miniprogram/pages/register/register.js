@@ -7,7 +7,7 @@ Page({
    */
   data: {
     name: "",
-    phone: "123",
+    phone: "15502858542",
     // 错误项
     error_field: null,
     // 公司地址数据组件结构
@@ -67,7 +67,7 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {},
+  // onShareAppMessage: function () {},
 
   createAnimation() {
     this.animate = wx.createAnimation({
@@ -273,7 +273,7 @@ Page({
         wx.cloud.callFunction({
           name: "userControl",
           data: {
-            action: "registerCommute",
+            action: "doRegisterCommute",
             phone: this.data.phone,
             name: this.data.name.trim(),
             company: this.data.company_address[this.data.company_index[0]]

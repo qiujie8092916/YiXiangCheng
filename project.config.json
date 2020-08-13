@@ -24,10 +24,10 @@
 			"disablePlugins": [],
 			"outputPath": ""
 		},
-		"bundle": false,
 		"useIsolateContext": true,
 		"useCompilerModule": false,
-		"userConfirmedUseCompilerModuleSwitch": false
+		"userConfirmedUseCompilerModuleSwitch": false,
+		"bundle": false
 	},
 	"appid": "wx94d678914b78155d",
 	"projectname": "YiXiangCheng",

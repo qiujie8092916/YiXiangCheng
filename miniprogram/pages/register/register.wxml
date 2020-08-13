@@ -62,7 +62,7 @@
     animation="{{shakeInvalidAnimate.certificate}}"
     name="employment_certificate"
     class="upload-image{{error_field === 'certificate' ? ' error' : ''}}"
-    src="{{employment_certificate.path || '/images/code-cloud-callback-config.png'}}"
+    src="{{employment_certificate.path || '/images/upload_certificate_of_employment.png'}}"
     catchtap="chooseImg"
   />
 

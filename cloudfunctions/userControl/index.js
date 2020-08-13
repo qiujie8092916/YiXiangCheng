@@ -1,6 +1,6 @@
 // 云函数入口文件
-const fs = require("fs");
 const cloud = require("wx-server-sdk");
+const nodemailer = require("nodemailer");
 
 cloud.init();
 
@@ -19,8 +19,11 @@ exports.main = async (event, context) => {
     case "getUserInfo": {
       return getUserInfo(event);
     }
-    case "registerCommute": {
-      return registerCommute(event);
+    case "isRegisterCommute": {
+      return isRegisterCommute(event);
+    }
+    case "doRegisterCommute": {
+      return doRegisterCommute(event);
     }
     case "registerCharter": {
       return registerCharter(event);
@@ -109,43 +112,118 @@ async function registerCharter(request) {
   }
 }
 
-// 通勤注册
-async function registerCommute(request) {
-  if (!request.phone) {
-    return {
-      resultCode: -1,
-      resultData: null,
-      errMsg: "phone不能为空",
-    };
-  }
+/**
+ * @desc 获取用户通勤注册情况
+ * @brief 首页用
+ * @returns {Promise<{resultCode: number, resultData: any, errMsg: string,}>}
+ */
+async function isRegisterCommute(request) {
+  return new Promise(async (resolve) => {
+    try {
+      const { OPENID } = cloud.getWXContext();
+      const { data } = await db
+        .collection("user_info")
+        .where({
+          user_type: 1,
+          user_id: OPENID,
+        })
+        .get();
 
-  if (!request.name) {
-    return {
-      resultCode: -2,
-      resultData: null,
-      errMsg: "name不能为空",
-    };
-  }
+      if (data.length) {
+        // resolve();
+        const user = data[0];
+        if (user.status === 1) {
+          // 已通过审核
+          return resolve({
+            resultCode: 0,
+            resultData: "/pages/commute/commute",
+            errMsg: null,
+          });
+        } else if (user.status === 0) {
+          // 未通过审核
+          return resolve({
+            resultCode: -1,
+            resultData: null,
+            errMsg: "管理员正在审核您的注册信息，请稍等...",
+          });
+        }
+      }
+      return resolve({
+        resultCode: 0,
+        resultData: "/pages/register/register",
+        errMsg: null,
+      });
+    } catch (e) {
+      return resolve({
+        resultCode: -1,
+        resultData: null,
+        errMsg: e.toString(),
+      });
+    }
+  });
+}
 
-  if (!request.company) {
-    return {
-      resultCode: -3,
-      resultData: null,
-      errMsg: "company不能为空",
-    };
-  }
+/**
+ * @desc 通勤注册
+ * @param {object} request 请求参数
+ * @param {string} request.phone 手机号
+ * @param {string} request.name 用户名
+ * @param {string} request.company 公司id
+ * @param {string} request.fileId 工作证明云文件id
+ * @returns {Promise<{resultCode: number, resultData: any, errMsg: string,}>}
+ */
+async function doRegisterCommute(request) {
+  return new Promise(async (resolve) => {
+    if (!request.phone) {
+      return resolve({
+        resultCode: -1,
+        resultData: null,
+        errMsg: "phone不能为空",
+      });
+    }
 
-  if (!request.fileId) {
-    return {
-      resultCode: -4,
-      resultData: null,
-      errMsg: "文件id不能为空",
-    };
-  }
+    if (!request.name) {
+      return resolve({
+        resultCode: -2,
+        resultData: null,
+        errMsg: "name不能为空",
+      });
+    }
 
-  try {
+    if (!request.company) {
+      return resolve({
+        resultCode: -3,
+        resultData: null,
+        errMsg: "company不能为空",
+      });
+    }
+
+    if (!request.fileId) {
+      return resolve({
+        resultCode: -4,
+        resultData: null,
+        errMsg: "文件id不能为空",
+      });
+    }
+
     try {
       const { OPENID, UNIONID } = cloud.getWXContext();
+      const isRegistered = await db
+        .collection("user_info")
+        .where({
+          user_type: 1,
+          user_id: OPENID,
+        })
+        .count();
+
+      if (isRegistered.total) {
+        return resolve({
+          resultCode: -8,
+          resultData: null,
+          errMsg: "用户已注册",
+        });
+      }
+
       await db.collection("user_info").add({
         data: [
           {
@@ -162,23 +240,49 @@ async function registerCommute(request) {
           },
         ],
       });
-      return {
-        resultCode: 0,
-        resultData: true,
-      };
+
+      // 发送邮件
+      const auth = { user: "835413463@qq.com", pass: "jddqsbarkcfybcgj" },
+        transporter = nodemailer.createTransport({
+          auth,
+          port: 465, // SMTP 端口
+          service: "qq", // 使用内置传输发送邮件 查看支持列表：https://nodemailer.com/smtp/well-known/
+          // host: 'smtp.ethereal.email',
+          secureConnection: true, // 使用 SSL
+        }),
+        receivers = await db.collection("mailer").get(); //获取收件人列表
+
+      transporter.sendMail(
+        {
+          from: `"service" <${auth.user}>`,
+          to: receivers.data.map(({ user }) => user).join(","),
+          // cc: "",
+          subject: "小享兽注册通知",
+          // 发送text或者html格式
+          // text: 'Hello world?', // plain text body
+          html: `<b>姓名：</b>${request.name}<br/><b>手机号：</b>${request.phone}<br/><br/>请于小程序云开发控制台手动审核<br/><br/>勿回复`, //fs.createReadStream(path.resolve(__dirname, 'email.html')) // 流
+        },
+        (error, info) => {
+          if (error) {
+            return resolve({
+              resultCode: -7,
+              resultData: null,
+              errMsg: error.toString(),
+            });
+          }
+
+          return resolve({
+            resultCode: 0,
+            resultData: true,
+          });
+        }
+      );
     } catch (e) {
-      return {
-        resultCode: -5,
+      return resolve({
+        resultCode: -6,
         resultData: null,
-        errMsg: e,
-      };
+        errMsg: e.toString(),
+      });
     }
-  } catch (e) {
-    console.error(e);
-    return {
-      resultCode: -6,
-      resultData: null,
-      errMsg: e,
-    };
-  }
+  });
 }
