@@ -81,23 +81,15 @@ async function registerCommute(request) {
     };
   }
 
-  if (!request.file) {
+  if (!request.fileId) {
     return {
       resultCode: -4,
       resultData: null,
-      errMsg: "文件流不能为空",
+      errMsg: "文件id不能为空",
     };
   }
 
   try {
-    const { fileID: employment_certificate } = await cloud.uploadFile({
-      cloudPath: `employmentCertificate/${request.file.name}`, // 上传至云端的路径
-      fileContent: Buffer.alloc(
-        request.file.size,
-        request.file.content,
-        "base64"
-      ), // 小程序临时文件路径
-    });
     try {
       const { OPENID, UNIONID } = cloud.getWXContext();
       await db.collection("user_info").add({
@@ -107,7 +99,7 @@ async function registerCommute(request) {
             user_type: 1,
             user_id: OPENID,
             union_id: UNIONID,
-            employment_certificate,
+            employment_certificate: request.fileId,
             user_name: request.name,
             user_phone: request.phone,
             adress_id: request.company,

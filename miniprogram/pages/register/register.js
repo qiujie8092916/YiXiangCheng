@@ -260,50 +260,56 @@ Page({
   onsubmit({ detail: { value } }) {
     if (!this.preSubmit()) return;
 
-    wx.showLoading();
+    wx.showLoading({ title: "加载中" });
 
-    const data = wx
-      .getFileSystemManager()
-      .readFileSync(this.data.employment_certificate.path, "base64");
+    wx.cloud.uploadFile({
+      cloudPath: `employmentCertificate/${
+        this.data.employment_certificate.path.match(
+          new RegExp("[^/]+(?!.*/)")
+        )[0]
+      }`,
+      filePath: this.data.employment_certificate.path,
+      success: ({ fileID }) => {
+        wx.cloud.callFunction({
+          name: "userControl",
+          data: {
+            action: "registerCommute",
+            phone: this.data.phone,
+            name: this.data.name.trim(),
+            company: this.data.company_address[this.data.company_index[0]]
+              .address[this.data.company_index[1]].id,
+            fileId: fileID,
+          },
+          success: ({ result = {} }) => {
+            if (+result.resultCode !== 0) {
+              console.error(result.errMsg);
+              wx.hideLoading();
+              return wx.showToast({
+                icon: "none",
+                title: result.errMsg || "异常错误",
+              });
+            }
 
-    wx.cloud.callFunction({
-      name: "userControl",
-      data: {
-        action: "registerCommute",
-        phone: this.data.phone,
-        name: this.data.name.trim(),
-        company: this.data.company_address[this.data.company_index[0]].address[
-          this.data.company_index[1]
-        ].id,
-        file: {
-          size: this.data.employment_certificate.size,
-          name: this.data.employment_certificate.path.match(
-            new RegExp("[^/]+(?!.*/)")
-          )[0],
-          content: data,
-        },
-      },
-      success: ({ result = {} }) => {
-        if (+result.resultCode !== 0) {
-          console.error(result.errMsg);
-          wx.hideLoading();
-          wx.showToast({
-            icon: "none",
-            title: result.errMsg || "异常错误",
-          });
-        }
-        wx.hideLoading();
-        wx.showToast({
-          icon: "none",
-          title: "提交成功，等待审核",
+            wx.showToast({
+              icon: "none",
+              title: "提交成功，等待审核",
+            });
+          },
+          fail(e) {
+            console.error(e);
+            wx.showToast({
+              icon: "none",
+              title: JSON.stringify(e),
+            });
+          },
+          complete: wx.hideLoading,
         });
       },
-      fail(e) {
-        console.error(e);
+      fail: ({ errMsg }) => {
         wx.hideLoading();
         wx.showToast({
           icon: "none",
-          title: JSON.stringify(e),
+          title: errMsg,
         });
       },
     });
