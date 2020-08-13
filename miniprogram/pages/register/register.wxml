@@ -7,17 +7,19 @@
     <view class="label">手机号</view>
     <view class="rowst full">
       <input
-        animation="{{shakeInvalidAnimate.phone}}"
-        class="input disabled fx-1 rowlc{{error_field === 'phone' ? ' error' : ''}}"
-        placeholder-class="placeholder"
+        disabled
         value="{{ phone }}"
         placeholder="请授权手机号"
-        disabled
+        placeholder-class="placeholder"
+        animation="{{shakeInvalidAnimate.phone}}"
+        class="input disabled fx-1 rowlc{{error_field === 'phone' ? ' error' : ''}}"
       />
       <button
-        class="authorization-btn rowcc"
         hover-class="act-btn"
+        disabled="{{ phone }}"
         open-type="getPhoneNumber"
+        class="authorization-btn rowcc"
+        bindgetphonenumber="getPhoneNumber"
       >
         授权
       </button>
@@ -26,12 +28,12 @@
   <view class="block collt full">
     <view class="label">姓名</view>
     <input
-      animation="{{shakeInvalidAnimate.name}}"
-      class="input fx-1 rowlc{{error_field === 'name' ? ' error' : ''}}"
-      placeholder-class="placeholder"
       value="{{ name }}"
       placeholder="请输入姓名"
       bindinput="handlerName"
+      placeholder-class="placeholder"
+      animation="{{shakeInvalidAnimate.name}}"
+      class="input fx-1 rowlc{{error_field === 'name' ? ' error' : ''}}"
     />
   </view>
   <view class="block collt full">
@@ -43,8 +45,8 @@
       bindcolumnchange="changeCompany"
     >
       <view
-        class="poi-con flex-between{{error_field === 'company' ? ' error' : ''}}"
         animation="{{shakeInvalidAnimate.company}}"
+        class="poi-con flex-between{{error_field === 'company' ? ' error' : ''}}"
       >
         <view wx:if="{{selected_company}}"
           >{{ company_address[company_index[0]].area }} | {{
@@ -59,20 +61,20 @@
 
   <!-- 上传工作证明 -->
   <image
-    animation="{{shakeInvalidAnimate.certificate}}"
+    catchtap="chooseImg"
     name="employment_certificate"
+    animation="{{shakeInvalidAnimate.certificate}}"
     class="upload-image{{error_field === 'certificate' ? ' error' : ''}}"
     src="{{employment_certificate.path || '/images/upload_certificate_of_employment.png'}}"
-    catchtap="chooseImg"
   />
 
   <!-- 免责声明 -->
   <view class="block rowlc">
     <checkbox-group class="checkbox-group" bindchange="checkboxChange">
       <checkbox
-        class="checkbox{{error_field === 'protocol' ? ' error' : ''}}"
         checked="{{ !!is_protocol }}"
         animation="{{shakeInvalidAnimate.protocol}}"
+        class="checkbox{{error_field === 'protocol' ? ' error' : ''}}"
       />
     </checkbox-group>
     <view class="protocol-desc">免责申明</view>

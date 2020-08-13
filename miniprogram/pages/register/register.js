@@ -7,7 +7,7 @@ Page({
    */
   data: {
     name: "",
-    phone: "15502858542",
+    phone: "",
     // 错误项
     error_field: null,
     // 公司地址数据组件结构
@@ -68,6 +68,26 @@ Page({
    * 用户点击右上角分享
    */
   // onShareAppMessage: function () {},
+
+  /**
+   * 获取手机号
+   */
+  getPhoneNumber(e) {
+    wx.cloud
+      .callFunction({
+        name: "userControl",
+        data: {
+          action: "getCellphone",
+          id: e.detail.cloudID,
+        },
+      })
+      .then((res) => {
+        console.log("res: ", res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
 
   createAnimation() {
     this.animate = wx.createAnimation({
