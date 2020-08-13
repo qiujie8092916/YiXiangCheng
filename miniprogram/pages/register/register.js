@@ -7,7 +7,7 @@ Page({
    */
   data: {
     name: "",
-    phone: "123",
+    phone: "15502858542",
     // 错误项
     error_field: null,
     // 公司地址数据组件结构
