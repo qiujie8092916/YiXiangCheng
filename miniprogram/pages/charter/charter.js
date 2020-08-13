@@ -27,6 +27,8 @@ Page({
     charterMoney: 0, // 当前时间
     phone: "", // 手机号
     name: "", // 姓名
+    error_field: null, // 错误项
+    shakeInvalidAnimate: {},
   },
 
   /**
@@ -34,6 +36,7 @@ Page({
    */
   onLoad: function (options) {
     this.init();
+    this.createAnimation();
   },
 
   /**
@@ -70,6 +73,71 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {},
+
+  /**
+   * 校验动画
+   */
+  createAnimation() {
+    this.animate = wx.createAnimation({
+      delay: 0,
+      duration: 35,
+      timingFunction: "ease",
+    });
+  },
+
+  /**
+   * 下单校验
+   */
+  preSubmit() {
+    const animate = this.animate;
+    animate
+      .translateX(-5)
+      .step()
+      .translateX(4)
+      .step()
+      .translateX(-3)
+      .step()
+      .translateX(2)
+      .step()
+      .translateX(-1)
+      .step()
+      .translateX(0)
+      .step();
+
+    if (!this.data.phone) {
+      this.setData({
+        error_field: "phone",
+        ["shakeInvalidAnimate.phone"]: animate.export(),
+      });
+      wx.showToast({
+        icon: "none",
+        title: "请完成手机号授权",
+      });
+      return false;
+    }
+
+    if (!this.data.name) {
+      this.setData({
+        error_field: "name",
+        ["shakeInvalidAnimate.name"]: animate.export(),
+      });
+      wx.showToast({
+        icon: "none",
+        title: "请完善姓名",
+      });
+      return false;
+    }
+
+    if (!this.data.departure) {
+      wx.showToast({
+        icon: "none",
+        title: "请选择上车地点",
+      });
+      return false;
+    }
+
+    return true;
+  },
 
   /**
    * 选择位置
@@ -112,14 +180,18 @@ Page({
           },
         })
         .then((res) => {
-          res &&
-            res.result &&
-            res.result.data &&
+          if (res && res.result && res.result.resultData) {
             this.setData({
-              phone: res.result.data[0].user_phone,
-              name: res.result.data[0].user_name,
-            }) &&
-            Storage.setStorage("userInfo", res.result.data[0]);
+              phone: res.result.resultData.user_phone,
+              name: res.result.resultData.user_name,
+            });
+            Storage.setStorage("userInfo", res.result.resultData);
+          } else {
+            console.log("当前用户未注册");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
         });
     }
   },
@@ -128,22 +200,30 @@ Page({
    * 用户名监听
    */
   inputUserName(e) {
+    let _name = e.detail.value;
     this.setData({
-      name: e.detail.value,
+      name: _name,
     });
+    _name &&
+      this.data.error_field === "name" &&
+      this.setData({
+        error_field: null,
+      });
   },
   /**
    * 去支付
    */
-  gotoPayforOrder() {},
+  gotoPayforOrder() {
+    if (!this.preSubmit()) return;
+  },
 
   /**
-   * 获取手机号并注册
+   * 获取手机号
    */
   getPhoneNumber(e) {
     wx.cloud
       .callFunction({
-        name: "userCommon",
+        name: "userControl",
         data: {
           action: "getCellphone",
           id: e.detail.cloudID,
@@ -151,7 +231,9 @@ Page({
       })
       .then((res) => {
         console.log("res: ", res);
-        // todo 注册
+      })
+      .catch((err) => {
+        console.log(err);
       });
   },
 
@@ -159,7 +241,7 @@ Page({
    * 初始化
    */
   init() {
-    // 获取注册信息
+    // 获取用户信息
     this.getCloudUserInfo();
     // 初始化套餐价格
     this.setData({
