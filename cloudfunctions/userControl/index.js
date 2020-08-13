@@ -198,3 +198,77 @@ async function registerCommute(request) {
     };
   }
 }
+
+// 通勤注册
+async function registerCommute(request) {
+  if (!request.phone) {
+    return {
+      resultCode: -1,
+      resultData: null,
+      errMsg: "phone不能为空",
+    };
+  }
+
+  if (!request.name) {
+    return {
+      resultCode: -2,
+      resultData: null,
+      errMsg: "name不能为空",
+    };
+  }
+
+  if (!request.company) {
+    return {
+      resultCode: -3,
+      resultData: null,
+      errMsg: "company不能为空",
+    };
+  }
+
+  if (!request.fileId) {
+    return {
+      resultCode: -4,
+      resultData: null,
+      errMsg: "文件id不能为空",
+    };
+  }
+
+  try {
+    try {
+      const { OPENID, UNIONID } = cloud.getWXContext();
+      await db.collection("user_info").add({
+        data: [
+          {
+            status: 0,
+            user_type: 1,
+            user_id: OPENID,
+            union_id: UNIONID,
+            employment_certificate: request.fileId,
+            user_name: request.name,
+            user_phone: request.phone,
+            adress_id: request.company,
+            create_time: db.serverDate(),
+            update_time: db.serverDate(),
+          },
+        ],
+      });
+      return {
+        resultCode: 0,
+        resultData: true,
+      };
+    } catch (e) {
+      return {
+        resultCode: -5,
+        resultData: null,
+        errMsg: e,
+      };
+    }
+  } catch (e) {
+    console.error(e);
+    return {
+      resultCode: -6,
+      resultData: null,
+      errMsg: e,
+    };
+  }
+}

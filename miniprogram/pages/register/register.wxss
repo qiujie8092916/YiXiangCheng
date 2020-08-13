@@ -1,6 +1,7 @@
 @charset "UTF-8";
 /* miniprogram/pages/register/register.wxss */
 /*! 主题蓝 */
+/*! border边框灰色 */
 page {
   display: flex;
   flex-direction: column;
@@ -36,16 +37,11 @@ page {
   border-radius: 5rpx;
   padding-left: 20rpx;
   background: #ffffff;
-  border: 1rpx solid #d6d6d6;
+  border: 1rpx solid #cecece;
 }
 
 .input.disabled {
   background: #f8f8f8;
-}
-
-.input.error {
-  background: #fbeae5;
-  border-color: 1rgba 222, 54, 23, 1;
 }
 
 .authorization-btn {
@@ -65,16 +61,23 @@ page {
 .upload-image {
   width: 610rpx;
   height: 280rpx;
-  margin: 0 auto 50rpx;
+  margin: 0 70rpx 50rpx;
 }
 
 .checkbox-group {
-  transform: scale(0.6, 0.6) translateX(-30%);
+  width: 34rpx;
+  height: 34rpx;
+}
+
+.checkbox-group checkbox .wx-checkbox-input {
+  width: 34rpx;
+  height: 34rpx;
+  margin-bottom: 15rpx;
 }
 
 .protocol-desc {
   font-size: 27rpx;
-  text-indent: -16rpx;
+  margin-left: 15rpx;
   font-family: Helvetica;
   color: #212b36;
 }
@@ -101,10 +104,9 @@ page {
   padding-right: 24rpx;
   box-sizing: border-box;
   font-family: Helvetica;
+  border: 1rpx solid #cecece;
   color: #212b36;
   background: white;
-  border: 1rpx solid #d6d6d6;
-  box-shadow: 0rpx 2rpx 0rpx 0rpx rgba(22, 29, 37, 0.05);
 }
 
 .jiantou {
@@ -113,4 +115,13 @@ page {
 
 .placeholder {
   color: #8a8a8a;
+}
+
+.error,
+.error .wx-checkbox-input {
+  border: 1rpx solid red;
+}
+
+.checkbox.error {
+  border: initial;
 }
