@@ -47,13 +47,38 @@ Page({
 
   goBizBooking({ currentTarget }) {
     const { biz } = currentTarget.dataset;
-    switch (biz) {
-      case "charter":
-        //包车
-        return wx.navigateTo({ url: "/pages/charter/charter" });
-      case "commute":
-        //通勤
-        return wx.navigateTo({ url: "/pages/commute/commute" });
+
+    if (biz === "charter") {
+      return wx.navigateTo({ url: "/pages/charter/charter" });
+    } else if (biz === "commute") {
+      wx.showLoading({ title: "加载中" });
+      wx.cloud.callFunction({
+        name: "userControl",
+        data: {
+          action: "isRegisterCommute",
+        },
+        success: ({ result = {} }) => {
+          if (+result.resultCode !== 0) {
+            console.error(result.errMsg);
+            wx.hideLoading();
+            return wx.showToast({
+              icon: "none",
+              title: result.errMsg || "异常错误",
+            });
+          }
+
+          return wx.navigateTo({ url: result.resultData });
+        },
+        fail(e) {
+          console.error(e);
+          wx.hideLoading();
+          return wx.showToast({
+            icon: "none",
+            title: JSON.stringify(e),
+          });
+        },
+        complete: wx.hideLoading,
+      });
     }
   },
 });

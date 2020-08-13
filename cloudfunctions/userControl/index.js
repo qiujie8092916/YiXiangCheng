@@ -113,6 +113,57 @@ async function registerCharter(request) {
 }
 
 /**
+ * @desc 获取用户通勤注册情况
+ * @brief 首页用
+ * @returns {Promise<{resultCode: number, resultData: any, errMsg: string,}>}
+ */
+async function isRegisterCommute(request) {
+  return new Promise(async (resolve) => {
+    try {
+      const { OPENID } = cloud.getWXContext();
+      const { data } = await db
+        .collection("user_info")
+        .where({
+          user_type: 1,
+          user_id: OPENID,
+        })
+        .get();
+
+      if (data.length) {
+        // resolve();
+        const user = data[0];
+        if (user.status === 1) {
+          // 已通过审核
+          return resolve({
+            resultCode: 0,
+            resultData: "/pages/commute/commute",
+            errMsg: null,
+          });
+        } else if (user.status === 0) {
+          // 未通过审核
+          return resolve({
+            resultCode: -1,
+            resultData: null,
+            errMsg: "管理员正在审核您的注册信息，请稍等...",
+          });
+        }
+      }
+      return resolve({
+        resultCode: 0,
+        resultData: "/pages/register/register",
+        errMsg: null,
+      });
+    } catch (e) {
+      return resolve({
+        resultCode: -1,
+        resultData: null,
+        errMsg: e.toString(),
+      });
+    }
+  });
+}
+
+/**
  * @desc 通勤注册
  * @param {object} request 请求参数
  * @param {string} request.phone 手机号
@@ -124,7 +175,7 @@ async function registerCharter(request) {
 async function doRegisterCommute(request) {
   return new Promise(async (resolve) => {
     if (!request.phone) {
-      resolve({
+      return resolve({
         resultCode: -1,
         resultData: null,
         errMsg: "phone不能为空",
@@ -132,7 +183,7 @@ async function doRegisterCommute(request) {
     }
 
     if (!request.name) {
-      resolve({
+      return resolve({
         resultCode: -2,
         resultData: null,
         errMsg: "name不能为空",
@@ -140,7 +191,7 @@ async function doRegisterCommute(request) {
     }
 
     if (!request.company) {
-      resolve({
+      return resolve({
         resultCode: -3,
         resultData: null,
         errMsg: "company不能为空",
@@ -148,7 +199,7 @@ async function doRegisterCommute(request) {
     }
 
     if (!request.fileId) {
-      resolve({
+      return resolve({
         resultCode: -4,
         resultData: null,
         errMsg: "文件id不能为空",
@@ -166,7 +217,7 @@ async function doRegisterCommute(request) {
         .count();
 
       if (isRegistered.total) {
-        resolve({
+        return resolve({
           resultCode: -8,
           resultData: null,
           errMsg: "用户已注册",
@@ -213,21 +264,21 @@ async function doRegisterCommute(request) {
         },
         (error, info) => {
           if (error) {
-            resolve({
+            return resolve({
               resultCode: -7,
               resultData: null,
               errMsg: error.toString(),
             });
           }
 
-          resolve({
+          return resolve({
             resultCode: 0,
             resultData: true,
           });
         }
       );
     } catch (e) {
-      resolve({
+      return resolve({
         resultCode: -6,
         resultData: null,
         errMsg: e.toString(),
