@@ -1,7 +1,7 @@
 // miniprogram/pages/charter/charter.js
 // 包车下单页
 import Storage from "../../utils/storage";
-import { debounce } from "../../utils/ext";
+import { debounce, getCurDate, isBefore } from "../../utils/ext";
 
 Page({
   /**
@@ -9,6 +9,7 @@ Page({
    */
   data: {
     departure: "", // 上车地点
+    departure_time: "", // 选择时间
     duration: [
       {
         key: "four",
@@ -48,7 +49,10 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {},
+  onShow: function () {
+    // todo 若离开此页面后重新回到此页面时当前显示时间已经是过去时间则重置显示时间
+    // this.selectComponent("#datePicker").formatDateAndTime();
+  },
 
   /**
    * 生命周期函数--监听页面隐藏
@@ -151,6 +155,16 @@ Page({
   },
 
   /**
+   * 选择时间
+   */
+  changeTime(d) {
+    console.log(d.detail);
+    this.setData({
+      departure_time: d.detail,
+    });
+  },
+
+  /**
    * 改变套餐
    */
   changeDuration(duration) {
@@ -222,6 +236,24 @@ Page({
    */
   gotoPayforOrder() {
     if (!this.preSubmit()) return;
+
+    console.log(this.data.departure_time, "isBefore(this.data.departure_time)");
+
+    console.log(
+      isBefore(this.data.departure_time),
+      "isBefore(this.data.departure_time)"
+    );
+
+    let _params = {
+      departure: this.data.departure,
+      departure_time:
+        this.data.departure_time && !isBefore(this.data.departure_time)
+          ? this.data.departure_time
+          : getCurDate(),
+      phone: this.data.phone,
+      contact_name: this.data.contact_name,
+    };
+    console.log(_params, "包车下单参数");
   },
 
   /**

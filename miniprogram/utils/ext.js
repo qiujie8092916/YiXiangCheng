@@ -38,6 +38,14 @@ export const joinTime = function (time) {
   return moment().format("YYYY-MM-DD") + " " + time;
 };
 
+export const commonFormat = function (timeStr) {
+  return moment(timeStr).format();
+};
+
+export const getCurDate = function () {
+  return moment().format();
+};
+
 export const throttle = function (fn, delay) {
   let timer = null,
     start = Date.now();

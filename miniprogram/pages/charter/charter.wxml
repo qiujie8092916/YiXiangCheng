@@ -5,7 +5,7 @@
   <!-- 地址时间选择 -->
   <view class="poi-time">
     <poi-picker icon="chakantiezidingwei" bindchoosePoi="choosePoi" />
-    <date-picker />
+    <date-picker id="datePicker" bindchangeTime="changeTime" />
   </view>
   <!-- 套餐选择 -->
   <view class="duration flex-center">

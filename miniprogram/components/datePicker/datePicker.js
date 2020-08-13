@@ -6,6 +6,7 @@ import {
   isBefore,
   isAfter,
   joinTime,
+  commonFormat,
 } from "../../utils/ext";
 
 Component({
@@ -35,13 +36,15 @@ Component({
    * 组件的初始数据
    */
   data: {
-    curShowDate: "", // 格式化当前选择日期
-    curShowTime: "", // 格式换开始时间
-    curStartDate: "", // 格式化开始日期
-    curEndDate: "", // 格式化结束日期
-    curStartTime: "", // 格式化开始时间
-    curEndTime: "", // 格式化结束时间
-    timeDefaultValue: "", // 时间默认值
+    curShowDate: "", // 格式化当前选择日期(用来展示 8-13)
+    curShowTime: "", // 格式换开始时间(用来展示 12:13)
+    curStartDate: "", // 格式化开始日期(2020-8-13 同时是日期picker的默认值)
+    curEndDate: "", // 格式化结束日期(2020-9-13)
+    curStartTime: "", // 格式化开始时间(12:13)
+    curEndTime: "", // 格式化结束时间(12:13)
+    timeDefaultValue: "", // 时间默认值(时间picker的默认值)
+    selectDate: "", // 选择的日期(2020-8-13)
+    selectTime: "", // 选择的时间(12:13)
   },
 
   // 生命周期函数，可以为函数，或一个在methods段中定义的方法名
@@ -54,11 +57,33 @@ Component({
    * 组件的方法列表
    */
   methods: {
+    /**
+     * 日期回调
+     */
     bindDateChange(e) {
+      let _currentDate = e.detail.value,
+        temCurrentDate = _currentDate.split("-");
+
+      if (temCurrentDate[1][0] === "0") {
+        _currentDate =
+          temCurrentDate[0] +
+          "-" +
+          temCurrentDate[1][1] +
+          "-" +
+          temCurrentDate[2];
+      } else {
+        _currentDate = _currentDate;
+      }
+
+      this.triggerEvent(
+        "changeTime",
+        commonFormat(_currentDate + "-" + this.data.selectTime)
+      );
+
       this.setData({
+        selectDate: e.detail.value,
         curShowDate: dateFormat(e.detail.value, "MD"),
       });
-      this.triggerEvent("changeDate", e.detail.value);
       if (isSameDay(e.detail.value)) {
         // 已选时间在当前时间之前则重置显示时间/时间默认值/开始时间到当前最新时间
         if (isBefore(joinTime(this.data.curShowTime))) {
@@ -82,13 +107,41 @@ Component({
         });
       }
     },
+
+    /**
+     * 时间回调
+     */
     bindTimeChange(e) {
       this.setData({
+        selectTime: e.detail.value,
         curShowTime: e.detail.value,
         timeDefaultValue: e.detail.value,
       });
-      this.triggerEvent("changeTime", e.detail.value);
+
+      let _temCurrentDate = this.data.selectDate.split("-"),
+        _currentTime = e.detail.value,
+        _currentDate;
+
+      if (_temCurrentDate[1][0] === "0") {
+        _currentDate =
+          _temCurrentDate[0] +
+          "-" +
+          _temCurrentDate[1][1] +
+          "-" +
+          _temCurrentDate[2];
+      } else {
+        _currentDate = this.data.selectDate;
+      }
+
+      this.triggerEvent(
+        "changeTime",
+        commonFormat(_currentDate + "-" + _currentTime)
+      );
     },
+
+    /**
+     * 初始化
+     */
     formatDateAndTime() {
       this.setData({
         curShowDate: dateFormat(this.properties.dateStart, "MD"),
@@ -100,6 +153,8 @@ Component({
         curShowTime: dateFormat(this.properties.timeStart, "Hm"),
         timeDefaultValue: dateFormat(this.properties.timeStart, "Hm"),
         curStartTime: dateFormat(this.properties.timeStart, "Hm"),
+        selectDate: dateFormat(this.properties.timeStart, "YMD"),
+        selectTime: dateFormat(this.properties.timeStart, "Hm"),
       });
     },
   },
