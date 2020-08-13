@@ -50,6 +50,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    // todo 若离开此页面后重新回到此页面时当前显示时间已经是过去时间则重置显示时间
     // this.selectComponent("#datePicker").formatDateAndTime();
   },
 
