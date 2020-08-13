@@ -1,6 +1,7 @@
 // miniprogram/pages/charter/charter.js
 // 包车下单页
 import Storage from "../../utils/storage";
+import { debounce } from "../../utils/ext";
 
 Page({
   /**
@@ -26,7 +27,7 @@ Page({
     activeDuration: "four", // 套餐时长
     charterMoney: 0, // 当前时间
     phone: "", // 手机号
-    name: "", // 姓名
+    contact_name: "", // 乘车联系人
     error_field: null, // 错误项
     shakeInvalidAnimate: {},
   },
@@ -116,14 +117,14 @@ Page({
       return false;
     }
 
-    if (!this.data.name) {
+    if (!this.data.contact_name) {
       this.setData({
-        error_field: "name",
-        ["shakeInvalidAnimate.name"]: animate.export(),
+        error_field: "contact_name",
+        ["shakeInvalidAnimate.contact_name"]: animate.export(),
       });
       wx.showToast({
         icon: "none",
-        title: "请完善姓名",
+        title: "请完善乘车人",
       });
       return false;
     }
@@ -169,7 +170,6 @@ Page({
       // 已经注册过无需再授权
       this.setData({
         phone: userInfo.user_phone,
-        name: userInfo.user_name,
       });
     } else {
       wx.cloud
@@ -183,7 +183,6 @@ Page({
           if (res && res.result && res.result.resultData) {
             this.setData({
               phone: res.result.resultData.user_phone,
-              name: res.result.resultData.user_name,
             });
             Storage.setStorage("userInfo", res.result.resultData);
           } else {
@@ -197,19 +196,27 @@ Page({
   },
 
   /**
-   * 用户名监听
+   * 乘车人监听
    */
   inputUserName(e) {
     let _name = e.detail.value;
+    this.debounce(_name);
+  },
+
+  /**
+   * 乘车人debounce
+   */
+  debounceInputName(_name) {
     this.setData({
-      name: _name,
+      contact_name: _name,
     });
     _name &&
-      this.data.error_field === "name" &&
+      this.data.error_field === "contact_name" &&
       this.setData({
         error_field: null,
       });
   },
+
   /**
    * 去支付
    */
@@ -247,5 +254,7 @@ Page({
     this.setData({
       charterMoney: this.data.moneyMap[this.data.activeDuration],
     });
+    // 输入乘车联系人debounce
+    this.debounce = debounce(this.debounceInputName, 200);
   },
 });

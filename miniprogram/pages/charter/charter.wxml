@@ -48,13 +48,13 @@
       </view>
     </view>
     <view class="collt marginbot full">
-      <view class="label">姓名</view>
+      <view class="label">乘车联系人</view>
       <input
-        class="input fx-1 rowlc {{error_field === 'name' ? ' error' : ''}}"
-        animation="{{shakeInvalidAnimate.name}}"
-        placeholder="请输入姓名"
+        class="input fx-1 rowlc {{error_field === 'contact_name' ? ' error' : ''}}"
+        animation="{{shakeInvalidAnimate.contact_name}}"
+        placeholder="请输入乘车联系人"
         bindinput="inputUserName"
-        value="{{name}}"
+        value="{{contact_name}}"
       />
     </view>
   </view>
