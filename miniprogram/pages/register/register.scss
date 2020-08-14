@@ -1,7 +1,5 @@
 /* miniprogram/pages/register/register.wxss */
-@import '../../style/preset.scss';
-
-
+@import "../../style/preset.scss";
 
 page {
   display: flex;
@@ -26,17 +24,17 @@ page {
 }
 
 .label {
-  font-size:27rpx;
-  line-height:36rpx;
+  font-size: 27rpx;
+  line-height: 36rpx;
   margin-bottom: 8rpx;
-  font-family:Helvetica;
-  color:rgba(33,43,54,1);
+  font-family: Helvetica;
+  color: rgba(33, 43, 54, 1);
 }
 
 .input {
-  font-size:27rpx;
+  font-size: 27rpx;
   height: 65rpx;
-  border-radius:5rpx;
+  border-radius: 5rpx;
   padding-left: 20rpx;
   background: #ffffff;
   border: 1rpx solid $gray;
@@ -54,10 +52,10 @@ page {
   background: $blue;
   border-radius: 5rpx;
   width: 180rpx !important;
-  color: rgba(255,255,255,1);
+  color: rgba(255, 255, 255, 1);
   min-height: 66rpx !important;
   margin-left: 20rpx !important;
-  font-family:PingFangSC-Medium,PingFang SC;
+  font-family: PingFangSC-Medium, PingFang SC;
 }
 
 .upload-image {
@@ -77,14 +75,14 @@ page {
   margin-bottom: 15rpx;
 }
 
-.protocol-desc{
-  font-size:27rpx;
+.protocol-desc {
+  font-size: 27rpx;
   margin-left: 15rpx;
-  font-family:Helvetica;
-  color:rgba(33,43,54,1);
+  font-family: Helvetica;
+  color: rgba(33, 43, 54, 1);
 }
 
-.submit{
+.submit {
   height: 100rpx;
   min-width: 0rpx;
   font-size: 27rpx;
@@ -92,38 +90,16 @@ page {
   background: $blue;
   border-radius: 5rpx;
   width: 610rpx !important;
-  color: rgba(255,255,255,1);
+  color: rgba(255, 255, 255, 1);
   min-height: 100rpx !important;
-  font-family:PingFangSC-Medium,PingFang SC;
-}
-
-.poi-con{
-  width: 610rpx;
-  height: 65rpx;
-  font-size: 27rpx;
-  border-radius: 5rpx;
-  padding-left: 24rpx;
-  padding-right: 24rpx;
-  box-sizing: border-box;
-  font-family: Helvetica;
-  border: 1rpx solid $gray;
-  color: rgba(33, 43, 54, 1);
-  background: rgba(255, 255, 255, 1);
-}
-
-.jiantou {
-  font-size: 22rpx;
-}
-
-.placeholder{
-  color: #8a8a8a;
+  font-family: PingFangSC-Medium, PingFang SC;
 }
 
 .error,
-.error .wx-checkbox-input{
+.error .wx-checkbox-input {
   border: 1rpx solid red;
 }
 
-.checkbox.error{
+.checkbox.error {
   border: initial;
 }

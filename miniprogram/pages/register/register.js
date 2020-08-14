@@ -7,19 +7,13 @@ Page({
    */
   data: {
     name: "",
-    phone: "",
+    phone: "15502858542",
+    // 公司地址id
+    company_id: "",
     // 错误项
     error_field: null,
-    // 公司地址数据组件结构
-    company_array: [],
     // 是否勾选免责声明
     is_protocol: false,
-    // 公司地址维护数据
-    company_address: [],
-    // 公司地址二级联动选择项
-    company_index: [0, 0],
-    // 是否选择公司地址
-    selected_company: false,
     // 必填项提示动画
     shakeInvalidAnimate: {},
     // 工作证明临时文件地址
@@ -30,7 +24,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.init();
     this.createAnimation();
   },
 
@@ -97,49 +90,6 @@ Page({
     });
   },
 
-  init() {
-    wx.cloud.callFunction({
-      name: "getAddress",
-      data: {
-        isCompany: 1,
-      },
-      success: ({ result }) => {
-        const company_address = (result || []).reduce((acc, cur) => {
-          const area = cur.addrInfo.area,
-            existIndex = acc.findIndex((it) => it.id === area),
-            addrInfo = {
-              id: cur.id,
-              ...cur.addrInfo,
-            };
-
-          if (existIndex === -1) {
-            acc.push({
-              id: cur.addrInfo.area,
-              area: cur.addrInfo.area,
-              address: [addrInfo],
-            });
-          } else {
-            acc[existIndex].address.push(addrInfo);
-          }
-          return acc;
-        }, []);
-
-        this.setData({
-          company_address,
-          company_array: [
-            company_address.map((it) => it.area),
-            company_address[this.data.company_index[0]].address.map(
-              (it) => it.name
-            ),
-          ],
-        });
-      },
-      fail(e) {
-        console.log(e);
-      },
-    });
-  },
-
   handlerName({ detail }) {
     this.setData({
       name: detail.value,
@@ -171,30 +121,9 @@ Page({
     });
   },
 
-  changeCompany({ detail }) {
-    const company_index = this.data.company_index;
-
-    company_index[detail.column] = detail.value;
-
-    const second_array = this.data.company_address[
-      company_index[0]
-    ].address.map((it) => it.name);
-
-    if (company_index[1] > second_array.length - 1) {
-      company_index[1] = second_array.length - 1;
-    }
-
-    this.setData({
-      company_index,
-      "company_array[1]": second_array,
-    });
-  },
-
   submitCompay({ detail }) {
-    console.log(detail);
     this.setData({
-      selected_company: true,
-      company_index: detail.value,
+      company_id: detail,
     });
   },
 
@@ -238,7 +167,7 @@ Page({
       return false;
     }
 
-    if (!this.data.selected_company) {
+    if (!this.data.company_id) {
       this.setData({
         error_field: "company",
         ["shakeInvalidAnimate.company"]: animate.export(),
@@ -296,23 +225,24 @@ Page({
             action: "doRegisterCommute",
             phone: this.data.phone,
             name: this.data.name.trim(),
-            company: this.data.company_address[this.data.company_index[0]]
-              .address[this.data.company_index[1]].id,
+            company: this.data.company_id,
             fileId: fileID,
           },
           success: ({ result = {} }) => {
-            if (+result.resultCode !== 0) {
-              console.error(result.errMsg);
-              wx.hideLoading();
-              return wx.showToast({
-                icon: "none",
-                title: result.errMsg || "异常错误",
-              });
-            }
-
-            wx.showToast({
-              icon: "none",
-              title: "提交成功，等待审核",
+            wx.hideLoading({
+              complete() {
+                if (+result.resultCode !== 0) {
+                  console.error(result.errMsg);
+                  return wx.showToast({
+                    icon: "none",
+                    title: result.errMsg || "异常错误",
+                  });
+                }
+                wx.showToast({
+                  icon: "none",
+                  title: "提交成功，等待审核",
+                });
+              },
             });
           },
           fail(e) {
@@ -326,10 +256,13 @@ Page({
         });
       },
       fail: ({ errMsg }) => {
-        wx.hideLoading();
-        wx.showToast({
-          icon: "none",
-          title: errMsg,
+        wx.hideLoading({
+          complete() {
+            wx.showToast({
+              icon: "none",
+              title: errMsg,
+            });
+          },
         });
       },
     });

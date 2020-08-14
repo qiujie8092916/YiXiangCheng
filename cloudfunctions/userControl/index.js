@@ -214,7 +214,7 @@ async function doRegisterCommute(request) {
           user_type: 1,
           user_id: OPENID,
         })
-        .count();
+        .get();
 
       if (isRegistered.total) {
         return resolve({

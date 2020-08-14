@@ -29,7 +29,7 @@
     }
   },
   "lint-staged": {
-    "**/*.{wxml,js,wxss,wxs}": [
+    "**/*.{wxml,js,wxss,wxs,scss}": [
       "prettier --write",
       "git add"
     ]

@@ -38,25 +38,14 @@
   </view>
   <view class="block collt full">
     <view class="label">选择公司</view>
-    <picker
-      mode="multiSelector"
-      range="{{company_array}}"
+    <area-address
+      type="company"
+      is-error="{{error_field === 'company'}}"
+      placeholder="请选择公司"
+      shake-invalid-animate="{{shakeInvalidAnimate.company}}"
       bindchange="submitCompay"
-      bindcolumnchange="changeCompany"
-    >
-      <view
-        animation="{{shakeInvalidAnimate.company}}"
-        class="poi-con flex-between{{error_field === 'company' ? ' error' : ''}}"
-      >
-        <view wx:if="{{selected_company}}"
-          >{{ company_address[company_index[0]].area }} | {{
-          company_address[company_index[0]].address[company_index[1]].name
-          }}</view
-        >
-        <view wx:else class="placeholder">请选择公司</view>
-        <view class="iconfont shangxiajiantou- jiantou"></view>
-      </view>
-    </picker>
+      bindisSelected="isSelected"
+    />
   </view>
 
   <!-- 上传工作证明 -->

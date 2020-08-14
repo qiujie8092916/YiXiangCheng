@@ -1,0 +1,20 @@
+<!--components/areaAddress/areaAddress.wxml-->
+<picker
+  mode="multiSelector"
+  range="{{range}}"
+  value="{{[0, 0]}}"
+  bindchange="change"
+  bindcolumnchange="columnchange"
+>
+  <view
+    animation="{{shakeInvalidAnimate}}"
+    class="poi-con flex-between{{isError ? ' error' : ''}}"
+  >
+    <view wx:if="{{isSelected}}">
+      {{ dataSource[selectIndex[0]].area }} | {{
+      dataSource[selectIndex[0]].address[selectIndex[1]].name}}
+    </view>
+    <view wx:else class="placeholder">{{placeholder}}</view>
+    <view class="iconfont shangxiajiantou- jiantou"></view>
+  </view>
+</picker>

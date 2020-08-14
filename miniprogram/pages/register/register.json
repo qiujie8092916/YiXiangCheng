@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "用户注册",
   "usingComponents": {
-    "logo-header": "/components/logoHeader/logoHeader"
+    "logo-header": "/components/logoHeader/logoHeader",
+    "area-address": "/components/areaAddress/areaAddress"
   }
 }

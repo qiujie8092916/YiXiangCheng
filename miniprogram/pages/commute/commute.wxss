@@ -1,6 +1,7 @@
 @charset "UTF-8";
 /* miniprogram/pages/commute/commute.wxss */
 /*! 主题蓝 */
+/*! border边框灰色 */
 page {
   background-color: #ffffff !important;
 }
@@ -40,9 +41,10 @@ page {
   border-bottom: 1px solid #dfe3e8;
 }
 
-.type-con {
-  padding-left: 185rpx;
-  padding-right: 138rpx;
+.type {
+  margin: 60rpx 150rpx 45rpx;
+  display: grid;
+  grid-template: 1 2;
 }
 
 .type-it {
