@@ -208,7 +208,7 @@ async function doRegisterCommute(request) {
 
     try {
       const { OPENID, UNIONID } = cloud.getWXContext();
-      const isRegistered = await db
+      const exist = await db
         .collection("user_info")
         .where({
           user_type: 1,
@@ -216,12 +216,20 @@ async function doRegisterCommute(request) {
         })
         .get();
 
-      if (isRegistered.total) {
-        return resolve({
-          resultCode: -8,
-          resultData: null,
-          errMsg: "用户已注册",
-        });
+      if (exist.data.length) {
+        if (exist.data[0].status === 0) {
+          return resolve({
+            resultCode: -8,
+            resultData: null,
+            errMsg: "管理员正在审核您的注册信息，请勿重复提交",
+          });
+        } else {
+          return resolve({
+            resultCode: -8,
+            resultData: null,
+            errMsg: "用户已注册",
+          });
+        }
       }
 
       await db.collection("user_info").add({
