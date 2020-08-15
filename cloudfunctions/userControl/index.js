@@ -28,6 +28,9 @@ exports.main = async (event, context) => {
     case "registerCharter": {
       return registerCharter(event);
     }
+    case "getUserCompany": {
+      return getUserCompany(event);
+    }
     default: {
       return;
     }
@@ -294,3 +297,80 @@ async function doRegisterCommute(request) {
     }
   });
 }
+
+/**
+ * @desc 获取通勤注册用户的公司地址
+ * @param request
+ * @returns {Promise<{CompanyObject}>}
+ */
+const getUserCompany = async (request) => {
+  try {
+    const { OPENID } = cloud.getWXContext();
+    const _ = db.command;
+    const $ = _.aggregate;
+    const res = await db
+      .collection("user_info")
+      .aggregate()
+      .lookup({
+        from: "address",
+        let: {
+          user_address_id: "$address_id",
+        },
+        as: "company",
+        pipeline: $.pipeline()
+          .match(_.expr($.eq(["$_id", "$$user_address_id"])))
+          .project({
+            _id: 0,
+            create_time: 0,
+            update_time: 0,
+          })
+          .done(),
+      })
+      .match({
+        user_id: OPENID,
+      })
+      .replaceRoot({
+        newRoot: $.mergeObjects([
+          {
+            id: "$address_id",
+          },
+          $.arrayElemAt(["$company", 0]),
+          "$$ROOT",
+        ]),
+      })
+      .project({
+        _id: 0,
+        status: 0,
+        company: 0,
+        user_id: 0,
+        user_type: 0,
+        user_name: 0,
+        address_id: 0,
+        user_phone: 0,
+        update_time: 0,
+        create_time: 0,
+        employment_certificate: 0,
+      })
+      .end();
+
+    if (!res.list.length) {
+      return {
+        resultCode: -2,
+        resultData: null,
+        errMsg: "查询用户信息失败",
+      };
+    }
+
+    return {
+      resultCode: 0,
+      resultData: res.list[0],
+      errMsg: null,
+    };
+  } catch (e) {
+    return {
+      resultCode: -1,
+      resultData: null,
+      errMsg: e.toString(),
+    };
+  }
+};
