@@ -127,7 +127,19 @@ Page({
   },
 
   choosePoi({ detail }) {
-    console.log(detail);
+    detail &&
+      this.setData({
+        pickObj: {
+          id: 0,
+          area: "",
+          name: detail.name,
+          city: detail.city,
+          address: detail.address,
+          province: detail.province,
+          district: detail.district,
+          coordinates: [detail.longitude, detail.latitude],
+        },
+      });
   },
 
   onTabsChange(e) {

@@ -41,6 +41,7 @@
     <area-address
       width="562rpx"
       type="company"
+      default-value="{{companyObj}}"
       is-error="{{error_field === 'company'}}"
       placeholder="请选择公司"
       shake-invalid-animate="{{shakeInvalidAnimate.company}}"

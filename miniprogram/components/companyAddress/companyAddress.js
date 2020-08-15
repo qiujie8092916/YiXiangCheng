@@ -23,10 +23,22 @@ Component({
     },
   },
 
+  observers: {
+    address(val) {
+      if (Object.keys(val).length) {
+        this.setData({
+          isSkeleton: false,
+        });
+      }
+    },
+  },
+
   /**
    * 组件的初始数据
    */
-  data: {},
+  data: {
+    isSkeleton: true,
+  },
 
   /**
    * 组件的方法列表

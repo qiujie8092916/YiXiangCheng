@@ -35,17 +35,30 @@
 }
 
 .address-name {
-  font-size:28rpx;
-  font-weight:500;
-  line-height:40rpx;
-  color:rgba(69,78,86,1);
-  font-family:PingFangSC-Medium,PingFang SC;
+  font-size: 28rpx;
+  font-weight: 500;
+  line-height: 40rpx;
+  color: rgba(69, 78, 86, 1);
+  font-family: PingFangSC-Medium, PingFang SC;
 }
 
 .address-desc {
-  font-size:20rpx;
-  font-weight:500;
-  line-height:25rpx;
-  color:rgba(69,78,86,1);
-  font-family:PingFangSC-Medium,PingFang SC;
+  font-size: 20rpx;
+  font-weight: 500;
+  line-height: 25rpx;
+  color: rgba(69, 78, 86, 1);
+  font-family: PingFangSC-Medium, PingFang SC;
+}
+
+.skeleton-address-name {
+  height: 40rpx;
+  width: 350rpx;
+  margin-bottom: 10rpx;
+  border-radius: 6rpx;
+}
+
+.skeleton-address-desc {
+  height: 25rpx;
+  width: 200rpx;
+  border-radius: 6rpx;
 }

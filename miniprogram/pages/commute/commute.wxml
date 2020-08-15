@@ -24,51 +24,44 @@
       bindchange="onTabsChange"
       current="{{current === 'goHome' ? 0 : 1}}"
     >
+      <!-- 享回家 -->
       <swiper-item item-id="goHome">
-        <!-- 享回家 -->
-        <view class="tab-content go-home">
-          <company-address disabled address="{{ companyAddress }}" />
+        <company-address disabled address="{{ companyAddress }}" />
+        <view hidden="{{ activeType === 'individual' }}">
           <poi-picker
-            hidden="{{ activeType === 'individual' }}"
             type="destination"
             icon="chakantiezidingwei"
             bindchoosePoi="choosePoi"
           />
-          <view
-            hidden="{{ activeType === 'sharing' }}"
-            class="block flex-center"
-          >
-            <view class="{{['iconfont', 'icon', 'chakantiezidingwei']}}" />
-            <template
-              is="area-address-tmpl"
-              data="{{placeholder: 'destination', errorField: error_field, animate: shakeInvalidAnimate.pick, submitPick}}"
-            />
-          </view>
-          <date-picker />
         </view>
+        <view hidden="{{ activeType === 'sharing' }}" class="block flex-center">
+          <view class="{{['iconfont', 'icon', 'chakantiezidingwei']}}" />
+          <template
+            is="area-address-tmpl"
+            data="{{placeholder: 'destination', errorField: error_field, animate: shakeInvalidAnimate.pick, defaultValue: pickObj, submitPick}}"
+          />
+        </view>
+        <date-picker />
       </swiper-item>
+
+      <!-- 享上班 -->
       <swiper-item item-id="goWork">
-        <!-- 享上班 -->
-        <view class="tab-content go-work">
+        <view hidden="{{ activeType === 'individual' }}">
           <poi-picker
-            hidden="{{ activeType === 'individual' }}"
             type="departure"
             icon="chakantiezidingwei"
             bindchoosePoi="choosePoi"
           />
-          <view
-            hidden="{{ activeType === 'sharing' }}"
-            class="block flex-center"
-          >
-            <view class="{{['iconfont', 'icon', 'chakantiezidingwei']}}" />
-            <template
-              is="area-address-tmpl"
-              data="{{placeholder: 'departure', errorField: error_field, animate: shakeInvalidAnimate.pick, submitPick}}"
-            />
-          </view>
-          <company-address disabled address="{{ companyAddress }}" />
-          <date-picker />
         </view>
+        <view hidden="{{ activeType === 'sharing' }}" class="block flex-center">
+          <view class="{{['iconfont', 'icon', 'chakantiezidingwei']}}" />
+          <template
+            is="area-address-tmpl"
+            data="{{placeholder: 'departure', errorField: error_field, animate: shakeInvalidAnimate.pick, defaultValue: pickObj, submitPick}}"
+          />
+        </view>
+        <company-address disabled address="{{ companyAddress }}" />
+        <date-picker />
       </swiper-item>
     </swiper>
 
@@ -100,6 +93,7 @@
   <area-address
     type="pick"
     width="450rpx"
+    default-value="{{defaultValue}}"
     is-error="{{errorField === 'pick'}}"
     placeholder="{{placeholder}}"
     shake-invalid-animate="{{animate}}"

@@ -2,7 +2,7 @@
 <picker
   mode="{{type === 'company' ? 'multiSelector': 'selector' }}"
   range="{{range}}"
-  value="{{type === 'company' ? [0, 0]: 0}}"
+  value="{{selectIndex}}"
   bindchange="change"
   bindcolumnchange="columnchange"
 >

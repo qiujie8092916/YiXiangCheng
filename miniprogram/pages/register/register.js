@@ -9,7 +9,7 @@ Page({
     name: "",
     phone: "15502858542",
     // 公司地址id
-    company_id: "",
+    companyObj: {},
     // 错误项
     error_field: null,
     // 是否勾选免责声明
@@ -123,7 +123,7 @@ Page({
 
   submitCompay({ detail }) {
     this.setData({
-      company_id: detail.id,
+      companyObj: detail,
     });
   },
 
@@ -167,7 +167,7 @@ Page({
       return false;
     }
 
-    if (!this.data.company_id) {
+    if (!this.data.companyObj.id) {
       this.setData({
         error_field: "company",
         ["shakeInvalidAnimate.company"]: animate.export(),
@@ -225,7 +225,7 @@ Page({
             action: "doRegisterCommute",
             phone: this.data.phone,
             name: this.data.name.trim(),
-            company: this.data.company_id,
+            company: this.data.companyObj.id,
             fileId: fileID,
           },
           success: ({ result = {} }) => {

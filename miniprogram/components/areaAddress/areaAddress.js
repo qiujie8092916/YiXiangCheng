@@ -8,6 +8,9 @@ Component({
       type: String,
       value: "0rpx",
     },
+    defaultValue: {
+      type: Object,
+    },
     type: String, //pick 一级选择框  company 二级联动选择框
     isError: {
       type: Boolean,
@@ -27,6 +30,7 @@ Component({
    * 组件的初始数据
    */
   data: {
+    value: 0,
     range: [],
     dataSource: [],
     isSelected: false,
@@ -34,7 +38,7 @@ Component({
   },
 
   observers: {
-    type: function (val) {
+    type(val) {
       if (val === "company") {
         this.setData({
           selectIndex: [0, 0],
@@ -43,6 +47,35 @@ Component({
         this.setData({
           selectIndex: 0,
         });
+      }
+    },
+    defaultValue(val) {
+      if (val) {
+        if (this.data.dataSource.length) {
+          if (this.properties.type === "company") {
+            const selectIndex = this.data.dataSource.reduce((acc, cur, idx) => {
+              const child_idx = cur.address.findIndex(
+                (addr) => addr.id === val.id
+              );
+              if (child_idx !== -1) {
+                acc[0] = idx;
+                acc[1] = child_idx;
+              }
+              return acc;
+            }, []);
+            this.setData({
+              isSelected: true,
+              selectIndex: selectIndex.length ? selectIndex : [0, 0],
+            });
+          } else {
+            this.setData({
+              isSelected: true,
+              selectIndex: this.data.dataSource.findIndex(
+                (it) => val.id === it.id
+              ),
+            });
+          }
+        }
       }
     },
   },

@@ -277,3 +277,24 @@ page {
 }
 
 /** 全局常用样式 end */
+
+/** 骨架屏 start */
+.skeleton {
+  opacity: 1;
+  animation-fill-mode: both;
+  background-color: #f0f2f5;
+  animation: bounce 1s ease-in 0s infinite normal both;
+}
+
+@keyframes bounce {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+/** 骨架屏 end */
