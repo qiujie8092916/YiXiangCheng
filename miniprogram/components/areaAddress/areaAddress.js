@@ -64,15 +64,16 @@ Component({
               return acc;
             }, []);
             this.setData({
-              isSelected: true,
+              isSelected: selectIndex.length,
               selectIndex: selectIndex.length ? selectIndex : [0, 0],
             });
           } else {
+            const selectIndex = this.data.dataSource.findIndex(
+              (it) => val.id === it.id
+            );
             this.setData({
-              isSelected: true,
-              selectIndex: this.data.dataSource.findIndex(
-                (it) => val.id === it.id
-              ),
+              isSelected: selectIndex !== -1,
+              selectIndex: selectIndex !== -1 ? selectIndex : 0,
             });
           }
         }

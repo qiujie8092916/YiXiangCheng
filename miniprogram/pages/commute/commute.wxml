@@ -31,6 +31,8 @@
           <poi-picker
             type="destination"
             icon="chakantiezidingwei"
+            is-error="{{error_field === 'sharing'}}"
+            shake-invalid-animate="{{shakeInvalidAnimate.sharing}}"
             bindchoosePoi="choosePoi"
           />
         </view>
@@ -38,7 +40,7 @@
           <view class="{{['iconfont', 'icon', 'chakantiezidingwei']}}" />
           <template
             is="area-address-tmpl"
-            data="{{placeholder: 'destination', errorField: error_field, animate: shakeInvalidAnimate.pick, defaultValue: pickObj, submitPick}}"
+            data="{{placeholder: 'destination', errorField: error_field, activeType, animate: shakeInvalidAnimate.individual, defaultValue: pickObj, submitPick}}"
           />
         </view>
         <date-picker />
@@ -50,6 +52,8 @@
           <poi-picker
             type="departure"
             icon="chakantiezidingwei"
+            is-error="{{error_field === 'sharing'}}"
+            shake-invalid-animate="{{shakeInvalidAnimate.sharing}}"
             bindchoosePoi="choosePoi"
           />
         </view>
@@ -57,7 +61,7 @@
           <view class="{{['iconfont', 'icon', 'chakantiezidingwei']}}" />
           <template
             is="area-address-tmpl"
-            data="{{placeholder: 'departure', errorField: error_field, animate: shakeInvalidAnimate.pick, defaultValue: pickObj, submitPick}}"
+            data="{{placeholder: 'departure', errorField: error_field, activeType, animate: shakeInvalidAnimate.individual, defaultValue: pickObj, submitPick}}"
           />
         </view>
         <company-address disabled address="{{ companyAddress }}" />
@@ -84,8 +88,19 @@
       </view>
     </view>
 
+    <!-- 显示区域 -->
+    <view class="screen colct">
+      <text class="pric">一口价：￥{{estimate}}元</text>
+      <text class="desc"
+        >车型：奔驰E系列 乘坐人数：{{activeType === 'sharing' ? '1':
+        '4'}}人</text
+      >
+    </view>
+
     <!-- 提交 -->
-    <button class="submit rowcc" form-type="submit">确认无误，提交</button>
+    <button class="submit rowcc" hover-class="act-btn" form-type="submit">
+      去支付
+    </button>
   </form>
 </view>
 
@@ -94,7 +109,7 @@
     type="pick"
     width="450rpx"
     default-value="{{defaultValue}}"
-    is-error="{{errorField === 'pick'}}"
+    is-error="{{errorField === activeType}}"
     placeholder="{{placeholder}}"
     shake-invalid-animate="{{animate}}"
     bindchange="submitPick"

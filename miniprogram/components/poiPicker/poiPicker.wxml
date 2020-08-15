@@ -1,7 +1,11 @@
 <!--components/poiPicker/poiPicker.wxml-->
 <view class="poi flex-center">
   <view class="{{['iconfont', 'icon', icon]}}"></view>
-  <view class="poi-con flex-between" bindtap="choosePoi">
+  <view
+    class="poi-con flex-between{{isError ? ' error' : ''}}"
+    animation="{{shakeInvalidAnimate}}"
+    bindtap="choosePoi"
+  >
     <view class="poi-name {{type}}">{{poi}}</view>
     <view class="iconfont shangxiajiantou- jiantou"></view>
   </view>

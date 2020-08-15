@@ -19,6 +19,14 @@ Component({
       type: String,
       default: "departure", // departure 出发地 destination 目的地
     },
+    isError: {
+      type: Boolean,
+      default: false,
+    },
+    shakeInvalidAnimate: {
+      type: Object,
+      default: () => ({}),
+    },
   },
 
   observers: {

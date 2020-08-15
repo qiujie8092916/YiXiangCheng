@@ -9,9 +9,22 @@ Page({
    * 页面的初始数据
    */
   data: {
+    /**
+     * 表单错误字段
+     * @type string
+     */
+    error_field: "",
+    /**
+     * 预估价
+     * @type number
+     */
+    estimate: 0,
     current: "goHome",
     companyAddress: {},
-    pickObj: {},
+    pickObj: {
+      sharing: {},
+      individual: {},
+    },
     tabs: [
       {
         key: "goHome",
@@ -33,7 +46,10 @@ Page({
       },
     ],
     activeType: "sharing",
-    // 必填项提示动画
+    /**
+     * 必填项提示动画
+     * @type Animation
+     */
     shakeInvalidAnimate: {},
   },
 
@@ -129,7 +145,7 @@ Page({
   choosePoi({ detail }) {
     detail &&
       this.setData({
-        pickObj: {
+        "pickObj.sharing": {
           id: 0,
           area: "",
           name: detail.name,
@@ -148,6 +164,7 @@ Page({
 
     this.setData({
       current,
+      error_field: "",
     });
   },
 
@@ -159,7 +176,7 @@ Page({
 
   submitPick({ detail }) {
     this.setData({
-      pickObj: detail,
+      "pickObj.individual": detail,
     });
   },
 
@@ -179,10 +196,13 @@ Page({
       .translateX(0)
       .step();
 
-    if (!Object.keys(this.data.pickObj).length) {
+    if (!Object.keys(this.data.pickObj[this.data.activeType]).length) {
+      const shakeInvalidAnimate = {
+        [this.data.activeType]: animate.export(),
+      };
       this.setData({
-        error_field: "pick",
-        ["shakeInvalidAnimate.pick"]: animate.export(),
+        error_field: this.data.activeType,
+        shakeInvalidAnimate,
       });
       wx.showToast({
         icon: "none",

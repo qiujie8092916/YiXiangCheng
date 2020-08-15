@@ -134,6 +134,10 @@ Page({
     }
 
     if (!this.data.departure) {
+      this.setData({
+        error_field: "poi",
+        ["shakeInvalidAnimate.poi"]: animate.export(),
+      });
       wx.showToast({
         icon: "none",
         title: "请选择上车地点",

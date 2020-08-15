@@ -4,7 +4,12 @@
   <logo-header isShowOrder="true" />
   <!-- 地址时间选择 -->
   <view class="poi-time">
-    <poi-picker icon="chakantiezidingwei" bindchoosePoi="choosePoi" />
+    <poi-picker
+      icon="chakantiezidingwei"
+      is-error="{{error_field === 'poi'}}"
+      shake-invalid-animate="{{shakeInvalidAnimate.poi}}"
+      bindchoosePoi="choosePoi"
+    />
     <date-picker id="datePicker" bindchangeTime="changeTime" />
   </view>
   <!-- 套餐选择 -->
@@ -65,6 +70,8 @@
   </view>
   <!-- 支付按钮 -->
   <view class="pay flex-center">
-    <view class="pay-btn" bindtap="gotoPayforOrder">去支付</view>
+    <view class="pay-btn" hover-class="act-btn" bindtap="gotoPayforOrder"
+      >去支付</view
+    >
   </view>
 </view>
