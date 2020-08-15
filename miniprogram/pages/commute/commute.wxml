@@ -40,7 +40,7 @@
           <view class="{{['iconfont', 'icon', 'chakantiezidingwei']}}" />
           <template
             is="area-address-tmpl"
-            data="{{placeholder: 'destination', errorField: error_field, activeType, animate: shakeInvalidAnimate.individual, defaultValue: pickObj, submitPick}}"
+            data="{{placeholder: 'destination', errorField: error_field, activeType, animate: shakeInvalidAnimate.individual, defaultValue: pickObj.individual, submitPick}}"
           />
         </view>
         <date-picker />
@@ -61,7 +61,7 @@
           <view class="{{['iconfont', 'icon', 'chakantiezidingwei']}}" />
           <template
             is="area-address-tmpl"
-            data="{{placeholder: 'departure', errorField: error_field, activeType, animate: shakeInvalidAnimate.individual, defaultValue: pickObj, submitPick}}"
+            data="{{placeholder: 'departure', errorField: error_field, activeType, animate: shakeInvalidAnimate.individual, defaultValue: pickObj.individual, submitPick}}"
           />
         </view>
         <company-address disabled address="{{ companyAddress }}" />
@@ -90,7 +90,10 @@
 
     <!-- 显示区域 -->
     <view class="screen colct">
-      <text class="pric">一口价：￥{{estimate}}元</text>
+      <text class="pric"
+        >一口价：{{estimate[activeType] ? '￥' : ''}}{{estimate[activeType] ||
+        '--'}}元</text
+      >
       <text class="desc"
         >车型：奔驰E系列 乘坐人数：{{activeType === 'sharing' ? '1':
         '4'}}人</text

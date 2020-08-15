@@ -16,9 +16,12 @@ Page({
     error_field: "",
     /**
      * 预估价
-     * @type number
+     * @type object
      */
-    estimate: 0,
+    estimate: {
+      sharing: 0,
+      individual: 0,
+    },
     current: "goHome",
     companyAddress: {},
     pickObj: {
@@ -142,42 +145,101 @@ Page({
     });
   },
 
+  submitPick({ detail }) {
+    this.getEstimatePrice(detail.coordinates);
+    this.setData({
+      "pickObj.individual": detail,
+    });
+  },
+
   choosePoi({ detail }) {
-    detail &&
+    if (detail) {
+      const coordinates = [detail.longitude, detail.latitude];
+      this.getEstimatePrice(coordinates);
       this.setData({
         "pickObj.sharing": {
           id: 0,
           area: "",
+          coordinates,
           name: detail.name,
           city: detail.city,
           address: detail.address,
           province: detail.province,
           district: detail.district,
-          coordinates: [detail.longitude, detail.latitude],
         },
       });
+    }
   },
 
   onTabsChange(e) {
     const current =
       e.currentTarget.dataset.key || e.detail.currentItemId || "goHome";
 
-    this.setData({
-      current,
-      error_field: "",
-    });
+    if (current !== this.data.current) {
+      this.getEstimatePrice(
+        this.data.pickObj[this.data.activeType].coordinates
+      );
+
+      this.setData({
+        current,
+        error_field: "",
+      });
+    }
   },
 
   changeType({ currentTarget }) {
-    this.setData({
-      activeType: currentTarget.dataset.type,
-    });
+    const activeType = currentTarget.dataset.type;
+    if (activeType !== this.data.activeType) {
+      this.setData(
+        {
+          activeType,
+        },
+        () => {
+          this.getEstimatePrice(this.data.pickObj[activeType].coordinates);
+        }
+      );
+    }
   },
 
-  submitPick({ detail }) {
-    this.setData({
-      "pickObj.individual": detail,
-    });
+  getEstimatePrice(coordinates) {
+    if (coordinates && coordinates.length) {
+      wx.showLoading({ title: "请稍等" });
+
+      const params = { mode: "driving" },
+        pickCoordinates = JSON.parse(JSON.stringify(coordinates)),
+        companyCoordinates = JSON.parse(
+          JSON.stringify(this.data.companyAddress.coordinate.coordinates)
+        );
+      if (this.data.current === "goHome") {
+        params.from = companyCoordinates.reverse().join(",");
+        params.to = pickCoordinates.reverse().join(",");
+      } else {
+        params.from = pickCoordinates.reverse().join(",");
+        params.to = companyCoordinates.reverse().join(",");
+      }
+
+      console.log(params);
+      qqmapsdk.direction({
+        ...params,
+        success: ({ result }) => {
+          this.setData({
+            ["estimate." + this.data.activeType + ""]: result.routes[0]
+              .taxi_fare.fare,
+          });
+          wx.hideLoading();
+        },
+        fail(err) {
+          wx.hideLoading({
+            complete() {
+              wx.showToast({
+                icon: "none",
+                title: err.message.toString(),
+              });
+            },
+          });
+        },
+      });
+    }
   },
 
   preSubmit() {

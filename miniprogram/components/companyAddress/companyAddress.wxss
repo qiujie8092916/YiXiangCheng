@@ -151,18 +151,22 @@ button:focus {
   outline: 0;
 }
 
-button::after {
-  border: none;
-}
-
+/*button::after {*/
+/*  content: none;*/
+/*  border: none;*/
+/*}*/
 page {
+  height: 100%;
   display: flex;
-  min-height: 100vh;
   flex-direction: column;
+  justify-content: flex-start;
   background-color: #f2f2f7;
   color: #222222;
-  justify-content: flex-start;
   font-family: PingFangSC-Regular, PingFang SC;
+}
+
+.full {
+  width: 100%;
 }
 
 /* 单行文本溢出省略 */
@@ -410,6 +414,27 @@ page {
 }
 
 /** 全局常用样式 end */
+/** 骨架屏 start */
+.skeleton {
+  opacity: 1;
+  animation-fill-mode: both;
+  background-color: #f0f2f5;
+  animation: bounce 1s ease-in 0s infinite normal both;
+}
+
+@keyframes bounce {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/** 骨架屏 end */
 .address {
   width: 100%;
   margin-bottom: 42rpx;
@@ -457,4 +482,17 @@ page {
   line-height: 25rpx;
   color: #454e56;
   font-family: PingFangSC-Medium, PingFang SC;
+}
+
+.skeleton-address-name {
+  height: 40rpx;
+  width: 350rpx;
+  margin-bottom: 10rpx;
+  border-radius: 6rpx;
+}
+
+.skeleton-address-desc {
+  height: 25rpx;
+  width: 200rpx;
+  border-radius: 6rpx;
 }
