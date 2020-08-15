@@ -2,48 +2,107 @@
 <view>
   <!-- logo -->
   <logo-header isShowOrder="true" />
-  <view class="container">
-    <view class="tab-cotainer">
-      <view
-        wx:for="{{ tabs }}"
-        wx:key="key"
-        data-key="{{item.key}}"
-        catchtap="onTabsChange"
-        class="{{['tab-item', current === item.key ? 'current' : '']}}"
-      >
-        {{item.title}}
-      </view>
-    </view>
-  </view>
 
-  <!-- 标签 -->
-  <view class="tab-content" wx:if="{{current === 'goHome'}}">
-    <company-address disabled address="{{companyAddress}}" />
-    <poi-picker icon="chakantiezidingwei" bindchoosePoi="choosePoi" />
-    <date-picker />
-  </view>
-  <view class="tab-content" wx:elif="{{current === 'goWork'}}">
-    <poi-picker icon="chakantiezidingwei" bindchoosePoi="choosePoi" />
-    <company-address disabled address="{{companyAddress}}" />
-    <date-picker />
-  </view>
-
-  <!-- 拼车 独享 -->
-  <view class="type">
-    <view class="type-con flex-between">
-      <view
-        wx:for="{{type}}"
-        wx:key="key"
-        class="type-it flex-center {{activeType === item.key ? 'type-active' : ''}}"
-        data-type="{{item.key}}"
-        catchtap="changeType"
-      >
-        <text>{{item.value}}</text>
+  <form bindsubmit="onsubmit" class="colct">
+    <view class="container">
+      <view class="tab-cotainer">
         <view
-          wx:if="{{activeType === item.key}}"
-          class="iconfont youxiajiaogouxuan type-selected"
-        />
+          wx:for="{{ tabs }}"
+          wx:key="key"
+          data-key="{{item.key}}"
+          catchtap="onTabsChange"
+          class="{{['tab-item', current === item.key ? 'current' : '']}}"
+        >
+          {{item.title}}
+        </view>
       </view>
     </view>
-  </view>
+
+    <!-- 标签 -->
+    <swiper
+      class="swiper"
+      bindchange="onTabsChange"
+      current="{{current === 'goHome' ? 0 : 1}}"
+    >
+      <swiper-item item-id="goHome">
+        <!-- 享回家 -->
+        <view class="tab-content go-home">
+          <company-address disabled address="{{ companyAddress }}" />
+          <poi-picker
+            hidden="{{ activeType === 'individual' }}"
+            type="destination"
+            icon="chakantiezidingwei"
+            bindchoosePoi="choosePoi"
+          />
+          <view
+            hidden="{{ activeType === 'sharing' }}"
+            class="block flex-center"
+          >
+            <view class="{{['iconfont', 'icon', 'chakantiezidingwei']}}" />
+            <template
+              is="area-address-tmpl"
+              data="{{placeholder: 'destination', errorField: error_field, animate: shakeInvalidAnimate.pick, submitPick}}"
+            />
+          </view>
+          <date-picker />
+        </view>
+      </swiper-item>
+      <swiper-item item-id="goWork">
+        <!-- 享上班 -->
+        <view class="tab-content go-work">
+          <poi-picker
+            hidden="{{ activeType === 'individual' }}"
+            type="departure"
+            icon="chakantiezidingwei"
+            bindchoosePoi="choosePoi"
+          />
+          <view
+            hidden="{{ activeType === 'sharing' }}"
+            class="block flex-center"
+          >
+            <view class="{{['iconfont', 'icon', 'chakantiezidingwei']}}" />
+            <template
+              is="area-address-tmpl"
+              data="{{placeholder: 'departure', errorField: error_field, animate: shakeInvalidAnimate.pick, submitPick}}"
+            />
+          </view>
+          <company-address disabled address="{{ companyAddress }}" />
+          <date-picker />
+        </view>
+      </swiper-item>
+    </swiper>
+
+    <!-- 拼车 独享 -->
+    <view class="type colct">
+      <view class="type-con flex-between">
+        <view
+          wx:for="{{type}}"
+          wx:key="key"
+          class="type-it flex-center {{activeType === item.key ? 'type-active' : ''}}"
+          data-type="{{item.key}}"
+          catchtap="changeType"
+        >
+          <text>{{item.value}}</text>
+          <view
+            wx:if="{{activeType === item.key}}"
+            class="iconfont youxiajiaogouxuan type-selected"
+          />
+        </view>
+      </view>
+    </view>
+
+    <!-- 提交 -->
+    <button class="submit rowcc" form-type="submit">确认无误，提交</button>
+  </form>
 </view>
+
+<template name="area-address-tmpl">
+  <area-address
+    type="pick"
+    width="450rpx"
+    is-error="{{errorField === 'pick'}}"
+    placeholder="{{placeholder}}"
+    shake-invalid-animate="{{animate}}"
+    bindchange="submitPick"
+  />
+</template>

@@ -1,0 +1,49 @@
+/* components/datePicker/datePicker.wxss */
+@import "../../fonts/iconfont.wxss";
+@import "../../app.wxss";
+@import "../../style/preset.scss";
+
+.time {
+  width: 100%;
+}
+
+.icon {
+  font-size: 40rpx;
+}
+
+.time-con {
+  width: 500rpx;
+  margin-left: 34rpx;
+  font-size: 27rpx;
+  font-family: Helvetica;
+  color: rgba(33, 43, 54, 1);
+  background: rgba(255, 255, 255, 1);
+}
+
+.picker {
+  width: 190rpx;
+  height: 65rpx;
+  color: $fontcolor;
+  padding-left: 24rpx;
+  padding-right: 24rpx;
+  //background: linear-gradient(
+  //  180deg,
+  //  rgba(255, 255, 255, 1) 0%,
+  //  rgba(249, 250, 251, 1) 100%
+  //);
+  //box-shadow: 0rpx 2rpx 0rpx 0rpx rgba(22, 29, 37, 0.05);
+  border-radius: 5rpx;
+  border: 2rpx solid $gray;
+}
+
+.time-picker {
+  margin-left: 20rpx;
+}
+
+.jiantou {
+  font-size: 22rpx;
+}
+
+.jiantou {
+  font-size: 22rpx;
+}

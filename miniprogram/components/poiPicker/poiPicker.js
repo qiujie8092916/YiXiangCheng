@@ -17,8 +17,22 @@ Component({
     },
     type: {
       type: String,
-      default: 'departure' // departure 出发地 destination 目的地
-    }
+      default: "departure", // departure 出发地 destination 目的地
+    },
+  },
+
+  observers: {
+    type: function (val) {
+      if (val === "destination") {
+        this.setData({
+          poi: "您在哪儿下车？",
+        });
+      } else {
+        this.setData({
+          poi: "您在哪儿上车？",
+        });
+      }
+    },
   },
 
   /**
@@ -45,13 +59,10 @@ Component({
     // 组件所在页面的生命周期函数
     show: function () {
       const location = chooseLocation.getLocation();
-      location ? this.setData({
-        poi: location.name,
-      }) : this.properties.type === 'destination' ? this.setData({
-        poi: "您在哪儿下车？"
-      }) : this.setData({
-        poi: "您在哪儿上车？"
-      })
+      location &&
+        this.setData({
+          poi: location.name,
+        });
 
       this.triggerEvent("choosePoi", location);
     },

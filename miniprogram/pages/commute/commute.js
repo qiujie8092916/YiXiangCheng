@@ -10,11 +10,8 @@ Page({
    */
   data: {
     current: "goHome",
-    companyAddress: {
-      area: "凌空SOHO",
-      name: "Sky Bridge HQ天会",
-      address: "上海市长宁区金钟路968号",
-    },
+    companyAddress: {},
+    pickObj: {},
     tabs: [
       {
         key: "goHome",
@@ -36,6 +33,8 @@ Page({
       },
     ],
     activeType: "sharing",
+    // 必填项提示动画
+    shakeInvalidAnimate: {},
   },
 
   /**
@@ -52,8 +51,9 @@ Page({
     });*/
 
     //TODO 更新skecth表结构
-
+    wx.showLoading({ title: "加载中" });
     this.init();
+    this.createAnimation();
   },
 
   /**
@@ -89,17 +89,53 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {},
+  // onShareAppMessage: function () {},
 
-  init() {},
+  async init() {
+    try {
+      const { result = {} } = await wx.cloud.callFunction({
+        name: "userControl",
+        data: {
+          action: "getUserCompany",
+        },
+      });
+      if (+result.resultCode !== 0) {
+        throw result.errMsg;
+      }
+      this.setData({
+        companyAddress: result.resultData,
+      });
+      wx.hideLoading();
+    } catch (e) {
+      wx.hideLoading({
+        complete() {
+          wx.showToast({
+            icon: "none",
+            title: JSON.stringify(e),
+          });
+        },
+      });
+    }
+  },
+
+  createAnimation() {
+    this.animate = wx.createAnimation({
+      delay: 0,
+      duration: 35,
+      timingFunction: "ease",
+    });
+  },
 
   choosePoi({ detail }) {
     console.log(detail);
   },
 
-  onTabsChange({ currentTarget }) {
+  onTabsChange(e) {
+    const current =
+      e.currentTarget.dataset.key || e.detail.currentItemId || "goHome";
+
     this.setData({
-      current: currentTarget.dataset.key,
+      current,
     });
   },
 
@@ -107,5 +143,46 @@ Page({
     this.setData({
       activeType: currentTarget.dataset.type,
     });
+  },
+
+  submitPick({ detail }) {
+    this.setData({
+      pickObj: detail,
+    });
+  },
+
+  preSubmit() {
+    const animate = this.animate;
+    animate
+      .translateX(-5)
+      .step()
+      .translateX(4)
+      .step()
+      .translateX(-3)
+      .step()
+      .translateX(2)
+      .step()
+      .translateX(-1)
+      .step()
+      .translateX(0)
+      .step();
+
+    if (!Object.keys(this.data.pickObj).length) {
+      this.setData({
+        error_field: "pick",
+        ["shakeInvalidAnimate.pick"]: animate.export(),
+      });
+      wx.showToast({
+        icon: "none",
+        title: `请完善${this.data.current === "goHome" ? "下" : "上"}车地址`,
+      });
+      return false;
+    }
+
+    return true;
+  },
+
+  onsubmit() {
+    if (!this.preSubmit()) return;
   },
 });

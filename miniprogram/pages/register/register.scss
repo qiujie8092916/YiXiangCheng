@@ -18,9 +18,14 @@ page {
   font-family:PingFangSC-Medium,PingFang SC;
 }*/
 
+.placeholder {
+  color: #222222;
+}
+
 .block {
-  box-sizing: border-box;
+  width: 750rpx;
   padding: 0 70rpx 50rpx;
+  box-sizing: border-box;
 }
 
 .label {
@@ -32,12 +37,13 @@ page {
 }
 
 .input {
-  font-size: 27rpx;
   height: 65rpx;
+  font-size: 27rpx;
+  color: $fontcolor;
   border-radius: 5rpx;
   padding-left: 20rpx;
   background: #ffffff;
-  border: 1rpx solid $gray;
+  border: 2rpx solid $gray;
 
   &.disabled {
     background: #f8f8f8;

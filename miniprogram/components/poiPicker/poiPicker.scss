@@ -1,0 +1,37 @@
+/* components/poiPicker/poiPicker.wxss */
+@import "../../fonts/iconfont.wxss";
+@import "../../app.wxss";
+@import "../../style/preset.scss";
+
+.poi {
+  width: 100%;
+  margin-bottom: 42rpx;
+}
+.poi-con {
+  width: 450rpx;
+  height: 65rpx;
+  padding-left: 24rpx;
+  padding-right: 24rpx;
+  margin-left: 34rpx;
+  font-size: 27rpx;
+  font-family: Helvetica;
+  color: rgba(33, 43, 54, 1);
+  border-radius: 5rpx;
+  border: 2rpx solid $gray;
+  background: rgba(255, 255, 255, 1);
+}
+
+.icon {
+  font-size: 40rpx;
+}
+
+.jiantou {
+  font-size: 22rpx;
+}
+
+.poi-name {
+  color: $fontcolor;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

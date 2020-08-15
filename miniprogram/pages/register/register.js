@@ -123,7 +123,7 @@ Page({
 
   submitCompay({ detail }) {
     this.setData({
-      company_id: detail,
+      company_id: detail.id,
     });
   },
 

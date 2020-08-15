@@ -3,25 +3,22 @@
 @import "../../style/preset.scss";
 
 .poi-con {
-  width: 610rpx;
   height: 65rpx;
   font-size: 27rpx;
+  color: $fontcolor;
   border-radius: 5rpx;
   padding-left: 24rpx;
   padding-right: 24rpx;
-  box-sizing: border-box;
   font-family: Helvetica;
-  border: 1rpx solid $gray;
-  color: rgba(33, 43, 54, 1);
+  border: 2rpx solid $gray;
   background: rgba(255, 255, 255, 1);
 }
 
 .jiantou {
   font-size: 22rpx;
 }
-
-.placeholder {
-  color: #8a8a8a;
+.input .placeholder {
+  color: $fontcolor;
 }
 
 .error,

@@ -1,7 +1,8 @@
 @charset "UTF-8";
 /* miniprogram/pages/commute/commute.wxss */
-/*! 主题蓝 */
-/*! border边框灰色 */
+/** 主题蓝 */
+/** border边框灰色 */
+/** 默认字体颜色 */
 page {
   background-color: #ffffff !important;
 }
@@ -36,20 +37,19 @@ page {
   display: flex;
   width: 590rpx;
   align-items: center;
-  margin: 40rpx 0rpx 40rpx;
+  margin: 40rpx auto 40rpx;
   justify-content: space-around;
   border-bottom: 1px solid #dfe3e8;
 }
 
 .type {
-  margin: 60rpx 150rpx 45rpx;
-  display: grid;
-  grid-template: 1 2;
+  margin: 80rpx 150rpx 45rpx;
 }
 
 .type-it {
   width: 190rpx;
   height: 80rpx;
+  color: #637381;
   border-radius: 7rpx;
   border: 2rpx solid #d6d6d6;
 }
@@ -72,4 +72,14 @@ page {
   position: absolute;
   right: -1rpx;
   bottom: -2rpx;
+}
+
+.block {
+  width: 100%;
+  margin-bottom: 42rpx;
+}
+
+.block .icon {
+  font-size: 40rpx;
+  margin-right: 34rpx;
 }

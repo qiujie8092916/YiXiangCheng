@@ -1,5 +1,5 @@
 /* miniprogram/pages/charter/charter.wxss */
-@import '../../style/preset.scss';
+@import "../../style/preset.scss";
 
 page {
   height: 100%;
@@ -23,8 +23,9 @@ page {
 .duration-it {
   width: 190rpx;
   height: 80rpx;
+  color: $fontcolor;
   border-radius: 7rpx;
-  border: 2rpx solid rgba(214, 214, 214, 1);
+  border: 2rpx solid $gray;
 }
 
 .duration-it:first-child {
@@ -45,4 +46,95 @@ page {
   position: absolute;
   right: -1rpx;
   bottom: -2rpx;
+}
+
+.register-info {
+  margin-top: 45rpx;
+  padding-left: 162rpx;
+  padding-right: 95rpx;
+}
+
+.label {
+  font-size: 27rpx;
+  line-height: 36rpx;
+  margin-bottom: 8rpx;
+  font-family: Helvetica;
+  color: #212b36;
+}
+
+.input {
+  font-size: 27rpx;
+  height: 65rpx;
+  color: $fontcolor;
+  border-radius: 5rpx;
+  padding-left: 20rpx;
+  background: #ffffff;
+  border: 2rpx solid $gray;
+}
+
+.input.disabled {
+  background: #f8f8f8;
+}
+
+.authorization-btn {
+  height: 66rpx;
+  min-width: 0rpx;
+  font-size: 27rpx;
+  font-weight: 500;
+  background: #3184c7;
+  border-radius: 5rpx;
+  width: 180rpx !important;
+  color: white;
+  min-height: 66rpx !important;
+  margin-left: 20rpx !important;
+  font-family: PingFangSC-Medium, PingFang SC;
+}
+
+.marginbot {
+  margin-bottom: 20rpx;
+}
+
+.price {
+  margin-top: 286rpx;
+  margin-bottom: 91rpx;
+}
+
+.price-detail {
+  font-size: 40rpx;
+  color: #3184c7;
+}
+
+.price-desc {
+  font-size: 28rpx;
+  color: #3184c7;
+}
+
+.pay {
+  padding-bottom: 50rpx;
+}
+
+.pay-btn {
+  width: 609rpx;
+  height: 101rpx;
+  font-size: 33rpx;
+  border-radius: 5rpx;
+  text-align: center;
+  line-height: 101rpx;
+  background: #3184c7;
+  color: #fff;
+}
+
+.pay-disabled {
+  pointer-events: none;
+  background: #f7f7f7;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.error,
+.error .wx-checkbox-input {
+  border: 1rpx solid red;
+}
+
+.checkbox.error {
+  border: initial;
 }

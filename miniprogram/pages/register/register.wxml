@@ -39,12 +39,12 @@
   <view class="block collt full">
     <view class="label">选择公司</view>
     <area-address
+      width="562rpx"
       type="company"
       is-error="{{error_field === 'company'}}"
       placeholder="请选择公司"
       shake-invalid-animate="{{shakeInvalidAnimate.company}}"
       bindchange="submitCompay"
-      bindisSelected="isSelected"
     />
   </view>
 

@@ -1,20 +1,27 @@
 <!--components/areaAddress/areaAddress.wxml-->
 <picker
-  mode="multiSelector"
+  mode="{{type === 'company' ? 'multiSelector': 'selector' }}"
   range="{{range}}"
-  value="{{[0, 0]}}"
+  value="{{type === 'company' ? [0, 0]: 0}}"
   bindchange="change"
   bindcolumnchange="columnchange"
 >
   <view
     animation="{{shakeInvalidAnimate}}"
     class="poi-con flex-between{{isError ? ' error' : ''}}"
+    style="width: {{width}}"
   >
-    <view wx:if="{{isSelected}}">
-      {{ dataSource[selectIndex[0]].area }} | {{
-      dataSource[selectIndex[0]].address[selectIndex[1]].name}}
-    </view>
-    <view wx:else class="placeholder">{{placeholder}}</view>
+    <block wx:if="{{isSelected}}">
+      <view class="input" wx:if="{{type === 'company'}}">
+        {{ dataSource[selectIndex[0]].area }} | {{
+        dataSource[selectIndex[0]].address[selectIndex[1]].name}}
+      </view>
+      <view class="input" wx:else>{{dataSource[selectIndex].name}}</view>
+    </block>
+    <view wx:else class="placeholder {{placeholder}}"
+      >{{placeholder === 'departure' ? '您在哪儿上车？': placeholder ===
+      'destination' ? '您在哪儿下车？': placeholder}}</view
+    >
     <view class="iconfont shangxiajiantou- jiantou"></view>
   </view>
 </picker>

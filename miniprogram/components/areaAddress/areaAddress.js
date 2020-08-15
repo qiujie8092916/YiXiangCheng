@@ -4,7 +4,11 @@ Component({
    * 组件的属性列表
    */
   properties: {
-    type: String,
+    width: {
+      type: String,
+      value: "0rpx",
+    },
+    type: String, //pick 一级选择框  company 二级联动选择框
     isError: {
       type: Boolean,
       default: false,
@@ -26,13 +30,36 @@ Component({
     range: [],
     dataSource: [],
     isSelected: false,
-    selectIndex: [0, 0],
+    selectIndex: null,
+  },
+
+  observers: {
+    type: function (val) {
+      if (val === "company") {
+        this.setData({
+          selectIndex: [0, 0],
+        });
+      } else {
+        this.setData({
+          selectIndex: 0,
+        });
+      }
+    },
+  },
+
+  lifetimes: {
+    attached: function () {},
+    moved: function () {},
+    detached: function () {},
   },
 
   pageLifetimes: {
-    show() {
+    // 组件所在页面的生命周期函数
+    show: function () {
       this.init();
     },
+    hide: function () {},
+    resize: function () {},
   },
 
   /**
@@ -53,32 +80,43 @@ Component({
               }
             : {},
         success: ({ result }) => {
-          const dataSource = (result || []).reduce((acc, cur) => {
-            const area = cur.addrInfo.area,
-              existIndex = acc.findIndex((it) => it.id === area),
-              addrInfo = {
-                id: cur.id,
-                ...cur.addrInfo,
-              };
+          let range = [],
+            dataSource = [];
+          if (this.properties.type === "company") {
+            dataSource = (result || []).reduce((acc, cur) => {
+              const area = cur.addrInfo.area,
+                existIndex = acc.findIndex((it) => it.id === area),
+                addrInfo = {
+                  id: cur.id,
+                  ...cur.addrInfo,
+                };
 
-            if (existIndex === -1) {
-              acc.push({
-                id: cur.addrInfo.area,
-                area: cur.addrInfo.area,
-                address: [addrInfo],
-              });
-            } else {
-              acc[existIndex].address.push(addrInfo);
-            }
-            return acc;
-          }, []);
-
-          this.setData({
-            dataSource,
-            range: [
+              if (existIndex === -1) {
+                acc.push({
+                  id: cur.addrInfo.area,
+                  area: cur.addrInfo.area,
+                  address: [addrInfo],
+                });
+              } else {
+                acc[existIndex].address.push(addrInfo);
+              }
+              return acc;
+            }, []);
+            range = [
               dataSource.map((it) => it.area),
               dataSource[this.data.selectIndex[0]].address.map((it) => it.name),
-            ],
+            ];
+          } else if (this.properties.type === "pick") {
+            dataSource = (result || []).map((it) => ({
+              id: it.id,
+              ...it.addrInfo,
+            }));
+            range = dataSource.map((it) => it.name);
+          }
+
+          this.setData({
+            range,
+            dataSource,
           });
         },
         fail(e) {
@@ -88,20 +126,25 @@ Component({
     },
 
     change({ detail }) {
+      const selectIndex =
+        this.properties.type === "company"
+          ? detail.value
+          : parseInt(detail.value);
       this.setData({
+        selectIndex,
         isSelected: true,
-        selectIndex: detail.value,
       });
       this.triggerEvent(
         "change",
-        this.data.dataSource[detail.value[0]].address[detail.value[1]].id
+        this.properties.type === "company"
+          ? this.data.dataSource[selectIndex[0]].address[selectIndex[1]]
+          : this.data.dataSource[selectIndex]
       );
     },
 
     columnchange({ detail }) {
       if (detail.column === 0) {
         this.setData({
-          // selectIndex,
           "range[1]": this.data.dataSource[detail.value].address.map(
             (it) => it.name
           ),

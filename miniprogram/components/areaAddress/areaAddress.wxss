@@ -345,19 +345,18 @@ page {
 }
 
 /** 全局常用样式 end */
-/*! 主题蓝 */
-/*! border边框灰色 */
+/** 主题蓝 */
+/** border边框灰色 */
+/** 默认字体颜色 */
 .poi-con {
-  width: 610rpx;
   height: 65rpx;
   font-size: 27rpx;
+  color: #212b36;
   border-radius: 5rpx;
   padding-left: 24rpx;
   padding-right: 24rpx;
-  box-sizing: border-box;
   font-family: Helvetica;
-  border: 1rpx solid #cecece;
-  color: #212b36;
+  border: 2rpx solid #cecece;
   background: white;
 }
 
@@ -365,8 +364,8 @@ page {
   font-size: 22rpx;
 }
 
-.placeholder {
-  color: #8a8a8a;
+.input .placeholder {
+  color: #212b36;
 }
 
 .error,

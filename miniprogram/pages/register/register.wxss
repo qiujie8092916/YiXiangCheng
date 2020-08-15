@@ -1,7 +1,8 @@
 @charset "UTF-8";
 /* miniprogram/pages/register/register.wxss */
-/*! 主题蓝 */
-/*! border边框灰色 */
+/** 主题蓝 */
+/** border边框灰色 */
+/** 默认字体颜色 */
 page {
   display: flex;
   flex-direction: column;
@@ -18,9 +19,14 @@ page {
   color: $blue;
   font-family:PingFangSC-Medium,PingFang SC;
 }*/
+.placeholder {
+  color: #222222;
+}
+
 .block {
-  box-sizing: border-box;
+  width: 750rpx;
   padding: 0 70rpx 50rpx;
+  box-sizing: border-box;
 }
 
 .label {
@@ -32,12 +38,13 @@ page {
 }
 
 .input {
-  font-size: 27rpx;
   height: 65rpx;
+  font-size: 27rpx;
+  color: #212b36;
   border-radius: 5rpx;
   padding-left: 20rpx;
   background: #ffffff;
-  border: 1rpx solid #cecece;
+  border: 2rpx solid #cecece;
 }
 
 .input.disabled {
@@ -93,28 +100,6 @@ page {
   color: white;
   min-height: 100rpx !important;
   font-family: PingFangSC-Medium, PingFang SC;
-}
-
-.poi-con {
-  width: 610rpx;
-  height: 65rpx;
-  font-size: 27rpx;
-  border-radius: 5rpx;
-  padding-left: 24rpx;
-  padding-right: 24rpx;
-  box-sizing: border-box;
-  font-family: Helvetica;
-  border: 1rpx solid #cecece;
-  color: #212b36;
-  background: white;
-}
-
-.jiantou {
-  font-size: 22rpx;
-}
-
-.placeholder {
-  color: #8a8a8a;
 }
 
 .error,

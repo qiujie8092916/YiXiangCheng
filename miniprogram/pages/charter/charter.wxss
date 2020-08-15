@@ -1,6 +1,8 @@
 @charset "UTF-8";
 /* miniprogram/pages/charter/charter.wxss */
-/*! 主题蓝 */
+/** 主题蓝 */
+/** border边框灰色 */
+/** 默认字体颜色 */
 page {
   height: 100%;
 }
@@ -23,9 +25,9 @@ page {
 .duration-it {
   width: 190rpx;
   height: 80rpx;
-  position: relative;
+  color: #212b36;
   border-radius: 7rpx;
-  border: 2rpx solid #d6d6d6;
+  border: 2rpx solid #cecece;
 }
 
 .duration-it:first-child {
@@ -65,10 +67,11 @@ page {
 .input {
   font-size: 27rpx;
   height: 65rpx;
+  color: #212b36;
   border-radius: 5rpx;
   padding-left: 20rpx;
   background: #ffffff;
-  border: 2rpx solid #d6d6d6;
+  border: 2rpx solid #cecece;
 }
 
 .input.disabled {
