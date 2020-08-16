@@ -78,3 +78,44 @@ export const debounce = function (fn, delay) {
     }, delay);
   };
 };
+
+export const setTimeDateFmt = (s) => {
+  // 个位数补齐十位数
+  return s < 10 ? "0" + s : s;
+};
+
+export const getRandomArbitrary = (min, max) => {
+  return Math.random() * (max - min) + min;
+};
+
+/**
+ * @description:
+ * @param min {Number} 日期后面拼接随机数右区间
+ * @param max {Number} 日期后面拼接随机数左区间
+ * @return {String} 202008161649491416598
+ */
+export const randomStingAsUUid = (min = 1, max = 2) => {
+  const now = new Date();
+  let month = now.getMonth() + 1,
+    day = now.getDate(),
+    hour = now.getHours(),
+    minutes = now.getMinutes(),
+    seconds = now.getSeconds();
+
+  month = setTimeDateFmt(month);
+  day = setTimeDateFmt(day);
+  hour = setTimeDateFmt(hour);
+  minutes = setTimeDateFmt(minutes);
+  seconds = setTimeDateFmt(seconds);
+
+  let orderCode =
+    now.getFullYear().toString() +
+    month.toString() +
+    day +
+    hour +
+    minutes +
+    seconds +
+    Math.round(getRandomArbitrary(min, max) * 1000000).toString();
+
+  return orderCode;
+};

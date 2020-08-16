@@ -3,6 +3,8 @@ const cloud = require("wx-server-sdk");
 
 cloud.init();
 
+// 云开发支付 https://developers.weixin.qq.com/miniprogram/dev/wxcloud/reference-sdk-api/open/pay/CloudPay.unifiedOrder.html
+
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
