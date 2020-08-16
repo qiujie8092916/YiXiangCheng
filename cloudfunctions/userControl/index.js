@@ -25,8 +25,8 @@ exports.main = async (event, context) => {
     case "doRegisterCommute": {
       return doRegisterCommute(event);
     }
-    case "registerCharter": {
-      return registerCharter(event);
+    case "doReigsterCharter": {
+      return doReigsterCharter(event);
     }
     case "getUserCompany": {
       return getUserCompany(event);
@@ -91,7 +91,7 @@ async function getUserInfo(event) {
  * @param {string} request.fileId 工作证明云文件id
  * @returns {Promise<{resultCode: number, resultData: any, errMsg: string,}>}
  */
-async function registerCharter(request) {
+async function doReigsterCharter(request) {
   if (!request.phone) {
     return {
       resultCode: -1,

@@ -11,14 +11,14 @@ Component({
     defaultValue: {
       type: Object,
     },
-    type: String, //pick 一级选择框  company 二级联动选择框
+    type: String, // pick 一级选择框  company 二级联动选择框
     isError: {
       type: Boolean,
-      default: false,
+      value: false,
     },
     placeholder: {
       type: String,
-      default: "",
+      value: "",
     },
     shakeInvalidAnimate: {
       type: Object,

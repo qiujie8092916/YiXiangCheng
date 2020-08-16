@@ -276,7 +276,8 @@ Page({
           .callFunction({
             name: "userControl",
             data: {
-              action: "registerCharter",
+              action: "doReigsterCharter",
+              phone: res.user_phone,
             },
           })
           .then((res) => {
