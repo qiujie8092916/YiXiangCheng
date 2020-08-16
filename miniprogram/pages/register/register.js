@@ -68,7 +68,7 @@ Page({
   getPhoneNumber(e) {
     wx.cloud
       .callFunction({
-        name: "userControl",
+        name: "userController",
         data: {
           action: "getCellphone",
           id: e.detail.cloudID,
@@ -220,7 +220,7 @@ Page({
       filePath: this.data.employment_certificate.path,
       success: ({ fileID }) => {
         wx.cloud.callFunction({
-          name: "userControl",
+          name: "userController",
           data: {
             action: "doRegisterCommute",
             phone: this.data.phone,

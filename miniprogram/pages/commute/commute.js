@@ -113,7 +113,7 @@ Page({
   async init() {
     try {
       const { result = {} } = await wx.cloud.callFunction({
-        name: "userControl",
+        name: "userController",
         data: {
           action: "getUserCompany",
         },

@@ -53,7 +53,7 @@ Page({
     } else if (biz === "commute") {
       wx.showLoading({ title: "加载中" });
       wx.cloud.callFunction({
-        name: "userControl",
+        name: "userController",
         data: {
           action: "isRegisterCommute",
         },

@@ -197,7 +197,7 @@ Page({
     } else {
       wx.cloud
         .callFunction({
-          name: "userControl",
+          name: "userController",
           data: {
             action: "getUserInfo",
           },
@@ -264,7 +264,7 @@ Page({
   getPhoneNumber(e) {
     wx.cloud
       .callFunction({
-        name: "userControl",
+        name: "userController",
         data: {
           action: "getCellphone",
           id: e.detail.cloudID,
@@ -274,7 +274,7 @@ Page({
         console.log("获取手机号信息 ", res);
         wx.cloud
           .callFunction({
-            name: "userControl",
+            name: "userController",
             data: {
               action: "doReigsterCharter",
               phone: res.user_phone,
