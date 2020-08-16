@@ -22,7 +22,7 @@ Component({
     },
     shakeInvalidAnimate: {
       type: Object,
-      default: () => ({}),
+      value: () => ({}),
     },
   },
 

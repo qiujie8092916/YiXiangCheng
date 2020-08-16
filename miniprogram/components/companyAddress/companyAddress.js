@@ -10,7 +10,7 @@ Component({
      */
     disabled: {
       type: Boolean,
-      default: false,
+      value: false,
     },
     /**
      * @property {string} name 地址名称
@@ -19,7 +19,7 @@ Component({
      */
     address: {
       type: Object,
-      default: {},
+      value: {},
     },
   },
 

@@ -9,23 +9,23 @@ Component({
   properties: {
     icon: {
       type: String,
-      default: "chakantiezidingwei",
+      value: "chakantiezidingwei",
     },
     disabled: {
       type: Boolean,
-      default: false,
+      value: false,
     },
     type: {
       type: String,
-      default: "departure", // departure 出发地 destination 目的地
+      value: "departure", // departure 出发地 destination 目的地
     },
     isError: {
       type: Boolean,
-      default: false,
+      value: false,
     },
     shakeInvalidAnimate: {
       type: Object,
-      default: () => ({}),
+      value: () => ({}),
     },
   },
 
