@@ -61,19 +61,7 @@ Component({
      * 日期回调
      */
     bindDateChange(e) {
-      let _currentDate = e.detail.value,
-        temCurrentDate = _currentDate.split("-");
-
-      if (temCurrentDate[1][0] === "0") {
-        _currentDate =
-          temCurrentDate[0] +
-          "-" +
-          temCurrentDate[1][1] +
-          "-" +
-          temCurrentDate[2];
-      } else {
-        _currentDate = _currentDate;
-      }
+      let _currentDate = this.splitcurrentDate(e.detail.value);
 
       this.triggerEvent(
         "changeTime",
@@ -84,6 +72,7 @@ Component({
         selectDate: e.detail.value,
         curShowDate: dateFormat(e.detail.value, "MD"),
       });
+
       if (isSameDay(e.detail.value)) {
         // 已选时间在当前时间之前则重置显示时间/时间默认值/开始时间到当前最新时间
         if (isBefore(joinTime(this.data.curShowTime))) {
@@ -118,20 +107,8 @@ Component({
         timeDefaultValue: e.detail.value,
       });
 
-      let _temCurrentDate = this.data.selectDate.split("-"),
-        _currentTime = e.detail.value,
-        _currentDate;
-
-      if (_temCurrentDate[1][0] === "0") {
-        _currentDate =
-          _temCurrentDate[0] +
-          "-" +
-          _temCurrentDate[1][1] +
-          "-" +
-          _temCurrentDate[2];
-      } else {
-        _currentDate = this.data.selectDate;
-      }
+      let _currentTime = e.detail.value,
+        _currentDate = this.splitCurrentDate(this.data.selectDate);
 
       this.triggerEvent(
         "changeTime",
@@ -157,5 +134,21 @@ Component({
         selectTime: dateFormat(this.properties.timeStart, "Hm"),
       });
     },
+  },
+
+  /**
+   * 切割时间
+   */
+  splitCurrentDate(date) {
+    let _temCurDate = date.split("-"),
+      _currentDate;
+    if (_temCurDate[1][0] === "0") {
+      _currentDate =
+        _temCurDate[0] + "-" + _temCurDate[1][1] + "-" + _temCurDate[2];
+    } else {
+      _currentDate = date;
+    }
+
+    return _currentDate;
   },
 });

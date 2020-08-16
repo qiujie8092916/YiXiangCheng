@@ -1,7 +1,7 @@
 <!--miniprogram/pages/charter/charter.wxml-->
 <view class="content">
   <!-- logo -->
-  <logo-header isShowOrder="true" />
+  <logo-header />
   <!-- 地址时间选择 -->
   <view class="poi-time">
     <poi-picker

@@ -1,7 +1,7 @@
 // miniprogram/pages/charter/charter.js
 // 包车下单页
 import Storage from "../../utils/storage";
-import { debounce, getCurDate, isBefore } from "../../utils/ext";
+import { debounce, getCurDate, isBefore, isAfter } from "../../utils/ext";
 
 Page({
   /**
@@ -50,8 +50,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    // todo 若离开此页面后重新回到此页面时当前显示时间已经是过去时间则重置显示时间
-    // this.selectComponent("#datePicker").formatDateAndTime();
+    this.resetDepartureTime();
   },
 
   /**
@@ -78,6 +77,16 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {},
+
+  /**
+   * 重置包车时间
+   * 若离开此页面后重新回到此页面时当前显示时间已经是过去时间则重置显示时间
+   */
+  resetDepartureTime() {
+    if (!this.data.departure_time || isBefore(this.data.departure_time)) {
+      this.selectComponent("#datePicker").formatDateAndTime();
+    }
+  },
 
   /**
    * 校验动画
@@ -134,10 +143,6 @@ Page({
     }
 
     if (!this.data.departure) {
-      this.setData({
-        error_field: "poi",
-        ["shakeInvalidAnimate.poi"]: animate.export(),
-      });
       wx.showToast({
         icon: "none",
         title: "请选择上车地点",
@@ -241,17 +246,10 @@ Page({
   gotoPayforOrder() {
     if (!this.preSubmit()) return;
 
-    console.log(this.data.departure_time, "isBefore(this.data.departure_time)");
-
-    console.log(
-      isBefore(this.data.departure_time),
-      "isBefore(this.data.departure_time)"
-    );
-
     let _params = {
       departure: this.data.departure,
       departure_time:
-        this.data.departure_time && !isBefore(this.data.departure_time)
+        this.data.departure_time && isAfter(this.data.departure_time)
           ? this.data.departure_time
           : getCurDate(),
       phone: this.data.phone,
@@ -273,7 +271,25 @@ Page({
         },
       })
       .then((res) => {
-        console.log("res: ", res);
+        console.log("获取手机号信息 ", res);
+        wx.cloud
+          .callFunction({
+            name: "userControl",
+            data: {
+              action: "registerCharter",
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            if (+result.resultCode === 0) {
+              // 注册成功
+            } else {
+              // 注册失败
+            }
+          })
+          .catch((err) => {
+            console.log("err: ", err);
+          });
       })
       .catch((err) => {
         console.log(err);

@@ -43,7 +43,11 @@ async function getOpenData(event) {
   });
 }
 
-// 获取手机号
+/**
+ * @description: 获取手机号
+ * @param {type}
+ * @return {type}
+ */
 async function getCellphone(event) {
   const res = await cloud.getOpenData({
     list: [event.id],
@@ -51,7 +55,11 @@ async function getCellphone(event) {
   return { res, event };
 }
 
-// 查询用户信息
+/**
+ * @description: 查询用户信息
+ * @param {type}
+ * @return {type}
+ */
 async function getUserInfo(event) {
   const { OPENID } = cloud.getWXContext();
   const userInfoDb = db.collection("user_info");
@@ -74,7 +82,15 @@ async function getUserInfo(event) {
   }
 }
 
-// 包车注册
+/**
+ * @desc 包车注册
+ * @param {object} request 请求参数
+ * @param {string} request.phone 手机号
+ * @param {string} request.name 用户名
+ * @param {string} request.company 公司id
+ * @param {string} request.fileId 工作证明云文件id
+ * @returns {Promise<{resultCode: number, resultData: any, errMsg: string,}>}
+ */
 async function registerCharter(request) {
   if (!request.phone) {
     return {

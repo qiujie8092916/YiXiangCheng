@@ -6,7 +6,7 @@ Component({
   properties: {
     isShowOrder: {
       type: Boolean,
-      default: true,
+      value: true,
     },
   },
 

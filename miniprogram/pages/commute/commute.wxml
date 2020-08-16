@@ -1,7 +1,7 @@
 <!--miniprogram/pages/commute/commute.wxml-->
 <view>
   <!-- logo -->
-  <logo-header isShowOrder="true" />
+  <logo-header />
 
   <form bindsubmit="onsubmit" class="colct">
     <view class="container">
