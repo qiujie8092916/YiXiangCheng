@@ -27,6 +27,29 @@ Component({
       type: Object,
       value: () => ({}),
     },
+    /**
+     * @brief 是否显示 (false: 可能挂载了但是hidden了)
+     */
+    isShow: {
+      type: Boolean,
+      value: true,
+    },
+    /**
+     * @type {DataSource}
+     * @typedef {object} DataSource
+     * @property {0} DataSource.id
+     * @property {string} DataSource.address
+     * @property {string} DataSource.area
+     * @property {string} DataSource.city
+     * @property {array} DataSource.coordinates - [longitude, latitude]
+     * @property {string} DataSource.district
+     * @property {string} DataSource.name
+     * @property {string} DataSource.province
+     */
+    defaultValue: {
+      type: Object,
+      value: {},
+    }
   },
 
   observers: {
@@ -41,6 +64,13 @@ Component({
         });
       }
     },
+    defaultValue(val) {
+      if(Object.keys(val).length) {
+        this.setData({
+          poi: val.name,
+        })
+      }
+    }
   },
 
   /**
@@ -67,12 +97,13 @@ Component({
     // 组件所在页面的生命周期函数
     show: function () {
       const location = chooseLocation.getLocation();
-      location &&
+
+      if(location && this.properties.isShow) {
         this.setData({
           poi: location.name,
         });
-
-      this.triggerEvent("choosePoi", location);
+        this.triggerEvent("choosePoi", location);
+      }
     },
     hide: function () {},
     resize: function () {},

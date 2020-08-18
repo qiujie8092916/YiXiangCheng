@@ -8,8 +8,27 @@ Component({
       type: String,
       value: "0rpx",
     },
+    /**
+     * @type {DataSource}
+     * @typedef {object} DataSource
+     * @property {string} DataSource.address
+     * @property {string} DataSource.area
+     * @property {string} DataSource.city
+     * @property {array} DataSource.coordinates - [longitude, latitude]
+     * @property {string} DataSource.district
+     * @property {string} DataSource.id
+     * @property {string} DataSource.name
+     * @property {string} DataSource.province
+     */
     defaultValue: {
       type: Object,
+    },
+    /**
+     * @brief 是否显示 (false: 可能挂载了但是hidden了)
+     */
+    isShow: {
+      type: Boolean,
+      value: true,
     },
     type: String, // pick 一级选择框  company 二级联动选择框
     isError: {
@@ -30,10 +49,32 @@ Component({
    * 组件的初始数据
    */
   data: {
-    value: 0,
+    /**
+     * @desc 下拉框的需要的数据内容
+     */
     range: [],
+    /**
+     * @desc 维护的数据源
+     * @type {Array<DataSource>}
+     */
     dataSource: [],
+    /**
+     * @desc 是否初始化过
+     * @type boolean
+     * @default false
+     */
+    isInited: false,
+    /**
+     * @desc 是否选择了
+     * @type boolean
+     * @default false
+     */
     isSelected: false,
+    /**
+     * @desc 选择的索引
+     * @type {number|Array<number>}
+     * @default null
+     */
     selectIndex: null,
   },
 
@@ -67,16 +108,16 @@ Component({
               isSelected: selectIndex.length,
               selectIndex: selectIndex.length ? selectIndex : [0, 0],
             });
-          } else {
-            const selectIndex = this.data.dataSource.findIndex(
-              (it) => val.id === it.id
-            );
-            this.setData({
-              isSelected: selectIndex !== -1,
-              selectIndex: selectIndex !== -1 ? selectIndex : 0,
-            });
+          } else if (this.properties.type === "pick" && this.data.dataSource.length) {
+            this.setSelectIndex(this.data.dataSource)
           }
         }
+      }
+    },
+    isShow(val) {
+      // isShow为true && defaultValue为空时初始化
+      if(val && !this.data.isInited) {
+        this.init();
       }
     },
   },
@@ -90,7 +131,7 @@ Component({
   pageLifetimes: {
     // 组件所在页面的生命周期函数
     show: function () {
-      this.init();
+      // this.init();
     },
     hide: function () {},
     resize: function () {},
@@ -146,16 +187,28 @@ Component({
               ...it.addrInfo,
             }));
             range = dataSource.map((it) => it.name);
+            this.setSelectIndex(dataSource)
           }
 
           this.setData({
             range,
             dataSource,
+            isInited: true,
           });
         },
         fail(e) {
           console.log(e);
         },
+      });
+    },
+
+    setSelectIndex(dataSource) {
+      const selectIndex = dataSource.findIndex(
+          (it) => this.properties.defaultValue.id === it.id
+      );
+      this.setData({
+        isSelected: selectIndex !== -1,
+        selectIndex: selectIndex !== -1 ? selectIndex : 0,
       });
     },
 

@@ -27,20 +27,19 @@
       <!-- 享回家 -->
       <swiper-item item-id="goHome">
         <company-address disabled address="{{ companyAddress }}" />
+        <!-- 拼车 -->
         <view hidden="{{ activeType === 'individual' }}">
-          <poi-picker
-            type="destination"
-            icon="chakantiezidingwei"
-            is-error="{{error_field === 'sharing'}}"
-            shake-invalid-animate="{{shakeInvalidAnimate.sharing}}"
-            bindchoosePoi="choosePoi"
+          <template
+            is="poi-address-tmpl"
+            data="{{activeType, currentTab: current, activeTab: 'goHome', error_field, choosePoi, type: 'destination', animate: shakeInvalidAnimate.sharing, defaultValue: pickObj.sharing}}"
           />
         </view>
+        <!-- 独享 -->
         <view hidden="{{ activeType === 'sharing' }}" class="block flex-center">
           <view class="{{['iconfont', 'icon', 'chakantiezidingwei']}}" />
           <template
             is="area-address-tmpl"
-            data="{{placeholder: 'destination', errorField: error_field, activeType, animate: shakeInvalidAnimate.individual, defaultValue: pickObj.individual, submitPick}}"
+            data="{{activeType, error_field, submitPick, currentTab: current, activeTab: 'goHome', placeholder: 'destination', animate: shakeInvalidAnimate.individual, defaultValue: pickObj.individual}}"
           />
         </view>
         <date-picker />
@@ -48,20 +47,19 @@
 
       <!-- 享上班 -->
       <swiper-item item-id="goWork">
+        <!-- 拼车 -->
         <view hidden="{{ activeType === 'individual' }}">
-          <poi-picker
-            type="departure"
-            icon="chakantiezidingwei"
-            is-error="{{error_field === 'sharing'}}"
-            shake-invalid-animate="{{shakeInvalidAnimate.sharing}}"
-            bindchoosePoi="choosePoi"
+          <template
+            is="poi-address-tmpl"
+            data="{{activeType, currentTab: current, activeTab: 'goWork', error_field, choosePoi, type: 'departure', animate: shakeInvalidAnimate.sharing, defaultValue: pickObj.sharing}}"
           />
         </view>
+        <!-- 独享 -->
         <view hidden="{{ activeType === 'sharing' }}" class="block flex-center">
           <view class="{{['iconfont', 'icon', 'chakantiezidingwei']}}" />
           <template
             is="area-address-tmpl"
-            data="{{placeholder: 'departure', errorField: error_field, activeType, animate: shakeInvalidAnimate.individual, defaultValue: pickObj.individual, submitPick}}"
+            data="{{activeType, error_field, submitPick, currentTab: current, activeTab: 'goWork', placeholder: 'departure', animate: shakeInvalidAnimate.individual, defaultValue: pickObj.individual}}"
           />
         </view>
         <company-address disabled address="{{ companyAddress }}" />
@@ -111,10 +109,23 @@
   <area-address
     type="pick"
     width="450rpx"
-    default-value="{{defaultValue}}"
-    is-error="{{errorField === activeType}}"
     placeholder="{{placeholder}}"
+    default-value="{{defaultValue}}"
     shake-invalid-animate="{{animate}}"
+    is-error="{{error_field === activeType}}"
+    is-show="{{activeType === 'individual' && currentTab === activeTab}}"
     bindchange="submitPick"
+  />
+</template>
+
+<template name="poi-address-tmpl">
+  <poi-picker
+    type="{{type}}"
+    icon="chakantiezidingwei"
+    default-value="{{defaultValue}}"
+    shake-invalid-animate="{{animate}}"
+    is-error="{{error_field === 'sharing'}}"
+    is-show="{{activeType === 'sharing' && currentTab === activeTab}}"
+    bindchoosePoi="choosePoi"
   />
 </template>

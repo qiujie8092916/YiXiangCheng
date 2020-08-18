@@ -176,13 +176,13 @@ Page({
       e.currentTarget.dataset.key || e.detail.currentItemId || "goHome";
 
     if (current !== this.data.current) {
-      this.getEstimatePrice(
-        this.data.pickObj[this.data.activeType].coordinates
-      );
-
       this.setData({
         current,
         error_field: "",
+      }, () => {
+        this.getEstimatePrice(
+            this.data.pickObj[this.data.activeType].coordinates
+        );
       });
     }
   },
