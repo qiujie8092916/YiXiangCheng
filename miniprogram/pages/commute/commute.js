@@ -278,5 +278,12 @@ Page({
 
   onsubmit() {
     if (!this.preSubmit()) return;
+
+    wx.cloud.callFunction({
+      name: 'orderController',
+      data: {
+        bizType: 2,
+      }
+    })
   },
 });
