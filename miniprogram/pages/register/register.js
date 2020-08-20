@@ -238,10 +238,10 @@ Page({
                     title: result.errMsg || "异常错误",
                   });
                 }
-                wx.showToast({
-                  icon: "none",
-                  title: "提交成功，等待审核",
-                });
+                wx.showModal({
+                  showCancel: false,
+                  content: "提交成功，等待审核",
+                })
               },
             });
           },
