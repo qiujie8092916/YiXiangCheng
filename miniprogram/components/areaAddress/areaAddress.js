@@ -142,6 +142,7 @@ Component({
    */
   methods: {
     init() {
+      wx.showLoading({ title: '加载中' })
       wx.cloud.callFunction({
         name: "getAddress",
         data:
@@ -194,10 +195,11 @@ Component({
             range,
             dataSource,
             isInited: true,
-          });
+          }, wx.hideLoading);
         },
         fail(e) {
           console.log(e);
+          wx.hideLoading()
         },
       });
     },
