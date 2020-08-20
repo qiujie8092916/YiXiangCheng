@@ -42,7 +42,6 @@
             data="{{activeType, error_field, submitPick, currentTab: current, activeTab: 'goHome', placeholder: 'destination', animate: shakeInvalidAnimate.individual, defaultValue: pickObj.individual}}"
           />
         </view>
-        <date-picker bindchangeTime="changeTime" id="goHomedatePicker" />
       </swiper-item>
 
       <!-- 享上班 -->
@@ -63,9 +62,10 @@
           />
         </view>
         <company-address disabled address="{{ companyAddress }}" />
-        <date-picker bindchangeTime="changeTime" id="goWorkdatePicker" />
       </swiper-item>
     </swiper>
+
+    <date-picker bindchangeTime="changeTime" id="datePicker" />
 
     <!-- 拼车 独享 -->
     <view class="type colct">

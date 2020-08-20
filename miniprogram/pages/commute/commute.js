@@ -143,8 +143,7 @@ Page({
 
   resetTime(){
     if (!this.data.time || isBefore(this.data.time)) {
-      this.selectComponent("#goHomedatePicker").formatDateAndTime();
-      this.selectComponent("#goWorkdatePicker").formatDateAndTime();
+      this.selectComponent("#datePicker").formatDateAndTime();
     }
   },
 
@@ -221,7 +220,7 @@ Page({
 
   getEstimatePrice(coordinates) {
     if (coordinates && coordinates.length) {
-      wx.showLoading({ title: "请稍等" });
+      wx.showLoading({ title: "加载中" });
 
       const params = { mode: "driving" },
         pickCoordinates = JSON.parse(JSON.stringify(coordinates)),
@@ -312,12 +311,12 @@ Page({
       data: {
         action: 'create',
         bizType: 2,
+        to, // 坐标[longitude, latitude]
+        from, // 坐标[longitude, latitude]
+        time: this.data.time, // '2020-08-21 00:23:04'
+        price: this.data.estimate[this.data.activeType],// 实付金额
         type: this.data.current === 'goHome' ? 0: 1, // 0-回家 1-上班
         take: this.data.activeType === 'sharing' ? 0: 1, // 0-拼车 1-独享
-        from, // 坐标[longitude, latitude]
-        to, // 坐标[longitude, latitude]
-        // time '2020-08-21 00:23:04'
-        // price 实付金额
       }
     }).then(res => {
       console.log(res)
