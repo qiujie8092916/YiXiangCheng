@@ -134,21 +134,21 @@ Component({
         selectTime: dateFormat(this.properties.timeStart, "Hm"),
       });
     },
-  },
 
-  /**
-   * 切割时间
-   */
-  splitCurrentDate(date) {
-    let _temCurDate = date.split("-"),
-      _currentDate;
-    if (_temCurDate[1][0] === "0") {
-      _currentDate =
-        _temCurDate[0] + "-" + _temCurDate[1][1] + "-" + _temCurDate[2];
-    } else {
-      _currentDate = date;
-    }
+    /**
+     * 切割时间
+     */
+    splitCurrentDate(date) {
+      let _temCurDate = date.split("-"),
+          _currentDate;
+      if (_temCurDate[1][0] === "0") {
+        _currentDate =
+            _temCurDate[0] + "-" + _temCurDate[1][1] + "-" + _temCurDate[2];
+      } else {
+        _currentDate = date;
+      }
 
-    return _currentDate;
+      return _currentDate;
+    },
   },
 });

@@ -1,5 +1,6 @@
 // miniprogram/pages/commute/commute.js
 import { routeConfig } from "../../config";
+import {isBefore} from "../../utils/ext";
 
 const QQMapWX = require("../../vendor/qqmap-wx-jssdk.min");
 const qqmapsdk = new QQMapWX({ key: routeConfig.key });
@@ -22,6 +23,7 @@ Page({
       sharing: 0,
       individual: 0,
     },
+    time: '',
     current: "goHome",
     companyAddress: {},
     pickObj: {
@@ -83,7 +85,9 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {},
+  onShow: function () {
+    this.resetTime();
+  },
 
   /**
    * 生命周期函数--监听页面隐藏
@@ -135,6 +139,20 @@ Page({
         },
       });
     }
+  },
+
+  resetTime(){
+    if (!this.data.time || isBefore(this.data.time)) {
+      this.selectComponent("#goHomedatePicker").formatDateAndTime();
+      this.selectComponent("#goWorkdatePicker").formatDateAndTime();
+    }
+  },
+
+  changeTime({detail}){
+    console.log(detail)
+    this.setData({
+      time: detail,
+    });
   },
 
   createAnimation() {
@@ -279,11 +297,30 @@ Page({
   onsubmit() {
     if (!this.preSubmit()) return;
 
+    let from, to;
+
+    if(this.data.current === 'goHome') {
+      from = this.data.companyAddress.coordinate.coordinates
+      to = this.data.pickObj[this.data.activeType].coordinates
+    } else {
+      from = this.data.pickObj[this.data.activeType].coordinates
+      to = this.data.companyAddress.coordinate.coordinates
+    }
+
     wx.cloud.callFunction({
       name: 'orderController',
       data: {
+        action: 'create',
         bizType: 2,
+        type: this.data.current === 'goHome' ? 0: 1, // 0-回家 1-上班
+        take: this.data.activeType === 'sharing' ? 0: 1, // 0-拼车 1-独享
+        from, // 坐标[longitude, latitude]
+        to, // 坐标[longitude, latitude]
+        // time '2020-08-21 00:23:04'
+        // price 实付金额
       }
+    }).then(res => {
+      console.log(res)
     })
   },
 });
