@@ -9,6 +9,7 @@ Page({
    */
   data: {
     departure: "", // 上车地点
+    departureDefault: {}, // 上车地点初始化
     departure_time: "", // 选择时间
     duration: [
       {
@@ -24,13 +25,14 @@ Page({
     moneyMap: {
       four: 400,
       eight: 800,
-    }, // money map
+    }, // 价格表
     activeDuration: "four", // 套餐时长
     charterMoney: 0, // 当前时间
     phone: "", // 手机号
     contact_name: "", // 乘车联系人
     error_field: null, // 错误项
     shakeInvalidAnimate: {},
+    watcher: null, // 监听器
   },
 
   /**
@@ -38,7 +40,6 @@ Page({
    */
   onLoad: function (options) {
     this.init();
-    this.createAnimation();
   },
 
   /**
@@ -61,7 +62,9 @@ Page({
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {},
+  onUnload: async function () {
+    await this.watcher.close();
+  },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
@@ -143,9 +146,13 @@ Page({
     }
 
     if (!this.data.departure) {
+      this.setData({
+        error_field: "poi",
+        ["shakeInvalidAnimate.poi"]: animate.export(),
+      });
       wx.showToast({
         icon: "none",
-        title: "请选择上车地点",
+        title: "请完善上车点",
       });
       return false;
     }
@@ -157,10 +164,16 @@ Page({
    * 选择位置
    */
   choosePoi({ detail }) {
-    detail &&
+    if (detail) {
       this.setData({
-        departure: detail.address,
+        departure: detail.name,
+        departureDefault: { name: detail.name },
       });
+      Storage.setStorage(
+        "charterDeparture",
+        JSON.stringify({ name: detail.name })
+      );
+    }
   },
 
   /**
@@ -189,6 +202,7 @@ Page({
    */
   getCloudUserInfo() {
     const userInfo = Storage.getStorage("userInfo");
+
     if (userInfo && userInfo.user_phone) {
       // 已经注册过无需再授权
       this.setData({
@@ -207,7 +221,10 @@ Page({
             this.setData({
               phone: res.result.resultData.user_phone,
             });
-            Storage.setStorage("userInfo", res.result.resultData);
+            Storage.setStorage(
+              "userInfo",
+              JSON.stringify(res.result.resultData)
+            );
           } else {
             console.log("当前用户未注册");
           }
@@ -271,21 +288,28 @@ Page({
         },
       })
       .then((res) => {
-        console.log("获取手机号信息 ", res);
+        let { phoneNumber } = res.result.resultData;
+
+        this.setData({
+          phone: phoneNumber,
+        });
+
         wx.cloud
           .callFunction({
             name: "userController",
             data: {
               action: "doReigsterCharter",
-              phone: res.user_phone,
+              phone: phoneNumber,
             },
           })
           .then((res) => {
             console.log(res);
             if (+result.resultCode === 0) {
               // 注册成功
+              console.log("注册成功");
             } else {
               // 注册失败
+              console.log("注册失败");
             }
           })
           .catch((err) => {
@@ -298,16 +322,64 @@ Page({
   },
 
   /**
-   * 初始化
+   * 监听器
    */
-  init() {
-    // 获取用户信息
-    this.getCloudUserInfo();
-    // 初始化套餐价格
+  registerWatcher() {
+    const db = wx.cloud.database();
+    this.watcher = db
+      .collection("user_info")
+      .where({
+        user_id: "oWGYt5HPRLbHplWBqmcjONdqL5Qk",
+      })
+      .watch({
+        onChange: function (snapshot) {
+          console.log(snapshot, "user_info表变化");
+        },
+        onError: function (err) {
+          console.err(err, "user_info表监听错误");
+        },
+      });
+  },
+
+  /**
+   * 出发地初始化
+   */
+  checkDeparture() {
+    let _departureDefault = Storage.getStorage("charterDeparture");
+
+    if (_departureDefault) {
+      console.log("_departureDefault", _departureDefault);
+      this.setData({
+        departure: _departureDefault.name,
+        departureDefault: _departureDefault,
+      });
+    }
+  },
+
+  /**
+   * 初始化价格
+   */
+  checkCharterPrice() {
     this.setData({
       charterMoney: this.data.moneyMap[this.data.activeDuration],
     });
+  },
+
+  /**
+   * 初始化
+   */
+  init() {
     // 输入乘车联系人debounce
     this.debounce = debounce(this.debounceInputName, 200);
+    // 获取用户信息
+    this.getCloudUserInfo();
+    // 初始化出发地
+    this.checkDeparture();
+    // 初始化套餐价格
+    this.checkCharterPrice();
+    // 创建动画
+    this.createAnimation();
+    // 注册监听
+    this.registerWatcher();
   },
 });

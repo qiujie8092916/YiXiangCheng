@@ -49,7 +49,7 @@ Component({
     defaultValue: {
       type: Object,
       value: {},
-    }
+    },
   },
 
   observers: {
@@ -65,12 +65,12 @@ Component({
       }
     },
     defaultValue(val) {
-      if(Object.keys(val).length) {
+      if (Object.keys(val).length) {
         this.setData({
           poi: val.name,
-        })
+        });
       }
-    }
+    },
   },
 
   /**
@@ -98,7 +98,7 @@ Component({
     show: function () {
       const location = chooseLocation.getLocation();
 
-      if(location && this.properties.isShow) {
+      if (location && this.properties.isShow) {
         this.setData({
           poi: location.name,
         });

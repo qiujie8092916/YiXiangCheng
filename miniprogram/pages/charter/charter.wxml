@@ -8,6 +8,7 @@
       icon="chakantiezidingwei"
       is-error="{{error_field === 'poi'}}"
       shake-invalid-animate="{{shakeInvalidAnimate.poi}}"
+      default-value="{{departureDefault}}"
       bindchoosePoi="choosePoi"
     />
     <date-picker id="datePicker" bindchangeTime="changeTime" />
@@ -47,6 +48,7 @@
           disabled="{{phone}}"
           hover-class="act-btn"
           open-type="getPhoneNumber"
+          bindgetphonenumber="getPhoneNumber"
         >
           授权
         </button>

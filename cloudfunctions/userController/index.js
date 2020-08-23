@@ -37,6 +37,11 @@ exports.main = async (event, context) => {
   }
 };
 
+/**
+ * @description: 获取隐秘信息
+ * @param {type}
+ * @return {type}
+ */
 async function getOpenData(event) {
   return cloud.getOpenData({
     list: event.openData.list,
@@ -46,19 +51,25 @@ async function getOpenData(event) {
 /**
  * @description: 获取手机号
  * @param {type}
- * @return {type}
+ * @return {object}
  */
 async function getCellphone(event) {
-  const res = await cloud.getOpenData({
-    list: [event.id],
-  });
-  return { res, event };
+  try {
+    const res = await cloud.getOpenData({
+      list: [event.id],
+    });
+    const resultData = res.list[0].data;
+
+    return { resultCode: 0, resultData: resultData };
+  } catch (e) {
+    return { resultCode: -1, resultData: null, errMsg: e };
+  }
 }
 
 /**
  * @description: 查询用户信息
  * @param {type}
- * @return {type}
+ * @return {object}
  */
 async function getUserInfo(event) {
   const { OPENID } = cloud.getWXContext();
@@ -78,6 +89,7 @@ async function getUserInfo(event) {
     return {
       resultCode: -1,
       resultData: null,
+      errMsg: e,
     };
   }
 }
