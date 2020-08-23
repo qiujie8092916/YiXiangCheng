@@ -14,7 +14,7 @@ page {
 }
 
 .swiper {
-  height: 285rpx;
+  height: 216rpx;
 }
 
 .tab-item {

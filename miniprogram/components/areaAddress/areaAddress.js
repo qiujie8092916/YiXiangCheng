@@ -28,7 +28,7 @@ Component({
      */
     isShow: {
       type: Boolean,
-      value: true,
+      value: false,
     },
     type: String, // pick 一级选择框  company 二级联动选择框
     isError: {
@@ -108,15 +108,18 @@ Component({
               isSelected: selectIndex.length,
               selectIndex: selectIndex.length ? selectIndex : [0, 0],
             });
-          } else if (this.properties.type === "pick" && this.data.dataSource.length) {
-            this.setSelectIndex(this.data.dataSource)
+          } else if (
+            this.properties.type === "pick" &&
+            this.data.dataSource.length
+          ) {
+            this.setSelectIndex(this.data.dataSource);
           }
         }
       }
     },
     isShow(val) {
       // isShow为true && defaultValue为空时初始化
-      if(val && !this.data.isInited) {
+      if (val && !this.data.isInited) {
         this.init();
       }
     },
@@ -142,7 +145,7 @@ Component({
    */
   methods: {
     init() {
-      wx.showLoading({ title: '加载中' })
+      wx.showLoading({ title: "加载中" });
       wx.cloud.callFunction({
         name: "getAddress",
         data:
@@ -188,25 +191,28 @@ Component({
               ...it.addrInfo,
             }));
             range = dataSource.map((it) => it.name);
-            this.setSelectIndex(dataSource)
+            this.setSelectIndex(dataSource);
           }
 
-          this.setData({
-            range,
-            dataSource,
-            isInited: true,
-          }, wx.hideLoading);
+          this.setData(
+            {
+              range,
+              dataSource,
+              isInited: true,
+            },
+            wx.hideLoading
+          );
         },
         fail(e) {
           console.log(e);
-          wx.hideLoading()
+          wx.hideLoading();
         },
       });
     },
 
     setSelectIndex(dataSource) {
       const selectIndex = dataSource.findIndex(
-          (it) => this.properties.defaultValue.id === it.id
+        (it) => this.properties.defaultValue.id === it.id
       );
       this.setData({
         isSelected: selectIndex !== -1,
