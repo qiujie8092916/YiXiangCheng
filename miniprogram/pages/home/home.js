@@ -77,7 +77,6 @@ Page({
             title: JSON.stringify(e),
           });
         },
-        complete: wx.hideLoading,
       });
     }
   },
