@@ -38,12 +38,12 @@ export const joinTime = function (time) {
   return moment().format("YYYY-MM-DD") + " " + time;
 };
 
-export const commonFormat = function (timeStr) {
-  return moment(timeStr).format();
+export const normalDateformat = function (time) {
+  return moment(time).format();
 };
 
-export const getCurDate = function () {
-  return moment().format();
+export const currentDatetime = function () {
+  return moment().format("YYYY-MM-DD-HH:mm:ss");
 };
 
 export const throttle = function (fn, delay) {

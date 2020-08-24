@@ -142,7 +142,7 @@ Page({
   },
 
   resetTime() {
-    if (!this.data.time || isBefore(this.data.time)) {
+    if (!this.data.time || isBefore(new Date(this.data.time))) {
       this.selectComponent("#datePicker").formatDateAndTime();
     }
   },

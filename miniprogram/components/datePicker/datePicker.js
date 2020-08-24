@@ -6,7 +6,6 @@ import {
   isBefore,
   isAfter,
   joinTime,
-  commonFormat,
 } from "../../utils/ext";
 
 Component({
@@ -61,17 +60,16 @@ Component({
      * 日期回调
      */
     bindDateChange(e) {
-      let _currentDate = this.splitCurrentDate(e.detail.value);
-      this.triggerEvent(
-        "changeTime",
-        commonFormat(_currentDate + "-" + this.data.selectTime)
-      );
+      let _currentDate = e.detail.value,
+        _currentTime = this.data.selectTime;
+
+      this.triggerEvent("changeTime", _currentDate + "-" + _currentTime);
       this.setData({
-        selectDate: e.detail.value,
-        curShowDate: dateFormat(e.detail.value, "MD"),
+        selectDate: _currentDate,
+        curShowDate: dateFormat(_currentDate, "MD"),
       });
 
-      if (isSameDay(e.detail.value)) {
+      if (isSameDay(_currentDate)) {
         // 已选时间在当前时间之前则重置显示时间/时间默认值/开始时间到当前最新时间
         if (isBefore(joinTime(this.data.curShowTime))) {
           this.setData({
@@ -99,35 +97,39 @@ Component({
      * 时间回调
      */
     bindTimeChange(e) {
-      this.setData({
-        selectTime: e.detail.value,
-        curShowTime: e.detail.value,
-        timeDefaultValue: e.detail.value,
-      });
+      // todo 页面停留时间长仍可选过去时间因开始结束的区间只在组件挂在时确定
       let _currentTime = e.detail.value,
-        _currentDate = this.splitCurrentDate(this.data.selectDate);
-      this.triggerEvent(
-        "changeTime",
-        commonFormat(_currentDate + "-" + _currentTime)
-      );
+        _currentDate;
+
+      this.setData({
+        selectTime: _currentTime,
+        curShowTime: _currentTime,
+        timeDefaultValue: _currentTime,
+      });
+      _currentDate = this.data.selectDate;
+      this.triggerEvent("changeTime", _currentDate + "-" + _currentTime);
     },
 
     /**
      * 初始化
      */
     formatDateAndTime() {
+      let dateStart = this.properties.dateStart,
+        dateEnd = this.properties.dateEnd,
+        timeStart = this.properties.timeStart;
+
       this.setData({
-        curShowDate: dateFormat(this.properties.dateStart, "MD"),
-        curStartDate: dateFormat(this.properties.dateStart, "YMD"),
+        curShowDate: dateFormat(dateStart, "MD"),
+        curStartDate: dateFormat(dateStart, "YMD"),
         curEndDate:
-          Object.keys(this.properties.dateEnd).length === 0
+          Object.keys(dateEnd).length === 0
             ? dateFormat(nextMonth(), "YMD")
-            : dateFormat(this.properties.dateEnd, "YMD"),
-        curShowTime: dateFormat(this.properties.timeStart, "Hm"),
-        timeDefaultValue: dateFormat(this.properties.timeStart, "Hm"),
-        curStartTime: dateFormat(this.properties.timeStart, "Hm"),
-        selectDate: dateFormat(this.properties.timeStart, "YMD"),
-        selectTime: dateFormat(this.properties.timeStart, "Hm"),
+            : dateFormat(dateEnd, "YMD"),
+        curShowTime: dateFormat(timeStart, "Hm"),
+        timeDefaultValue: dateFormat(timeStart, "Hm"),
+        curStartTime: dateFormat(timeStart, "Hm"),
+        selectDate: dateFormat(timeStart, "YMD"),
+        selectTime: dateFormat(timeStart, "Hm"),
       });
     },
 
@@ -135,16 +137,16 @@ Component({
      * 切割时间
      */
     splitCurrentDate(date) {
-      let _temCurDate = date.split("-"),
-        _currentDate;
-      if (_temCurDate[1][0] === "0") {
-        _currentDate =
-          _temCurDate[0] + "-" + _temCurDate[1][1] + "-" + _temCurDate[2];
+      let temCurDate = date.split("-"),
+        currentDate;
+      if (temCurDate[1][0] === "0") {
+        currentDate =
+          temCurDate[0] + "-" + temCurDate[1][1] + "-" + temCurDate[2];
       } else {
-        _currentDate = date;
+        currentDate = date;
       }
 
-      return _currentDate;
+      return currentDate;
     },
   },
 });
