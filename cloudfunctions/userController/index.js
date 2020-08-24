@@ -4,6 +4,7 @@ const nodemailer = require("nodemailer");
 
 cloud.init();
 
+const log = cloud.logger();
 const db = cloud.database();
 
 // 云函数入口函数
@@ -30,6 +31,9 @@ exports.main = async (event, context) => {
     }
     case "getUserCompany": {
       return getUserCompany(event);
+    }
+    case "setSubscribe": {
+      return setSubscribe(event);
     }
     default: {
       return;
@@ -101,6 +105,8 @@ async function getUserInfo(event) {
  * @param {string} request.name 用户名
  * @param {string} request.company 公司id
  * @param {string} request.fileId 工作证明云文件id
+ * @param {Boolean} request.is_send 是否发送订阅
+ * @param {Boolean} request.is_subscribe 是否订阅
  * @returns {Promise<{resultCode: number, resultData: any, errMsg: string,}>}
  */
 async function doReigsterCharter(request) {
@@ -125,6 +131,8 @@ async function doReigsterCharter(request) {
           user_name: "",
           user_phone: request.phone,
           address_id: "",
+          is_send: false,
+          is_subscribe: false,
           create_time: db.serverDate(),
           update_time: db.serverDate(),
         },
@@ -268,8 +276,10 @@ async function doRegisterCommute(request) {
           {
             status: 0,
             user_type: 1,
+            is_send: false,
             user_id: OPENID,
             union_id: UNIONID,
+            is_subscribe: false,
             employment_certificate: request.fileId,
             user_name: request.name,
             user_phone: request.phone,
@@ -310,6 +320,11 @@ async function doRegisterCommute(request) {
             });
           }
 
+          log.info({
+            value: "等待审核",
+            open_id: OPENID,
+          });
+
           return resolve({
             resultCode: 0,
             resultData: true,
@@ -325,6 +340,35 @@ async function doRegisterCommute(request) {
     }
   });
 }
+
+const setSubscribe = async () => {
+  try {
+    const { OPENID } = cloud.getWXContext();
+    await db
+      .collection("user_info")
+      .where({
+        user_type: 1,
+        user_id: OPENID,
+      })
+      .update({
+        data: {
+          is_subscribe: true,
+        },
+      });
+
+    return {
+      resultCode: 0,
+      resultData: true,
+      errMsg: null,
+    };
+  } catch (e) {
+    return {
+      resultCode: -1,
+      resultData: null,
+      errMsg: e.toString(),
+    };
+  }
+};
 
 /**
  * @desc 获取通勤注册用户的公司地址

@@ -1,12 +1,10 @@
 // miniprogram/pages/charter/charter.js
 // 包车下单页
 import Storage from "../../utils/storage";
+import { bussinessType } from "../../config";
 import { debounce, getCurDate, isBefore, isAfter } from "../../utils/ext";
 
 Page({
-  /**
-   * 页面的初始数据
-   */
   data: {
     departure: "", // 上车地点
     departureDefault: {}, // 上车地点初始化
@@ -15,6 +13,7 @@ Page({
       {
         key: "four",
         value: "4小时",
+        money: 400,
       },
       {
         key: "eight",
@@ -31,8 +30,7 @@ Page({
     phone: "", // 手机号
     contact_name: "", // 乘车联系人
     error_field: null, // 错误项
-    shakeInvalidAnimate: {},
-    watcher: null, // 监听器
+    shakeInvalidAnimate: {}, // 动画map
   },
 
   /**
@@ -62,9 +60,7 @@ Page({
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: async function () {
-    await this.watcher.close();
-  },
+  onUnload: async function () {},
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
@@ -173,6 +169,11 @@ Page({
         "charterDeparture",
         JSON.stringify({ name: detail.name })
       );
+      if (this.data.error_field === "poi") {
+        this.setData({
+          error_field: null,
+        });
+      }
     }
   },
 
@@ -258,11 +259,10 @@ Page({
   },
 
   /**
-   * 去支付
+   * 预支付
    */
   gotoPayforOrder() {
     if (!this.preSubmit()) return;
-
     let _params = {
       departure: this.data.departure,
       departure_time:
@@ -271,8 +271,72 @@ Page({
           : getCurDate(),
       phone: this.data.phone,
       contact_name: this.data.contact_name,
+      bizType: bussinessType.charter,
+      money: 1, // this.data.charterMoney
     };
+    wx.showLoading();
+    wx.cloud
+      .callFunction({
+        name: "orderController",
+        data: {
+          action: "createPerpayRequest",
+          params: _params,
+        },
+      })
+      .then(async (res) => {
+        const payment = res.result.resultData.payment;
+        const waitPayParams = Object.assign({}, _params, {
+          outTradeNo: res.result.resultData.outTradeNo,
+        });
+        const orderDetailUrl = `/pages/orderDetail/orderDetail?orderId=${waitPayParams.outTradeNo}`;
+        await this.createWaitPayOrder(waitPayParams);
+        wx.hideLoading();
+        wx.requestPayment({
+          ...payment,
+          success(res) {
+            console.log("pay_success", res);
+            wx.navigateTo({
+              url: orderDetailUrl,
+            });
+          },
+          fail(err) {
+            console.error("pay_fail", err);
+            if (err.errMsg === "requestPayment:fail cancel") {
+              wx.navigateTo({
+                url: orderDetailUrl,
+              });
+            }
+          },
+        });
+      })
+      .catch((err) => {
+        console.error(err, "预支付error");
+      });
+  },
+
+  /**
+   * 创建待支付订单
+   */
+  createWaitPayOrder(_params) {
     console.log(_params, "包车下单参数");
+    return new Promise((resolve, reject) => {
+      wx.cloud
+        .callFunction({
+          name: "orderController",
+          data: {
+            action: "createWaitPayOrder",
+            params: _params,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          resolve(res);
+        })
+        .catch((err) => {
+          console.log(err);
+          reject(err);
+        });
+    });
   },
 
   /**
@@ -289,11 +353,9 @@ Page({
       })
       .then((res) => {
         let { phoneNumber } = res.result.resultData;
-
         this.setData({
           phone: phoneNumber,
         });
-
         wx.cloud
           .callFunction({
             name: "userController",
@@ -303,41 +365,18 @@ Page({
             },
           })
           .then((res) => {
-            console.log(res);
-            if (+result.resultCode === 0) {
-              // 注册成功
+            if (+res.result.resultCode === 0) {
               console.log("注册成功");
             } else {
-              // 注册失败
               console.log("注册失败");
             }
           })
           .catch((err) => {
-            console.log("err: ", err);
+            console.log("注册失败", err);
           });
       })
       .catch((err) => {
-        console.log(err);
-      });
-  },
-
-  /**
-   * 监听器
-   */
-  registerWatcher() {
-    const db = wx.cloud.database();
-    this.watcher = db
-      .collection("user_info")
-      .where({
-        user_id: "oWGYt5HPRLbHplWBqmcjONdqL5Qk",
-      })
-      .watch({
-        onChange: function (snapshot) {
-          console.log(snapshot, "user_info表变化");
-        },
-        onError: function (err) {
-          console.err(err, "user_info表监听错误");
-        },
+        console.log("获取手机号失败", err);
       });
   },
 
@@ -379,7 +418,5 @@ Page({
     this.checkCharterPrice();
     // 创建动画
     this.createAnimation();
-    // 注册监听
-    this.registerWatcher();
   },
 });

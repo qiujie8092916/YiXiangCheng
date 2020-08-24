@@ -20,7 +20,7 @@ class Storage {
       tempStorageInfo = wx.getStorageSync(key) || "",
       splitStorage,
       expireTime;
-    if (tempStorageInfo) {
+    if (tempStorageInfo && tempStorageInfo.indexOf("___") !== -1) {
       splitStorage = tempStorageInfo.split("___")[0];
       expireTime = tempStorageInfo.split("___")[1];
       return getStorageTime > expireTime ? "" : JSON.parse(splitStorage);

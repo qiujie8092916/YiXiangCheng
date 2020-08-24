@@ -7,3 +7,8 @@ export const poiConfig = {
 export const routeConfig = {
   key: "KTGBZ-5OBRK-ATTJX-AWI37-F4HZQ-VEFEL",
 };
+
+export const bussinessType = {
+  charter: 1,
+  commute: 2,
+};

@@ -61,13 +61,11 @@ Component({
      * 日期回调
      */
     bindDateChange(e) {
-      let _currentDate = this.splitcurrentDate(e.detail.value);
-
+      let _currentDate = this.splitCurrentDate(e.detail.value);
       this.triggerEvent(
         "changeTime",
         commonFormat(_currentDate + "-" + this.data.selectTime)
       );
-
       this.setData({
         selectDate: e.detail.value,
         curShowDate: dateFormat(e.detail.value, "MD"),
@@ -106,10 +104,8 @@ Component({
         curShowTime: e.detail.value,
         timeDefaultValue: e.detail.value,
       });
-
       let _currentTime = e.detail.value,
         _currentDate = this.splitCurrentDate(this.data.selectDate);
-
       this.triggerEvent(
         "changeTime",
         commonFormat(_currentDate + "-" + _currentTime)
@@ -140,10 +136,10 @@ Component({
      */
     splitCurrentDate(date) {
       let _temCurDate = date.split("-"),
-          _currentDate;
+        _currentDate;
       if (_temCurDate[1][0] === "0") {
         _currentDate =
-            _temCurDate[0] + "-" + _temCurDate[1][1] + "-" + _temCurDate[2];
+          _temCurDate[0] + "-" + _temCurDate[1][1] + "-" + _temCurDate[2];
       } else {
         _currentDate = date;
       }
