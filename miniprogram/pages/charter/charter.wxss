@@ -97,7 +97,7 @@ page {
 }
 
 .price {
-  margin-top: 286rpx;
+  margin-top: 60rpx;
   margin-bottom: 91rpx;
 }
 
