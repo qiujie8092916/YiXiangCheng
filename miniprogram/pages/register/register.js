@@ -206,11 +206,92 @@ Page({
     return true;
   },
 
+  /**
+   * 订阅
+   */
+  registerSubscribe() {
+    const template_id = "tmuTKASNdq3h637YPkUSp9t57ePCCougAKaSzbEJvKo";
+    wx.requestSubscribeMessage({
+      tmplIds: [template_id],
+      success: (res) => {
+        console.log("订阅成功");
+        wx.cloud.callFunction({
+          name: "userController",
+          data: {
+            action: "setSubscribe",
+          },
+          success: ({ result = {} }) => {
+            if (+result.resultCode !== 0) {
+              console.error(result.errMsg);
+            }
+          },
+          fail: (e) => {
+            console.error(e);
+            wx.showToast({
+              icon: "none",
+              title: JSON.stringify(e),
+            });
+          },
+        });
+      },
+      fail: ({ errCode, errMsg }) => {
+        console.error(errCode, errMsg);
+      },
+    });
+  },
+
+  /**
+   * 通勤注册
+   */
+  commuteRegister(fileID) {
+    wx.cloud.callFunction({
+      name: "userController",
+      data: {
+        action: "doRegisterCommute",
+        phone: this.data.phone,
+        name: this.data.name.trim(),
+        company: this.data.companyObj.id,
+        fileId: fileID,
+      },
+      success: ({ result = {} }) => {
+        wx.hideLoading({
+          complete() {
+            if (+result.resultCode !== 0) {
+              console.error(result.errMsg);
+              return wx.showToast({
+                icon: "none",
+                title: result.errMsg || "异常错误",
+              });
+            }
+            wx.showModal({
+              showCancel: false,
+              content: "提交成功，等待审核",
+              success: ({ confirm }) => {
+                if (confirm) {
+                  this.registerSubscribe();
+                }
+              },
+            });
+          },
+        });
+      },
+      fail(e) {
+        console.error(e);
+        wx.showToast({
+          icon: "none",
+          title: JSON.stringify(e),
+        });
+      },
+      complete: wx.hideLoading,
+    });
+  },
+
+  /**
+   * 提交注册
+   */
   onsubmit({ detail: { value } }) {
     if (!this.preSubmit()) return;
-
     wx.showLoading({ title: "加载中" });
-
     wx.cloud.uploadFile({
       cloudPath: `employmentCertificate/${
         this.data.employment_certificate.path.match(
@@ -219,74 +300,7 @@ Page({
       }`,
       filePath: this.data.employment_certificate.path,
       success: ({ fileID }) => {
-        wx.cloud.callFunction({
-          name: "userController",
-          data: {
-            action: "doRegisterCommute",
-            phone: this.data.phone,
-            name: this.data.name.trim(),
-            company: this.data.companyObj.id,
-            fileId: fileID,
-          },
-          success: ({ result = {} }) => {
-            wx.hideLoading({
-              complete() {
-                if (+result.resultCode !== 0) {
-                  console.error(result.errMsg);
-                  return wx.showToast({
-                    icon: "none",
-                    title: result.errMsg || "异常错误",
-                  });
-                }
-                wx.showModal({
-                  showCancel: false,
-                  content: "提交成功，等待审核",
-                  success: ({ confirm }) => {
-                    if (confirm) {
-                      const template_id =
-                        "tmuTKASNdq3h637YPkUSp9t57ePCCougAKaSzbEJvKo";
-                      wx.requestSubscribeMessage({
-                        tmplIds: [template_id],
-                        success: (res) => {
-                          console.log("订阅成功");
-                          wx.cloud.callFunction({
-                            name: "userController",
-                            data: {
-                              action: "setSubscribe",
-                            },
-                            success: ({ result = {} }) => {
-                              if (+result.resultCode !== 0) {
-                                console.error(result.errMsg);
-                              }
-                            },
-                            fail: (e) => {
-                              console.error(e);
-                              wx.showToast({
-                                icon: "none",
-                                title: JSON.stringify(e),
-                              });
-                            },
-                          });
-                        },
-                        fail: ({ errCode, errMsg }) => {
-                          console.error(errCode, errMsg);
-                        },
-                      });
-                    }
-                  },
-                });
-              },
-            });
-          },
-          fail(e) {
-            console.error(e);
-            wx.showToast({
-              icon: "none",
-              title: JSON.stringify(e),
-            });
-          },
-          complete: wx.hideLoading,
-        });
+        this.commuteRegister(fileID);
       },
       fail: ({ errMsg }) => {
         wx.hideLoading({
