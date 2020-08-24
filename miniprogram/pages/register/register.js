@@ -241,7 +241,40 @@ Page({
                 wx.showModal({
                   showCancel: false,
                   content: "提交成功，等待审核",
-                })
+                  success: ({ confirm }) => {
+                    if (confirm) {
+                      const template_id =
+                        "tmuTKASNdq3h637YPkUSp9t57ePCCougAKaSzbEJvKo";
+                      wx.requestSubscribeMessage({
+                        tmplIds: [template_id],
+                        success: (res) => {
+                          console.log("订阅成功");
+                          wx.cloud.callFunction({
+                            name: "userController",
+                            data: {
+                              action: "setSubscribe",
+                            },
+                            success: ({ result = {} }) => {
+                              if (+result.resultCode !== 0) {
+                                console.error(result.errMsg);
+                              }
+                            },
+                            fail: (e) => {
+                              console.error(e);
+                              wx.showToast({
+                                icon: "none",
+                                title: JSON.stringify(e),
+                              });
+                            },
+                          });
+                        },
+                        fail: ({ errCode, errMsg }) => {
+                          console.error(errCode, errMsg);
+                        },
+                      });
+                    }
+                  },
+                });
               },
             });
           },
