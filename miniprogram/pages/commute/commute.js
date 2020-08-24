@@ -1,6 +1,6 @@
 // miniprogram/pages/commute/commute.js
 import { routeConfig, bussinessType } from "../../config";
-import { isBefore } from "../../utils/ext";
+import { isBefore, splitCurrentDate } from "../../utils/ext";
 
 const QQMapWX = require("../../vendor/qqmap-wx-jssdk.min");
 const qqmapsdk = new QQMapWX({ key: routeConfig.key });
@@ -142,7 +142,10 @@ Page({
   },
 
   resetTime() {
-    if (!this.data.time || isBefore(new Date(this.data.time))) {
+    if (
+      !this.data.time ||
+      isBefore(new Date(splitCurrentDate(this.data.time)))
+    ) {
       this.selectComponent("#datePicker").formatDateAndTime();
     }
   },

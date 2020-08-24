@@ -2,7 +2,13 @@
 // 包车下单页
 import Storage from "../../utils/storage";
 import { bussinessType } from "../../config";
-import { debounce, currentDatetime, isBefore, isAfter } from "../../utils/ext";
+import {
+  debounce,
+  currentDatetime,
+  isBefore,
+  isAfter,
+  splitCurrentDate,
+} from "../../utils/ext";
 
 Page({
   data: {
@@ -82,9 +88,10 @@ Page({
    * 若离开此页面后重新回到此页面时当前显示时间已经是过去时间则重置显示时间
    */
   resetDepartureTime() {
+    splitCurrentDate;
     if (
       !this.data.departure_time ||
-      isBefore(new Date(this.data.departure_time))
+      isBefore(new Date(splitCurrentDate(this.data.departure_time)))
     ) {
       this.selectComponent("#datePicker").formatDateAndTime();
     }
@@ -268,7 +275,8 @@ Page({
     let _params = {
       departure: this.data.departure,
       departure_time:
-        this.data.departure_time && isAfter(new Date(this.data.departure_time))
+        this.data.departure_time &&
+        isAfter(new Date(splitCurrentDate(this.data.departure_time)))
           ? this.data.departure_time
           : currentDatetime(),
       phone: this.data.phone,

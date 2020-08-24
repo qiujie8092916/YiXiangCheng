@@ -119,3 +119,27 @@ export const randomStingAsUUid = (min = 1, max = 2) => {
 
   return orderCode;
 };
+
+/**
+ * @description: 切割时间
+ * @param {type} '2020-08-24-23:45'
+ * @return {type} '2020-8-24-23:45'
+ */
+export const splitCurrentDate = (date) => {
+  let temCurDate = date.split("-"),
+    currentDate;
+  if (temCurDate[1][0] === "0") {
+    currentDate =
+      temCurDate[0] +
+      "-" +
+      temCurDate[1][1] +
+      "-" +
+      temCurDate[2] +
+      "-" +
+      temCurDate[3];
+  } else {
+    currentDate = date;
+  }
+
+  return currentDate;
+};

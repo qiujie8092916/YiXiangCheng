@@ -70,6 +70,7 @@ Component({
       });
 
       if (isSameDay(_currentDate)) {
+        debugger;
         // 已选时间在当前时间之前则重置显示时间/时间默认值/开始时间到当前最新时间
         if (isBefore(joinTime(this.data.curShowTime))) {
           this.setData({
@@ -131,22 +132,6 @@ Component({
         selectDate: dateFormat(timeStart, "YMD"),
         selectTime: dateFormat(timeStart, "Hm"),
       });
-    },
-
-    /**
-     * 切割时间
-     */
-    splitCurrentDate(date) {
-      let temCurDate = date.split("-"),
-        currentDate;
-      if (temCurDate[1][0] === "0") {
-        currentDate =
-          temCurDate[0] + "-" + temCurDate[1][1] + "-" + temCurDate[2];
-      } else {
-        currentDate = date;
-      }
-
-      return currentDate;
     },
   },
 });
