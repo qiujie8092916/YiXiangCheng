@@ -1,6 +1,6 @@
 // miniprogram/pages/commute/commute.js
-import { routeConfig } from "../../config";
-import {isBefore} from "../../utils/ext";
+import { routeConfig, bussinessType } from "../../config";
+import { isBefore } from "../../utils/ext";
 
 const QQMapWX = require("../../vendor/qqmap-wx-jssdk.min");
 const qqmapsdk = new QQMapWX({ key: routeConfig.key });
@@ -23,7 +23,7 @@ Page({
       sharing: 0,
       individual: 0,
     },
-    time: '',
+    time: "",
     current: "goHome",
     companyAddress: {},
     pickObj: {
@@ -141,14 +141,14 @@ Page({
     }
   },
 
-  resetTime(){
+  resetTime() {
     if (!this.data.time || isBefore(this.data.time)) {
       this.selectComponent("#datePicker").formatDateAndTime();
     }
   },
 
-  changeTime({detail}){
-    console.log(detail)
+  changeTime({ detail }) {
+    console.log(detail);
     this.setData({
       time: detail,
     });
@@ -193,14 +193,17 @@ Page({
       e.currentTarget.dataset.key || e.detail.currentItemId || "goHome";
 
     if (current !== this.data.current) {
-      this.setData({
-        current,
-        error_field: "",
-      }, () => {
-        this.getEstimatePrice(
+      this.setData(
+        {
+          current,
+          error_field: "",
+        },
+        () => {
+          this.getEstimatePrice(
             this.data.pickObj[this.data.activeType].coordinates
-        );
-      });
+          );
+        }
+      );
     }
   },
 
@@ -298,28 +301,30 @@ Page({
 
     let from, to;
 
-    if(this.data.current === 'goHome') {
-      from = this.data.companyAddress.coordinate.coordinates
-      to = this.data.pickObj[this.data.activeType].coordinates
+    if (this.data.current === "goHome") {
+      from = this.data.companyAddress.coordinate.coordinates;
+      to = this.data.pickObj[this.data.activeType].coordinates;
     } else {
-      from = this.data.pickObj[this.data.activeType].coordinates
-      to = this.data.companyAddress.coordinate.coordinates
+      from = this.data.pickObj[this.data.activeType].coordinates;
+      to = this.data.companyAddress.coordinate.coordinates;
     }
 
-    wx.cloud.callFunction({
-      name: 'orderController',
-      data: {
-        action: 'create',
-        bizType: 2,
-        to, // 坐标[longitude, latitude]
-        from, // 坐标[longitude, latitude]
-        time: this.data.time, // '2020-08-21 00:23:04'
-        price: this.data.estimate[this.data.activeType],// 实付金额
-        type: this.data.current === 'goHome' ? 0: 1, // 0-回家 1-上班
-        take: this.data.activeType === 'sharing' ? 0: 1, // 0-拼车 1-独享
-      }
-    }).then(res => {
-      console.log(res)
-    })
+    wx.cloud
+      .callFunction({
+        name: "orderController",
+        data: {
+          action: "create",
+          bizType: bussinessType.commute,
+          to, // 坐标[longitude, latitude]
+          from, // 坐标[longitude, latitude]
+          time: this.data.time, // '2020-08-21 00:23:04'
+          price: this.data.estimate[this.data.activeType], // 实付金额
+          type: this.data.current === "goHome" ? 0 : 1, // 0-回家 1-上班
+          take: this.data.activeType === "sharing" ? 0 : 1, // 0-拼车 1-独享
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      });
   },
 });
