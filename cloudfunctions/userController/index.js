@@ -299,7 +299,7 @@ async function doRegisterCommute(request) {
           // host: 'smtp.ethereal.email',
           secureConnection: true, // 使用 SSL
         }),
-        receivers = await db.collection("mailer").get(); //获取收件人列表
+        receivers = await db.collection("manager_mailer").get(); //获取收件人列表
 
       transporter.sendMail(
         {

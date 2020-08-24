@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "openapi": ["subscribeMessage.send"]
+  },
+  "triggers": [
+    {
+      "name": "registerOrderStatusTrigger",
+      "type": "timer",
+      "config": "* */30 * * * * *"
+    }
+  ]
+}
