@@ -341,6 +341,11 @@ async function doRegisterCommute(request) {
   });
 }
 
+/**
+ * @description: 审核用户订阅
+ * @param {type}
+ * @return {type}
+ */
 const setSubscribe = async () => {
   try {
     const { OPENID } = cloud.getWXContext();

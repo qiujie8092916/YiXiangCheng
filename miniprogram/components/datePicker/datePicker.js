@@ -63,14 +63,12 @@ Component({
       let _currentDate = e.detail.value,
         _currentTime = this.data.selectTime;
 
-      this.triggerEvent("changeTime", _currentDate + "-" + _currentTime);
+      this.triggerEvent("changeTime", _currentDate + " " + _currentTime);
       this.setData({
         selectDate: _currentDate,
         curShowDate: dateFormat(_currentDate, "MD"),
       });
-
       if (isSameDay(_currentDate)) {
-        debugger;
         // 已选时间在当前时间之前则重置显示时间/时间默认值/开始时间到当前最新时间
         if (isBefore(joinTime(this.data.curShowTime))) {
           this.setData({
@@ -108,7 +106,7 @@ Component({
         timeDefaultValue: _currentTime,
       });
       _currentDate = this.data.selectDate;
-      this.triggerEvent("changeTime", _currentDate + "-" + _currentTime);
+      this.triggerEvent("changeTime", _currentDate + " " + _currentTime);
     },
 
     /**

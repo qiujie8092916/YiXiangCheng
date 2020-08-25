@@ -120,6 +120,9 @@ const createPerpayRequest = async (request) => {
       tradeType: "JSAPI",
     });
 
+    await this.updateAddressInfo();
+    await this.createWaitPayOrder();
+
     prePayResult = Object.assign({}, res, { outTradeNo: _outTradeNo });
 
     return {
@@ -147,7 +150,16 @@ const createPerpayRequest = async (request) => {
  * @param {Number} status 订单状态 待支付...
  * @param {String} outTradeNo 订单id
  */
-const createWaitPayOrder = (request) => {};
+const createWaitPayOrder = async (request) => {
+  const { OPENID, UNIONID } = cloud.getWXContext();
+};
+
+/**
+ * @description: 下单更新地址表
+ * @param {type}
+ * @return {type}
+ */
+const updateAddressInfo = async () => {};
 
 /**
  * @description: 查询订单详情

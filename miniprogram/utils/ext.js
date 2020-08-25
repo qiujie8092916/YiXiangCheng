@@ -39,11 +39,11 @@ export const joinTime = function (time) {
 };
 
 export const normalDateformat = function (time) {
-  return moment(time).format();
+  return moment(time).format("YYYY-MM-DD HH:mm");
 };
 
 export const currentDatetime = function () {
-  return moment().format("YYYY-MM-DD-HH:mm:ss");
+  return moment().format("YYYY-MM-DD HH:mm");
 };
 
 export const throttle = function (fn, delay) {
@@ -122,8 +122,8 @@ export const randomStingAsUUid = (min = 1, max = 2) => {
 
 /**
  * @description: 切割时间
- * @param {type} '2020-08-24-23:45'
- * @return {type} '2020-8-24-23:45'
+ * @param {type} '2020-08-24 23:45'
+ * @return {type} '2020-8-24 23:45'
  */
 export const splitCurrentDate = (date) => {
   let temCurDate = date.split("-"),
@@ -135,7 +135,7 @@ export const splitCurrentDate = (date) => {
       temCurDate[1][1] +
       "-" +
       temCurDate[2] +
-      "-" +
+      " " +
       temCurDate[3];
   } else {
     currentDate = date;

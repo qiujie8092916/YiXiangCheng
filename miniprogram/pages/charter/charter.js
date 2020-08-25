@@ -7,13 +7,13 @@ import {
   currentDatetime,
   isBefore,
   isAfter,
-  splitCurrentDate,
+  normalDateformat,
 } from "../../utils/ext";
 
 Page({
   data: {
-    departure: "", // 上车地点
-    departureDefault: {}, // 上车地点初始化
+    departure: "", // 上车地点: 三里庵合肥市蜀山区人民政府(南一环路南)
+    departureDefault: {}, // 上车地点初始化: {name: "三里庵合肥市蜀山区人民政府(南一环路南)", latitude: 31.8512, longitude:117.26061, city:"合肥市", address:"安徽省合肥市蜀山区梅山路105号", district: "蜀山区", province: "安徽省"}
     departure_time: "", // 选择时间
     duration: [
       {
@@ -88,11 +88,11 @@ Page({
    * 若离开此页面后重新回到此页面时当前显示时间已经是过去时间则重置显示时间
    */
   resetDepartureTime() {
-    splitCurrentDate;
     if (
       !this.data.departure_time ||
-      isBefore(new Date(splitCurrentDate(this.data.departure_time)))
+      isBefore(normalDateformat(this.data.departure_time))
     ) {
+      console.log("重置时间");
       this.selectComponent("#datePicker").formatDateAndTime();
     }
   },
@@ -170,15 +170,13 @@ Page({
    * 选择位置
    */
   choosePoi({ detail }) {
+    console.log(detail, "detail");
     if (detail) {
       this.setData({
         departure: detail.name,
-        departureDefault: { name: detail.name },
+        departureDefault: detail,
       });
-      Storage.setStorage(
-        "charterDeparture",
-        JSON.stringify({ name: detail.name })
-      );
+      Storage.setStorage("charterDeparture", JSON.stringify(detail));
       if (this.data.error_field === "poi") {
         this.setData({
           error_field: null,
@@ -191,6 +189,7 @@ Page({
    * 选择时间
    */
   changeTime(d) {
+    console.log(d.detail);
     this.setData({
       departure_time: d.detail,
     });
@@ -273,10 +272,10 @@ Page({
   gotoPayforOrder() {
     if (!this.preSubmit()) return;
     let _params = {
-      departure: this.data.departure,
+      departure: this.data.departureDefault,
       departure_time:
         this.data.departure_time &&
-        isAfter(new Date(splitCurrentDate(this.data.departure_time)))
+        isAfter(normalDateformat(this.data.departure_time))
           ? this.data.departure_time
           : currentDatetime(),
       phone: this.data.phone,
@@ -284,6 +283,7 @@ Page({
       bizType: bussinessType.charter,
       money: 1, // this.data.charterMoney
     };
+    console.log(_params, "下单参数");
     wx.showLoading();
     wx.cloud
       .callFunction({
@@ -293,13 +293,10 @@ Page({
           params: _params,
         },
       })
-      .then(async (res) => {
+      .then((res) => {
         const payment = res.result.resultData.payment;
-        const waitPayParams = Object.assign({}, _params, {
-          outTradeNo: res.result.resultData.outTradeNo,
-        });
-        const orderDetailUrl = `/pages/orderDetail/orderDetail?orderId=${waitPayParams.outTradeNo}`;
-        await this.createWaitPayOrder(waitPayParams);
+        const outTradeNo = res.result.resultData.outTradeNo;
+        const orderDetailUrl = `/pages/orderDetail/orderDetail?orderId=${outTradeNo}`;
         wx.hideLoading();
         wx.requestPayment({
           ...payment,
@@ -322,31 +319,6 @@ Page({
       .catch((err) => {
         console.error(err, "预支付error");
       });
-  },
-
-  /**
-   * 创建待支付订单
-   */
-  createWaitPayOrder(_params) {
-    console.log(_params, "包车下单参数");
-    return new Promise((resolve, reject) => {
-      wx.cloud
-        .callFunction({
-          name: "orderController",
-          data: {
-            action: "createWaitPayOrder",
-            params: _params,
-          },
-        })
-        .then((res) => {
-          console.log(res);
-          resolve(res);
-        })
-        .catch((err) => {
-          console.log(err);
-          reject(err);
-        });
-    });
   },
 
   /**
