@@ -147,22 +147,20 @@ Component({
     init() {
       wx.showLoading({ title: "加载中" });
       wx.cloud.callFunction({
-        name: "getAddress",
-        data:
-          this.properties.type === "company"
-            ? {
-                isCompany: 1,
-              }
-            : this.properties.type === "pick"
-            ? {
-                isPick: 1,
-              }
-            : {},
-        success: ({ result }) => {
+        name: "addressController",
+        data: {
+          action:
+            this.properties.type === "company"
+              ? "getCompany"
+              : this.properties.type === "pick"
+              ? "getPick"
+              : "",
+        },
+        success: ({ result = {} }) => {
           let range = [],
             dataSource = [];
           if (this.properties.type === "company") {
-            dataSource = (result || []).reduce((acc, cur) => {
+            dataSource = (result.resultData || []).reduce((acc, cur) => {
               const area = cur.addrInfo.area,
                 existIndex = acc.findIndex((it) => it.id === area),
                 addrInfo = {
@@ -186,7 +184,7 @@ Component({
               dataSource[this.data.selectIndex[0]].address.map((it) => it.name),
             ];
           } else if (this.properties.type === "pick") {
-            dataSource = (result || []).map((it) => ({
+            dataSource = (result.resultData || []).map((it) => ({
               id: it.id,
               ...it.addrInfo,
             }));
