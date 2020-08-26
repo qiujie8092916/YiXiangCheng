@@ -2,7 +2,9 @@
 const cloud = require("wx-server-sdk");
 const nodemailer = require("nodemailer");
 
-cloud.init();
+cloud.init({
+  env: cloud.DYNAMIC_CURRENT_ENV,
+});
 
 const log = cloud.logger();
 const db = cloud.database();

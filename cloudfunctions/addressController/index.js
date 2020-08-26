@@ -16,9 +16,9 @@
  *     isPick: boolean; // 是否是指定上下车地址
  * }
  * ```
- *
  * @returns {promise<{resultCode: number, resultData: any, errMsg: string}>}
  */
+
 // 云函数入口文件
 const cloud = require("wx-server-sdk");
 
