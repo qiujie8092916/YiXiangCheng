@@ -15,4 +15,5 @@ export const bussinessType = {
 
 export const subscribeMessageIds = {
   orderStatusId: "PBfi0VyoP-PgUpsNez_tcbHmdit7W_TO609Uzi7dq_4",
+  registerId: "tmuTKASNdq3h637YPkUSp9t57ePCCougAKaSzbEJvKo",
 };

@@ -146,6 +146,8 @@ const createPerpayRequest = async (request) => {
  * @param {String} commute_type 通勤类型 独享 拼车
  * @param {Number} status 订单状态 待支付...
  * @param {String} outTradeNo 订单id
+ * @param {String} is_subscribe 是否订阅发送接单消息
+ * @param {String} is_send 是否已发送接单订阅消息
  */
 const createWaitPayOrder = async (request) => {
   const { OPENID, UNIONID } = cloud.getWXContext();

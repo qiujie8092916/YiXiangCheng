@@ -1,5 +1,6 @@
 // miniprogram/pages/register/register.js
 import { arrayToJson } from "../../utils/ext";
+import { bussinessType, subscribeMessageIds } from "../../config";
 
 Page({
   /**
@@ -210,31 +211,35 @@ Page({
    * 订阅
    */
   registerSubscribe() {
-    const template_id = "tmuTKASNdq3h637YPkUSp9t57ePCCougAKaSzbEJvKo";
     wx.requestSubscribeMessage({
-      tmplIds: [template_id],
+      tmplIds: [subscribeMessageIds.registerId],
       success: (res) => {
-        console.log("订阅成功");
-        wx.cloud.callFunction({
-          name: "userController",
-          data: {
-            action: "setSubscribe",
-          },
-          success: ({ result = {} }) => {
-            if (+result.resultCode !== 0) {
-              console.error(result.errMsg);
-            }
-          },
-          fail: (e) => {
-            console.error(e);
-            wx.showToast({
-              icon: "none",
-              title: JSON.stringify(e),
-            });
-          },
-        });
+        if (res[subscribeMessageIds.registerId] === "accept") {
+          console.log("订阅成功");
+          wx.cloud.callFunction({
+            name: "userController",
+            data: {
+              action: "setSubscribe",
+            },
+            success: ({ result = {} }) => {
+              if (+result.resultCode !== 0) {
+                console.error(result.errMsg);
+              }
+            },
+            fail: (e) => {
+              console.error(e);
+              wx.showToast({
+                icon: "none",
+                title: JSON.stringify(e),
+              });
+            },
+          });
+        } else {
+          console.log("用户不订阅");
+        }
       },
       fail: ({ errCode, errMsg }) => {
+        console.log("订阅接口失败");
         console.error(errCode, errMsg);
       },
     });
