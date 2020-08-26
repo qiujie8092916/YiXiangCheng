@@ -1,7 +1,7 @@
 // miniprogram/pages/charter/charter.js
 // 包车下单页
 import Storage from "../../utils/storage";
-import { bussinessType } from "../../config";
+import { bussinessType, subscribeMessageIds } from "../../config";
 import {
   debounce,
   currentDatetime,
@@ -267,7 +267,7 @@ Page({
   },
 
   /**
-   * 预支付
+   * 预支付询问订阅
    */
   gotoPayforOrder() {
     if (!this.preSubmit()) return;
@@ -283,6 +283,47 @@ Page({
       bizType: bussinessType.charter,
       money: 1, // this.data.charterMoney
     };
+    this.subscribeOrderStatus(_params, this.createWaitPayOrder);
+  },
+
+  /**
+   * 订阅消息
+   */
+  subscribeOrderStatus(_params, callback) {
+    wx.requestSubscribeMessage({
+      tmplIds: [subscribeMessageIds.orderStatusId],
+      success(res) {
+        if (res[subscribeMessageIds.orderStatusId] === "accept") {
+          console.log(res, "用户订阅");
+          _params = Object.assign({}, _params, {
+            is_subscribe: true,
+            is_send: false,
+          });
+          callback(_params);
+        } else {
+          console.log(res, "用户不订阅");
+          _params = Object.assign({}, _params, {
+            is_subscribe: false,
+            is_send: false,
+          });
+          callback(_params);
+        }
+      },
+      fail(err) {
+        console.log(err, "订阅接口失败");
+        _params = Object.assign({}, _params, {
+          is_subscribe: false,
+          is_send: false,
+        });
+        callback(_params);
+      },
+    });
+  },
+
+  /**
+   * 下待支付订单
+   */
+  createWaitPayOrder(_params) {
     console.log(_params, "下单参数");
     wx.showLoading();
     wx.cloud
@@ -294,10 +335,10 @@ Page({
         },
       })
       .then((res) => {
+        wx.hideLoading();
         const payment = res.result.resultData.payment;
         const outTradeNo = res.result.resultData.outTradeNo;
         const orderDetailUrl = `/pages/orderDetail/orderDetail?orderId=${outTradeNo}`;
-        wx.hideLoading();
         wx.requestPayment({
           ...payment,
           success(res) {
@@ -317,6 +358,10 @@ Page({
         });
       })
       .catch((err) => {
+        wx.hideLoading();
+        wx.showToast({
+          title: err,
+        });
         console.error(err, "预支付error");
       });
   },

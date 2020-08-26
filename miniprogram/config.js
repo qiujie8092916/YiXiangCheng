@@ -12,3 +12,7 @@ export const bussinessType = {
   charter: 1,
   commute: 2,
 };
+
+export const subscribeMessageIds = {
+  orderStatusId: "PBfi0VyoP-PgUpsNez_tcbHmdit7W_TO609Uzi7dq_4",
+};

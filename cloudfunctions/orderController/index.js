@@ -25,9 +25,6 @@ exports.main = async (event, context) => {
     case "createPerpayRequest": {
       return createPerpayRequest(event.params);
     }
-    case "createWaitPayOrder": {
-      return createWaitPayOrder(event.params);
-    }
     case "checkOrderDetail": {
       return checkOrderDetail(event.params);
     }
