@@ -1,6 +1,11 @@
 // miniprogram/pages/commute/commute.js
-import { routeConfig, bussinessType } from "../../config";
-import { isBefore, normalDateformat } from "../../utils/ext";
+import { routeConfig, bussinessType, subscribeMessageIds } from "../../config";
+import {
+  currentDatetime,
+  isAfter,
+  isBefore,
+  normalDateformat,
+} from "../../utils/ext";
 
 const QQMapWX = require("../../vendor/qqmap-wx-jssdk.min");
 const qqmapsdk = new QQMapWX({ key: routeConfig.key });
@@ -296,35 +301,78 @@ Page({
     return true;
   },
 
-  onsubmit() {
-    if (!this.preSubmit()) return;
-
-    let from, to;
+  /**
+   * @desc 组装下单参数
+   */
+  genParams() {
+    let departure, destination;
 
     if (this.data.current === "goHome") {
-      from = this.data.companyAddress.coordinate.coordinates;
-      to = this.data.pickObj[this.data.activeType].coordinates;
+      departure = this.data.companyAddress.id;
+      destination =
+        this.data.pickObj[this.data.activeType].id ||
+        this.data.pickObj[this.data.activeType];
     } else {
-      from = this.data.pickObj[this.data.activeType].coordinates;
-      to = this.data.companyAddress.coordinate.coordinates;
+      departure =
+        this.data.pickObj[this.data.activeType].id ||
+        this.data.pickObj[this.data.activeType];
+      destination = this.data.companyAddress.id;
     }
+
+    return {
+      departure,
+      bizType: 2,
+      destination,
+      total_price: 1, //this.data.estimate[this.data.activeType], // 实付金额
+      commute_type: this.data.current === "goHome" ? 0 : 1, //0-回家 1-上班
+      commute_way: this.data.activeType === "sharing" ? 0 : 1, // 0-拼车 1-独享
+      departure_time:
+        this.data.time && isAfter(normalDateformat(this.data.departure_time))
+          ? this.data.departure_time
+          : currentDatetime(),
+    };
+  },
+
+  async onsubmit() {
+    if (!this.preSubmit()) return;
+
+    const params = this.genParams();
+    const is_subscribe = await this.subscribeOrderStatus();
 
     wx.cloud
       .callFunction({
         name: "orderController",
         data: {
-          action: "create",
-          bizType: bussinessType.commute,
-          to, // 坐标[longitude, latitude]
-          from, // 坐标[longitude, latitude]
-          time: this.data.time, // '2020-08-21 00:23:04'
-          price: this.data.estimate[this.data.activeType], // 实付金额
-          type: this.data.current === "goHome" ? 0 : 1, // 0-回家 1-上班
-          take: this.data.activeType === "sharing" ? 0 : 1, // 0-拼车 1-独享
+          action: "createPerpayRequest",
+          params: { is_subscribe, ...params },
         },
       })
       .then((res) => {
         console.log(res);
       });
+  },
+
+  /**
+   * 订阅消息
+   */
+  subscribeOrderStatus() {
+    return new Promise((resolve) => {
+      wx.requestSubscribeMessage({
+        tmplIds: [subscribeMessageIds.orderStatusId],
+        success(res) {
+          if (res[subscribeMessageIds.orderStatusId] === "accept") {
+            console.log(res, "用户订阅");
+            resolve(true);
+          } else {
+            console.log(res, "用户不订阅");
+            resolve(false);
+          }
+        },
+        fail(err) {
+          console.log(err, "订阅接口失败");
+          resolve(false);
+        },
+      });
+    });
   },
 });

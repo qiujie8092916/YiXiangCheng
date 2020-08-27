@@ -74,16 +74,16 @@ async function getCellphone(event) {
 
 /**
  * @description: 查询用户信息
- * @param {type}
+ * @param {object} request
+ * @param {string} [request.user_id]
  * @return {object}
  */
-async function getUserInfo(event) {
-  const { OPENID } = cloud.getWXContext();
+async function getUserInfo(request) {
   const userInfoDb = db.collection("user_info");
   try {
     const result = await userInfoDb
       .where({
-        user_id: OPENID,
+        user_id: request.user_id || cloud.getWXContext().OPENID,
       })
       .get();
 
