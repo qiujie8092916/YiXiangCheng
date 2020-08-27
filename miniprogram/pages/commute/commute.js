@@ -302,6 +302,30 @@ Page({
   },
 
   /**
+   * 订阅消息
+   */
+  subscribeOrderStatus() {
+    return new Promise((resolve) => {
+      wx.requestSubscribeMessage({
+        tmplIds: [subscribeMessageIds.orderStatusId],
+        success(res) {
+          if (res[subscribeMessageIds.orderStatusId] === "accept") {
+            console.log(res, "用户订阅");
+            resolve(true);
+          } else {
+            console.log(res, "用户不订阅");
+            resolve(false);
+          }
+        },
+        fail(err) {
+          console.log(err, "订阅接口失败");
+          resolve(false);
+        },
+      });
+    });
+  },
+
+  /**
    * @desc 组装下单参数
    */
   genParams() {
@@ -324,20 +348,25 @@ Page({
       bizType: 2,
       destination,
       total_price: 1, //this.data.estimate[this.data.activeType], // 实付金额
-      commute_type: this.data.current === "goHome" ? 0 : 1, //0-回家 1-上班
+      commute_type: this.data.current === "goHome" ? 0 : 1, // 0-回家 1-上班
       commute_way: this.data.activeType === "sharing" ? 0 : 1, // 0-拼车 1-独享
       departure_time:
-        this.data.time && isAfter(normalDateformat(this.data.departure_time))
-          ? this.data.departure_time
+        this.data.time && isAfter(normalDateformat(this.data.time))
+          ? this.data.time
           : currentDatetime(),
     };
   },
 
+  /**
+   * @desc 创建通勤订单
+   */
   async onsubmit() {
     if (!this.preSubmit()) return;
 
-    const params = this.genParams();
     const is_subscribe = await this.subscribeOrderStatus();
+
+    wx.showLoading({ title: "加载中" });
+    const params = this.genParams();
 
     wx.cloud
       .callFunction({
@@ -347,32 +376,42 @@ Page({
           params: { is_subscribe, ...params },
         },
       })
-      .then((res) => {
-        console.log(res);
+      .then(({ result = {} }) => {
+        wx.hideLoading();
+        if (+result.resultCode !== 0) {
+          throw "下单失败";
+        }
+        this.invokePay(result.resultData);
+      })
+      .catch((err) => {
+        wx.hideLoading();
+        wx.showToast({
+          title: "请稍后重试",
+          icon: "none",
+        });
+        console.error(err, "预支付error");
       });
   },
 
-  /**
-   * 订阅消息
-   */
-  subscribeOrderStatus() {
-    return new Promise((resolve) => {
-      wx.requestSubscribeMessage({
-        tmplIds: [subscribeMessageIds.orderStatusId],
-        success(res) {
-          if (res[subscribeMessageIds.orderStatusId] === "accept") {
-            console.log(res, "用户订阅");
-            resolve(true);
-          } else {
-            console.log(res, "用户不订阅");
-            resolve(false);
-          }
-        },
-        fail(err) {
-          console.log(err, "订阅接口失败");
-          resolve(false);
-        },
-      });
+  invokePay(prePayResult) {
+    const orderDetailUrl = `/pages/orderDetail/orderDetail?orderId=${prePayResult.outTradeNo}`;
+
+    wx.requestPayment({
+      ...prePayResult.payment,
+      success(res) {
+        console.log("pay_success", res);
+        wx.navigateTo({
+          url: orderDetailUrl,
+        });
+      },
+      fail(err) {
+        console.error("pay_fail", err);
+        if (err.errMsg === "requestPayment:fail cancel") {
+          wx.navigateTo({
+            url: orderDetailUrl,
+          });
+        }
+      },
     });
   },
 });

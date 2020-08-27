@@ -157,7 +157,9 @@ const createPerpayRequest = async (request) => {
  * @param {object} request
  * @param {String} request.outTradeNo 订单id
  * @param {String} request.departure_time 用车时间
- * @param {String} request.charter_duration 包车时长
+ * @param {String} request.charter_duration 包车时长（包车特殊字段）
+ * @param {String} request.commute_way 通勤方式 0-拼车 1-独享（通勤特殊字段）
+ * @param {String} request.commute_type 通勤时长 0-回家 1-上班（通勤特殊字段）
  * @param {Number} request.order_status 订单状态
  * @param {String} request.pay_serial_no 支付流水
  * @param {String} request.pay_time 支付时间
@@ -184,7 +186,6 @@ const createWaitPayOrder = async (request) => {
           order_no: request.outTradeNo,
           use_time: request.departure_time,
           order_status: 1,
-          charter_duration: request.charter_duration,
           pay_serial_no: null,
           pay_time: null,
           pay_way: 0,
@@ -199,6 +200,9 @@ const createWaitPayOrder = async (request) => {
           is_send: false,
           create_time: db.serverDate(),
           update_time: db.serverDate(),
+          charter_duration: request.charter_duration, //包车特殊字段
+          commute_way: request.commute_way, //通勤特殊字段
+          commute_type: request.commute_type, //通勤特殊字段
         },
       })
       .then((res) => {
