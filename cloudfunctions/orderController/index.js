@@ -87,13 +87,8 @@ const payRandomWord = () => {
 /**
  * @description: 预支付
  * @param {object} request
- * @param {1|2} request.bizType 业务类型 1-包车 2-通勤
  * @param {number} request.money 整数 单位：分
- * @param {string} request.contact_name 联系人姓名
- * @param {string} request.phone 联系人电话
- * @param {object|string} request.departure 出发地点信息（包车是poi返回的object, 通勤是维护的地址id）
- * @param {string} request.departure_time 出发时间
- * @param {object|string} request.destination 到达地点信息（同departure）
+ * @brief 剩下参数见 createWaitPayOrder
  */
 const createPerpayRequest = async (request) => {
   let _nonceStr = payRandomWord(),
@@ -168,6 +163,7 @@ const createPerpayRequest = async (request) => {
  * @param {String} request.is_subscribe 是否订阅发送接单消息
  * @param {String} request.create_time 创建时间
  * @param {String} request.update_time 更新时间
+ * @brief 剩下参数见 updateOrderSnapshot
  */
 const createWaitPayOrder = async (request) => {
   const { OPENID } = cloud.getWXContext();
@@ -220,7 +216,12 @@ const createWaitPayOrder = async (request) => {
 
 /**
  * @description: 下单更新地址快照表order_snapshot
- * @param {type}
+ * @param {object} request
+ * @param {1|2} request.bizType 业务类型 1-包车 2-通勤
+ * @param {string} request.contact_name 联系人姓名
+ * @param {string} request.phone 联系人电话
+ * @param {object|string} request.departure 出发地点信息（包车是poi返回的object, 通勤是维护的地址id）
+ * @param {object|string} request.destination 到达地点信息（同departure）
  * @return {type}
  */
 const updateOrderSnapshot = async (request) => {
