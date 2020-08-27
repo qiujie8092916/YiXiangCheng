@@ -231,7 +231,10 @@ const createWaitPayOrder = async (request) => {
 const updateOrderSnapshot = async (request) => {
   const snapshotDb = db.collection("order_snapshot");
   let pick_info = request.departure,
-    drop_info = {};
+    drop_info =
+      request.bizType === bussinessType.charter ? {} : request.destination,
+    contact_name = request.contact_name,
+    contact_phone = request.phone;
 
   if (request.bizType === bussinessType.commute) {
     if (
@@ -244,6 +247,10 @@ const updateOrderSnapshot = async (request) => {
     ) {
       drop_info = await getAddressInfo(request.destination);
     }
+
+    const userInfo = await getUserInfo();
+    contact_name = userInfo.contact_name || null;
+    contact_phone = userInfo.contact_phone || null;
   }
 
   try {
@@ -252,9 +259,9 @@ const updateOrderSnapshot = async (request) => {
         data: {
           pick_info,
           drop_info,
+          contact_name,
+          contact_phone,
           biz_type: request.bizType,
-          contact_name: request.contact_name,
-          contact_phone: request.phone,
           create_time: db.serverDate(),
           update_time: db.serverDate(),
         },
@@ -286,17 +293,49 @@ const updateOrderSnapshot = async (request) => {
  * @param id
  * @retrun {object}
  */
-const getAddressInfo = async (id) => {
+const getAddressInfo = async (address_id) => {
   try {
-    await cloud.callFunction({
+    const { result = {} } = await cloud.callFunction({
       // 要调用的云函数名称
       name: "addressController",
       // 传递给云函数的event参数
       data: {
         action: "getAddressById",
-        id,
+        id: address_id,
       },
     });
+    return +result.resultCode === 0 && result.resultData.id
+      ? {
+          id: result.resultData.id,
+          ...result.resultData.addrInfo,
+          is_pick: result.resultData.isPick,
+          is_company: result.resultData.isCompany,
+        }
+      : {};
+  } catch (e) {
+    return {};
+  }
+};
+
+const getUserInfo = async () => {
+  const { OPENID } = cloud.getWXContext();
+  try {
+    const { result = {} } = await cloud.callFunction({
+      // 要调用的云函数名称
+      name: "userController",
+      // 传递给云函数的event参数
+      data: {
+        action: "getUserInfo",
+        user_id: OPENID,
+      },
+    });
+
+    return +result.resultCode === 0 && Object.keys(result.resultData).length
+      ? {
+          contact_name: result.resultData.user_name,
+          contact_phone: result.resultData.user_phone,
+        }
+      : {};
   } catch (e) {
     return {};
   }
