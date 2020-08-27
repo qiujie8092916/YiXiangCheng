@@ -382,23 +382,23 @@ Page({
           if (res && res.result && res.result.resultData) {
             this.payUpdateOrder(orderDetailUrl, res.result.resultData);
           } else {
-            this.payUpdateOrder(orderDetailUrl, "");
+            this.payUpdateOrder(orderDetailUrl);
           }
         })
         .catch((err) => {
           console.log("err", err);
-          this.payUpdateOrder(orderDetailUrl, "");
+          this.payUpdateOrder(orderDetailUrl);
         });
     } catch (error) {
       console.log("err", error);
-      this.payUpdateOrder(orderDetailUrl, "");
+      this.payUpdateOrder(orderDetailUrl);
     }
   },
 
   /**
    * 支付完成更新订单
    */
-  payUpdateOrder(orderDetailUrl, transactionId) {
+  payUpdateOrder(orderDetailUrl, transactionId = "") {
     wx.cloud
       .callFunction({
         name: "orderController",
