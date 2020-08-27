@@ -87,7 +87,7 @@ const payRandomWord = () => {
 /**
  * @description: 预支付
  * @param {object} request
- * @param {number} request.money 整数 单位：分
+ * @param {number} request.total_price 整数 单位：分
  * @brief 剩下参数见 createWaitPayOrder
  */
 const createPerpayRequest = async (request) => {
@@ -111,7 +111,7 @@ const createPerpayRequest = async (request) => {
       body: orderDesc,
       outTradeNo: _outTradeNo,
       spbillCreateIp: "127.0.0.1",
-      totalFee: request.money,
+      totalFee: request.total_price,
       tradeType: "JSAPI",
     });
 
@@ -157,6 +157,7 @@ const createPerpayRequest = async (request) => {
  * @param {String} request.pay_time 支付时间
  * @param {0|1|2} request.pay_way 支付方式 0-微信 1-支付宝 2-银联
  * @param {Number} request.pay_price 支付金额
+ * @param {Number} request.total_price 订单金额
  * @param {String} request.refund_fee 退款金额
  * @param {String} request.refund_time 退款时间
  * @param {String} request.user_id 车车人id
@@ -182,6 +183,7 @@ const createWaitPayOrder = async (request) => {
           pay_time: null,
           pay_way: 0,
           pay_price: 0,
+          total_price: request.total_price,
           refund_fee: 0,
           refund_time: null,
           user_id: OPENID,

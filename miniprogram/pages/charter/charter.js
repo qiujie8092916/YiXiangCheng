@@ -282,7 +282,7 @@ Page({
       phone: this.data.phone,
       contact_name: this.data.contact_name,
       bizType: bussinessType.charter,
-      money: 1, // this.data.charterMoney
+      total_price: 1, // this.data.charterMoney
     };
     this.subscribeOrderStatus(_params, this.createWaitPayOrder);
   },
@@ -341,6 +341,7 @@ Page({
           ...payment,
           success(res) {
             console.log("pay_success", res);
+            // todo 支付订单
             wx.navigateTo({
               url: orderDetailUrl,
             });
