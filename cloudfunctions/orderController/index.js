@@ -174,7 +174,7 @@ const createWaitPayOrder = async (request) => {
   const { OPENID } = cloud.getWXContext();
   const orderDb = db.collection("order_info");
   try {
-    await orderDb
+    return await orderDb
       .add({
         data: {
           order_no: request.outTradeNo,
