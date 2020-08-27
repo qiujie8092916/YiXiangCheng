@@ -163,6 +163,7 @@ const createPerpayRequest = async (request) => {
  * @param {String} refund_time 退款时间
  * @param {String} user_id 车车人id
  * @param {String} driver_id 司机id
+ * @param {String} snapshot_id snapid
  * @param {String} is_subscribe 是否订阅发送接单消息
  * @param {String} is_send 是否已发送接单订阅消息
  * @param {String} create_time 创建时间
@@ -186,6 +187,7 @@ const createWaitPayOrder = async (request) => {
           refund_time: db.serverDate(),
           user_id: OPENID,
           driver_id: "",
+          snapshot_id: request.snapshot_id,
           is_subscribe: request.is_subscribe,
           is_send: request.is_send,
           create_time: db.serverDate(),
