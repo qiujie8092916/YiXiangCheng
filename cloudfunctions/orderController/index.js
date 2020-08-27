@@ -102,6 +102,7 @@ const createPerpayRequest = async (request) => {
     createOrderParams, // 下单参数
     snapshotId, // 订单快照id
     snapshotInfo, //  订单快照返回信息
+    createOrderInfo, // 创建订单信息
     prePayResult = {},
     orderDesc =
       request.bizType === bussinessType.charter
@@ -134,7 +135,7 @@ const createPerpayRequest = async (request) => {
       snapshot_id: snapshotId,
     });
 
-    await createWaitPayOrder(createOrderParams);
+    createOrderInfo = await createWaitPayOrder(createOrderParams);
 
     return {
       resultCode: 0,
@@ -151,20 +152,67 @@ const createPerpayRequest = async (request) => {
 
 /**
  * @description: 待支付订单
- * @param {String} departure 上车地点
- * @param {String} destination 下车地点
- * @param {Number} bizType 下单类型 1 包车 2 通勤
- * @param {Date} departure_time 乘车时间
- * @param {String} contact_name 乘车联系人姓名
- * @param {String} phone 联系人手机号
- * @param {String} commute_type 通勤类型 独享 拼车
- * @param {Number} status 订单状态 待支付...
- * @param {String} outTradeNo 订单id
+ * @param {String} order_no 订单id
+ * @param {String} order_time 用车时间
+ * @param {Number} order_status 订单状态
+ * @param {String} pay_serial_no 支付流水
+ * @param {String} pay_time 支付时间
+ * @param {String} pay_way 支付方式
+ * @param {Number} pay_price 支付金额
+ * @param {String} refund_fee 退款金额
+ * @param {String} refund_time 退款时间
+ * @param {String} user_id 车车人id
+ * @param {String} driver_id 司机id
  * @param {String} is_subscribe 是否订阅发送接单消息
  * @param {String} is_send 是否已发送接单订阅消息
+ * @param {String} create_time 创建时间
+ * @param {String} update_time 更新时间
  */
 const createWaitPayOrder = async (request) => {
-  const { OPENID, UNIONID } = cloud.getWXContext();
+  const { OPENID } = cloud.getWXContext();
+  const orderDb = db.collection("order_info");
+  try {
+    await orderDb
+      .add({
+        data: {
+          order_no: request.outTradeNo,
+          order_time: request.departure_time,
+          order_status: 1,
+          pay_serial_no: 0,
+          pay_time: db.serverDate(),
+          pay_way: null,
+          pay_price: 0,
+          refund_fee: 0,
+          refund_time: db.serverDate(),
+          user_id: OPENID,
+          driver_id: "",
+          is_subscribe: request.is_subscribe,
+          is_send: request.is_send,
+          create_time: db.serverDate(),
+          update_time: db.serverDate(),
+        },
+      })
+      .then((res) => {
+        return {
+          resultCode: 0,
+          resultData: res,
+        };
+      })
+      .catch((err) => {
+        return {
+          resultCode: -1,
+          resultData: null,
+          errMsg: err,
+        };
+      });
+  } catch (e) {
+    console.log(e);
+    return {
+      resultCode: -1,
+      resultData: null,
+      errMsg: e,
+    };
+  }
 };
 
 /**
