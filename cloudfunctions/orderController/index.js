@@ -330,13 +330,15 @@ const getAddressInfo = async (address_id) => {
   }
 };
 
+/**
+ * @description: 查询通勤用户信息
+ * @return {Object} 用户信息
+ */
 const getUserInfo = async () => {
   const { OPENID } = cloud.getWXContext();
   try {
     const { result = {} } = await cloud.callFunction({
-      // 要调用的云函数名称
       name: "userController",
-      // 传递给云函数的event参数
       data: {
         action: "getUserInfo",
         user_id: OPENID,
@@ -354,6 +356,11 @@ const getUserInfo = async () => {
   }
 };
 
+/**
+ * @description: 查询微信交易号
+ * @param {String} _params.orderId 订单Id
+ * @return {Object} 交易详情
+ */
 const checkWxPaydetail = async (_params) => {
   let _nonceStr = payRandomWord();
   try {
