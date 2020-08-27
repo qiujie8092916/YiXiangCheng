@@ -278,6 +278,7 @@ Page({
         isAfter(normalDateformat(this.data.departure_time))
           ? this.data.departure_time
           : currentDatetime(),
+      charter_duration: this.data.activeDuration === "four" ? 4 : 8,
       phone: this.data.phone,
       contact_name: this.data.contact_name,
       bizType: bussinessType.charter,

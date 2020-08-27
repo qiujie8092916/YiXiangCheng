@@ -109,15 +109,15 @@ const createPerpayRequest = async (request) => {
         : "小享兽-通勤接送";
   try {
     const res = await cloud.cloudPay.unifiedOrder({
-      functionName: "pay_cb", // 接收微信支付异步通知回调的云函数名
-      envId: "test-ey84k", // 所在的环境 ID
-      subMchId: "1601995626", // 微信支付分配的子商户号
-      nonceStr: _nonceStr, // 随机字符串，不长于32位
-      body: orderDesc, // 商品简单描述
-      outTradeNo: _outTradeNo, // 商户系统内部订单号，要求32个字符内
-      spbillCreateIp: "127.0.0.1", // 支持IPV4和IPV6两种格式的IP地址。调用微信支付API的机器IP
-      totalFee: request.money, // 支付金额
-      tradeType: "JSAPI", // 小程序取值如下：JSAPI
+      functionName: "pay_cb",
+      envId: "test-ey84k",
+      subMchId: "1601995626",
+      nonceStr: _nonceStr,
+      body: orderDesc,
+      outTradeNo: _outTradeNo,
+      spbillCreateIp: "127.0.0.1",
+      totalFee: request.money,
+      tradeType: "JSAPI",
     });
 
     prePayResult = Object.assign({}, res, { outTradeNo: _outTradeNo });
@@ -154,6 +154,7 @@ const createPerpayRequest = async (request) => {
  * @param {object} request
  * @param {String} request.outTradeNo 订单id
  * @param {String} request.departure_time 用车时间
+ * @param {String} request.charter_duration 包车时长
  * @param {Number} request.order_status 订单状态
  * @param {String} request.pay_serial_no 支付流水
  * @param {String} request.pay_time 支付时间
@@ -178,6 +179,7 @@ const createWaitPayOrder = async (request) => {
           order_no: request.outTradeNo,
           use_time: request.departure_time,
           order_status: 1,
+          charter_duration: request.charter_duration,
           pay_serial_no: null,
           pay_time: null,
           pay_way: 0,
@@ -191,9 +193,6 @@ const createWaitPayOrder = async (request) => {
           is_send: false,
           create_time: db.serverDate(),
           update_time: db.serverDate(),
-          order_id: request.outTradeNo,
-          contact_phone: request.phone,
-          contact_name: request.contact_name,
         },
       })
       .then((res) => {
@@ -249,6 +248,8 @@ const updateOrderSnapshot = async (request) => {
           pick_info,
           drop_info,
           biz_type: request.bizType,
+          contact_name: request.contact_name,
+          contact_phone: request.phone,
           create_time: db.serverDate(),
           update_time: db.serverDate(),
         },
