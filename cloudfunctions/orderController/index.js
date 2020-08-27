@@ -185,7 +185,7 @@ const createWaitPayOrder = async (request) => {
           pay_way: 0,
           pay_price: 0,
           refund_fee: 0,
-          refund_time: db.serverDate(),
+          refund_time: null,
           user_id: OPENID,
           driver_id: null,
           snapshot_id: request.snapshot_id,
@@ -225,9 +225,9 @@ const createWaitPayOrder = async (request) => {
  */
 const updateOrderSnapshot = async (request) => {
   const snapshotDb = db.collection("order_snapshot");
-
   let pick_info = request.departure,
     drop_info = {};
+
   if (request.bizType === bussinessType.commute) {
     if (
       Object.prototype.toString.call(request.departure) === "[object String]"
