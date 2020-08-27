@@ -323,6 +323,7 @@ Page({
    */
   createWaitPayOrder(_params) {
     console.log(_params, "下单参数");
+    let that = this;
     wx.showLoading();
     wx.cloud
       .callFunction({
@@ -341,10 +342,7 @@ Page({
           ...payment,
           success(res) {
             console.log("pay_success", res);
-            // todo 支付订单
-            wx.navigateTo({
-              url: orderDetailUrl,
-            });
+            that.checkWxPaydetail(outTradeNo, orderDetailUrl);
           },
           fail(err) {
             console.error("pay_fail", err);
@@ -363,6 +361,61 @@ Page({
           icon: "none",
         });
         console.error(err, "预支付error");
+      });
+  },
+
+  /**
+   * 支付完成查询微信交易订单号
+   */
+  checkWxPaydetail(outTradeNo, orderDetailUrl) {
+    try {
+      wx.cloud
+        .callFunction({
+          name: "orderController",
+          data: {
+            action: "checkWxPaydetail",
+            params: { orderId: outTradeNo },
+          },
+        })
+        .then((res) => {
+          console.log("res_detail", res);
+          if (res && res.result && res.result.resultData) {
+            this.payUpdateOrder(orderDetailUrl, res.result.resultData);
+          } else {
+            this.payUpdateOrder(orderDetailUrl, "");
+          }
+        })
+        .catch((err) => {
+          console.log("err", err);
+          this.payUpdateOrder(orderDetailUrl, "");
+        });
+    } catch (error) {
+      console.log("err", error);
+      this.payUpdateOrder(orderDetailUrl, "");
+    }
+  },
+
+  /**
+   * 支付完成更新订单
+   */
+  payUpdateOrder(orderDetailUrl, transactionId) {
+    wx.cloud
+      .callFunction({
+        name: "orderController",
+        data: {
+          action: "payUpdateOrder",
+          params: { transactionId: transactionId },
+        },
+      })
+      .then((res) => {
+        wx.navigateTo({
+          url: orderDetailUrl,
+        });
+      })
+      .catch((err) => {
+        wx.navigateTo({
+          url: orderDetailUrl,
+        });
       });
   },
 

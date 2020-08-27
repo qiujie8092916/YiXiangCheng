@@ -28,6 +28,12 @@ exports.main = async (event, context) => {
     case "checkOrderDetail": {
       return checkOrderDetail(event.params);
     }
+    case "checkWxPaydetail": {
+      return checkWxPaydetail(event.params);
+    }
+    case "payUpdateOrder": {
+      return payUpdateOrder(event.params);
+    }
     default: {
       return;
     }
@@ -282,6 +288,13 @@ const updateOrderSnapshot = async (request) => {
 };
 
 /**
+ * @description: 支付完成更新订单
+ * @param {string} _params.transactionId 微信交易单号
+ * @return {type}
+ */
+const payUpdateOrder = async (_params) => {};
+
+/**
  * @desc 获取地址信息
  * @param id
  * @retrun {object}
@@ -299,6 +312,28 @@ const getAddressInfo = async (id) => {
     });
   } catch (e) {
     return {};
+  }
+};
+
+const checkWxPaydetail = async (_params) => {
+  let _nonceStr = payRandomWord();
+  try {
+    const res = await cloud.cloudPay.queryOrder({
+      subMchId: "1601995626",
+      nonceStr: _nonceStr,
+      out_trade_no: _params.orderId,
+    });
+
+    return {
+      resultCode: 0,
+      resultData: res.transactionId,
+    };
+  } catch (error) {
+    return {
+      resultCode: -1,
+      resultData: null,
+      errMsg: err,
+    };
   }
 };
 
