@@ -122,10 +122,12 @@ const createPerpayRequest = async (request) => {
 
     prePayResult = Object.assign({}, res, { outTradeNo: _outTradeNo });
 
+    createOrderParams = Object.assign({}, request, {
+      outTradeNo: _outTradeNo,
+    });
+
     snapshotInfo = await updateOrderSnapshot(createOrderParams);
-    snapshotId = snapshotInfo.resultData
-      ? snapshotInfo.resultData.resultData._id
-      : "";
+    snapshotId = snapshotInfo.resultData ? snapshotInfo.resultData._id : "";
 
     createOrderParams = Object.assign({}, request, {
       outTradeNo: _outTradeNo,
@@ -181,7 +183,10 @@ const updateOrderSnapshot = async (request) => {
           contact_name: request.contact_name,
           contact_phone: request.phone,
           pick_info: request.departure,
-          drop_info: request.departure ? request.departure : {}, // 通勤存下车点
+          drop_info:
+            request.bizType === bussinessType.commute
+              ? request.destination
+              : {},
           create_time: db.serverDate(),
           update_time: db.serverDate(),
         },

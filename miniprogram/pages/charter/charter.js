@@ -360,7 +360,8 @@ Page({
       .catch((err) => {
         wx.hideLoading();
         wx.showToast({
-          title: err,
+          title: "请稍后重试",
+          icon: "none",
         });
         console.error(err, "预支付error");
       });
