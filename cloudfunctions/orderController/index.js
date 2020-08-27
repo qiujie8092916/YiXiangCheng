@@ -131,6 +131,8 @@ const createPerpayRequest = async (request) => {
 
     createOrderInfo = await createWaitPayOrder(createOrderParams);
 
+    console.log(createOrderInfo, "下单信息");
+
     return {
       resultCode: 0,
       resultData: prePayResult,
