@@ -298,14 +298,12 @@ Page({
           console.log(res, "用户订阅");
           _params = Object.assign({}, _params, {
             is_subscribe: true,
-            is_send: false,
           });
           callback(_params);
         } else {
           console.log(res, "用户不订阅");
           _params = Object.assign({}, _params, {
             is_subscribe: false,
-            is_send: false,
           });
           callback(_params);
         }
@@ -314,7 +312,6 @@ Page({
         console.log(err, "订阅接口失败");
         _params = Object.assign({}, _params, {
           is_subscribe: false,
-          is_send: false,
         });
         callback(_params);
       },

@@ -86,15 +86,14 @@ const payRandomWord = () => {
 
 /**
  * @description: 预支付
- * @param {String} functionName 接收微信支付异步通知回调的云函数名
- * @param {String} envId 所在的环境 ID
- * @param {String} subMchId 微信支付分配的子商户号
- * @param {String} nonceStr 随机字符串，不长于32位
- * @param {String} body 商品简单描述
- * @param {String} outTradeNo 商户系统内部订单号，要求32个字符内
- * @param {String} spbillCreateIp 支持IPV4和IPV6两种格式的IP地址。调用微信支付API的机器IP
- * @param {Number} totalFee 订单总金额，只能为整数
- * @param {String} tradeType 小程序取值如下：JSAPI
+ * @param {object} request
+ * @param {1|2} request.bizType 业务类型 1-包车 2-通勤
+ * @param {number} request.money 整数 单位：分
+ * @param {string} request.contact_name 联系人姓名
+ * @param {string} request.phone 联系人电话
+ * @param {object|string} request.departure 出发地点信息（包车是poi返回的object, 通勤是维护的地址id）
+ * @param {string} request.departure_time 出发时间
+ * @param {object|string} request.destination 到达地点信息（同departure）
  */
 const createPerpayRequest = async (request) => {
   let _nonceStr = payRandomWord(),
@@ -152,23 +151,23 @@ const createPerpayRequest = async (request) => {
 
 /**
  * @description: 待支付订单
- * @param {String} order_no 订单id
- * @param {String} order_time 用车时间
- * @param {String} charter_duration 包车时长
- * @param {Number} order_status 订单状态
- * @param {String} pay_serial_no 支付流水
- * @param {String} pay_time 支付时间
- * @param {String} pay_way 支付方式
- * @param {Number} pay_price 支付金额
- * @param {String} refund_fee 退款金额
- * @param {String} refund_time 退款时间
- * @param {String} user_id 车车人id
- * @param {String} driver_id 司机id
- * @param {String} snapshot_id snapid
- * @param {String} is_subscribe 是否订阅发送接单消息
- * @param {String} is_send 是否已发送接单订阅消息
- * @param {String} create_time 创建时间
- * @param {String} update_time 更新时间
+ * @param {object} request
+ * @param {String} request.outTradeNo 订单id
+ * @param {String} request.departure_time 用车时间
+ * @param {String} request.charter_duration 包车时长
+ * @param {Number} request.order_status 订单状态
+ * @param {String} request.pay_serial_no 支付流水
+ * @param {String} request.pay_time 支付时间
+ * @param {0|1|2} request.pay_way 支付方式 0-微信 1-支付宝 2-银联
+ * @param {Number} request.pay_price 支付金额
+ * @param {String} request.refund_fee 退款金额
+ * @param {String} request.refund_time 退款时间
+ * @param {String} request.user_id 车车人id
+ * @param {String} request.driver_id 司机id
+ * @param {String} request.snapshot_id snapid
+ * @param {String} request.is_subscribe 是否订阅发送接单消息
+ * @param {String} request.create_time 创建时间
+ * @param {String} request.update_time 更新时间
  */
 const createWaitPayOrder = async (request) => {
   const { OPENID } = cloud.getWXContext();
@@ -178,20 +177,20 @@ const createWaitPayOrder = async (request) => {
       .add({
         data: {
           order_no: request.outTradeNo,
-          order_time: request.departure_time,
+          use_time: request.departure_time,
           order_status: 1,
           charter_duration: request.charter_duration,
-          pay_serial_no: 0,
-          pay_time: db.serverDate(),
-          pay_way: null,
+          pay_serial_no: null,
+          pay_time: null,
+          pay_way: 0,
           pay_price: 0,
           refund_fee: 0,
           refund_time: db.serverDate(),
           user_id: OPENID,
-          driver_id: "",
+          driver_id: null,
           snapshot_id: request.snapshot_id,
           is_subscribe: request.is_subscribe,
-          is_send: request.is_send,
+          is_send: false,
           create_time: db.serverDate(),
           update_time: db.serverDate(),
         },
@@ -226,19 +225,31 @@ const createWaitPayOrder = async (request) => {
  */
 const updateOrderSnapshot = async (request) => {
   const snapshotDb = db.collection("order_snapshot");
+
+  let pick_info = request.departure,
+    drop_info = {};
+  if (request.bizType === bussinessType.commute) {
+    if (
+      Object.prototype.toString.call(request.departure) === "[object String]"
+    ) {
+      pick_info = await getAddressInfo(request.departure);
+    }
+    if (
+      Object.prototype.toString.call(request.destination) === "[object String]"
+    ) {
+      drop_info = await getAddressInfo(request.destination);
+    }
+  }
+
   try {
     return await snapshotDb
       .add({
         data: {
-          order_id: request.outTradeNo,
+          pick_info,
+          drop_info,
           biz_type: request.bizType,
           contact_name: request.contact_name,
           contact_phone: request.phone,
-          pick_info: request.departure,
-          drop_info:
-            request.bizType === bussinessType.commute
-              ? request.destination
-              : {},
           create_time: db.serverDate(),
           update_time: db.serverDate(),
         },
@@ -262,6 +273,27 @@ const updateOrderSnapshot = async (request) => {
       resultData: null,
       errMsg: err,
     };
+  }
+};
+
+/**
+ * @desc 获取地址信息
+ * @param id
+ * @retrun {object}
+ */
+const getAddressInfo = async (id) => {
+  try {
+    await cloud.callFunction({
+      // 要调用的云函数名称
+      name: "addressController",
+      // 传递给云函数的event参数
+      data: {
+        action: "getAddressById",
+        id,
+      },
+    });
+  } catch (e) {
+    return {};
   }
 };
 
