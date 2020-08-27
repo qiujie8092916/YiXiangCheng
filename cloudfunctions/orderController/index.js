@@ -28,12 +28,6 @@ exports.main = async (event, context) => {
     case "checkOrderDetail": {
       return checkOrderDetail(event.params);
     }
-    case "checkWxPaydetail": {
-      return checkWxPaydetail(event.params);
-    }
-    case "payUpdateOrder": {
-      return payUpdateOrder(event.params);
-    }
     default: {
       return;
     }
@@ -110,7 +104,7 @@ const createPerpayRequest = async (request) => {
         : "小享兽-通勤接送";
   try {
     const res = await cloud.cloudPay.unifiedOrder({
-      functionName: "pay_cb",
+      functionName: "paycontroller",
       envId: "test-ey84k",
       subMchId: "1601995626",
       nonceStr: _nonceStr,
@@ -299,13 +293,6 @@ const updateOrderSnapshot = async (request) => {
 };
 
 /**
- * @description: 支付完成更新订单
- * @param {string} _params.transactionId 微信交易单号
- * @return {type}
- */
-const payUpdateOrder = async (_params) => {};
-
-/**
  * @desc 获取地址信息
  * @param id
  * @retrun {object}
@@ -361,33 +348,6 @@ const getUserInfo = async () => {
 };
 
 /**
- * @description: 查询微信交易号
- * @param {String} _params.orderId 订单Id
- * @return {Object} 交易详情
- */
-const checkWxPaydetail = async (_params) => {
-  let _nonceStr = payRandomWord();
-  try {
-    const res = await cloud.cloudPay.queryOrder({
-      subMchId: "1601995626",
-      nonceStr: _nonceStr,
-      out_trade_no: _params.orderId,
-    });
-
-    return {
-      resultCode: 0,
-      resultData: res.transactionId,
-    };
-  } catch (error) {
-    return {
-      resultCode: -1,
-      resultData: null,
-      errMsg: err,
-    };
-  }
-};
-
-/**
  * @description: 查询订单详情
  * @param {String} orderId 订单Id
  * @return {Object} 订单详情
@@ -397,7 +357,7 @@ const checkOrderDetail = async (request) => {
   try {
     const result = await orderInfoDb
       .where({
-        order_id: request.orderId,
+        order_no: request.orderId,
       })
       .get();
 

@@ -1,11 +1,12 @@
 // miniprogram/pages/commute/commute.js
-import { routeConfig, bussinessType, subscribeMessageIds } from "../../config";
+import { routeConfig } from "../../config";
 import {
-  currentDatetime,
+  Order,
   isAfter,
   isBefore,
+  currentDatetime,
   normalDateformat,
-} from "../../utils/ext";
+} from "../../utils/index";
 
 const QQMapWX = require("../../vendor/qqmap-wx-jssdk.min");
 const qqmapsdk = new QQMapWX({ key: routeConfig.key });
@@ -302,30 +303,6 @@ Page({
   },
 
   /**
-   * 订阅消息
-   */
-  subscribeOrderStatus() {
-    return new Promise((resolve) => {
-      wx.requestSubscribeMessage({
-        tmplIds: [subscribeMessageIds.orderStatusId],
-        success(res) {
-          if (res[subscribeMessageIds.orderStatusId] === "accept") {
-            console.log(res, "用户订阅");
-            resolve(true);
-          } else {
-            console.log(res, "用户不订阅");
-            resolve(false);
-          }
-        },
-        fail(err) {
-          console.log(err, "订阅接口失败");
-          resolve(false);
-        },
-      });
-    });
-  },
-
-  /**
    * @desc 组装下单参数
    */
   genParams() {
@@ -363,55 +340,18 @@ Page({
   async onsubmit() {
     if (!this.preSubmit()) return;
 
-    const is_subscribe = await this.subscribeOrderStatus();
+    const is_subscribe = await Order.subscribeOrderStatus();
 
-    wx.showLoading({ title: "加载中" });
     const params = this.genParams();
 
-    wx.cloud
-      .callFunction({
-        name: "orderController",
-        data: {
-          action: "createPerpayRequest",
-          params: { is_subscribe, ...params },
-        },
-      })
-      .then(({ result = {} }) => {
-        wx.hideLoading();
-        if (+result.resultCode !== 0) {
-          throw "下单失败";
-        }
-        this.invokePay(result.resultData);
-      })
-      .catch((err) => {
-        wx.hideLoading();
-        wx.showToast({
-          title: "请稍后重试",
-          icon: "none",
-        });
-        console.error(err, "预支付error");
-      });
-  },
-
-  invokePay(prePayResult) {
-    const orderDetailUrl = `/pages/orderDetail/orderDetail?orderId=${prePayResult.outTradeNo}`;
-
-    wx.requestPayment({
-      ...prePayResult.payment,
-      success(res) {
-        console.log("pay_success", res);
-        wx.navigateTo({
-          url: orderDetailUrl,
-        });
-      },
-      fail(err) {
-        console.error("pay_fail", err);
-        if (err.errMsg === "requestPayment:fail cancel") {
+    Order.createOrder({ is_subscribe, ...params }).then((prePayResult) => {
+      Order.invokePay(prePayResult.outTradeNo, prePayResult.payment).finally(
+        () => {
           wx.navigateTo({
-            url: orderDetailUrl,
+            url: `/pages/orderDetail/orderDetail?orderId=${prePayResult.outTradeNo}`,
           });
         }
-      },
+      );
     });
   },
 });

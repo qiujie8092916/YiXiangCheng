@@ -1,14 +1,15 @@
 // miniprogram/pages/charter/charter.js
 // 包车下单页
-import Storage from "../../utils/storage";
-import { bussinessType, subscribeMessageIds } from "../../config";
+import { bussinessType } from "../../config";
 import {
+  Order,
+  Storage,
+  isAfter,
+  isBefore,
   debounce,
   currentDatetime,
-  isBefore,
-  isAfter,
   normalDateformat,
-} from "../../utils/ext";
+} from "../../utils/index";
 
 Page({
   data: {
@@ -269,7 +270,7 @@ Page({
   /**
    * 预支付询问订阅
    */
-  gotoPayforOrder() {
+  async gotoPayforOrder() {
     if (!this.preSubmit()) return;
     let _params = {
       departure: this.data.departureDefault,
@@ -284,38 +285,10 @@ Page({
       bizType: bussinessType.charter,
       total_price: 1, // this.data.charterMoney
     };
-    this.subscribeOrderStatus(_params, this.createWaitPayOrder);
-  },
 
-  /**
-   * 订阅消息
-   */
-  subscribeOrderStatus(_params, callback) {
-    wx.requestSubscribeMessage({
-      tmplIds: [subscribeMessageIds.orderStatusId],
-      success(res) {
-        if (res[subscribeMessageIds.orderStatusId] === "accept") {
-          console.log(res, "用户订阅");
-          _params = Object.assign({}, _params, {
-            is_subscribe: true,
-          });
-          callback(_params);
-        } else {
-          console.log(res, "用户不订阅");
-          _params = Object.assign({}, _params, {
-            is_subscribe: false,
-          });
-          callback(_params);
-        }
-      },
-      fail(err) {
-        console.log(err, "订阅接口失败");
-        _params = Object.assign({}, _params, {
-          is_subscribe: false,
-        });
-        callback(_params);
-      },
-    });
+    const is_subscribe = await Order.subscribeOrderStatus();
+
+    this.createWaitPayOrder({ is_subscribe, ..._params });
   },
 
   /**
@@ -323,100 +296,16 @@ Page({
    */
   createWaitPayOrder(_params) {
     console.log(_params, "下单参数");
-    let that = this;
-    wx.showLoading();
-    wx.cloud
-      .callFunction({
-        name: "orderController",
-        data: {
-          action: "createPerpayRequest",
-          params: _params,
-        },
-      })
-      .then((res) => {
-        wx.hideLoading();
-        const payment = res.result.resultData.payment;
-        const outTradeNo = res.result.resultData.outTradeNo;
-        const orderDetailUrl = `/pages/orderDetail/orderDetail?orderId=${outTradeNo}`;
-        wx.requestPayment({
-          ...payment,
-          success(res) {
-            console.log("pay_success", res);
-            that.checkWxPaydetail(outTradeNo, orderDetailUrl);
-          },
-          fail(err) {
-            console.error("pay_fail", err);
-            if (err.errMsg === "requestPayment:fail cancel") {
-              wx.navigateTo({
-                url: orderDetailUrl,
-              });
-            }
-          },
-        });
-      })
-      .catch((err) => {
-        wx.hideLoading();
-        wx.showToast({
-          title: "请稍后重试",
-          icon: "none",
-        });
-        console.error(err, "预支付error");
-      });
-  },
 
-  /**
-   * 支付完成查询微信交易订单号
-   */
-  checkWxPaydetail(outTradeNo, orderDetailUrl) {
-    try {
-      wx.cloud
-        .callFunction({
-          name: "orderController",
-          data: {
-            action: "checkWxPaydetail",
-            params: { orderId: outTradeNo },
-          },
-        })
-        .then((res) => {
-          console.log("res_detail", res);
-          if (res && res.result && res.result.resultData) {
-            this.payUpdateOrder(orderDetailUrl, res.result.resultData);
-          } else {
-            this.payUpdateOrder(orderDetailUrl);
-          }
-        })
-        .catch((err) => {
-          console.log("err", err);
-          this.payUpdateOrder(orderDetailUrl);
-        });
-    } catch (error) {
-      console.log("err", error);
-      this.payUpdateOrder(orderDetailUrl);
-    }
-  },
-
-  /**
-   * 支付完成更新订单
-   */
-  payUpdateOrder(orderDetailUrl, transactionId = "") {
-    wx.cloud
-      .callFunction({
-        name: "orderController",
-        data: {
-          action: "payUpdateOrder",
-          params: { transactionId: transactionId },
-        },
-      })
-      .then((res) => {
-        wx.navigateTo({
-          url: orderDetailUrl,
-        });
-      })
-      .catch((err) => {
-        wx.navigateTo({
-          url: orderDetailUrl,
-        });
-      });
+    Order.createOrder(_params).then((prePayResult) => {
+      Order.invokePay(prePayResult.outTradeNo, prePayResult.payment).finally(
+        () => {
+          wx.navigateTo({
+            url: `/pages/orderDetail/orderDetail?orderId=${prePayResult.outTradeNo}`,
+          });
+        }
+      );
+    });
   },
 
   /**
