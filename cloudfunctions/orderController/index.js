@@ -99,6 +99,9 @@ const payRandomWord = () => {
 const createPerpayRequest = async (request) => {
   let _nonceStr = payRandomWord(),
     _outTradeNo = genOrderNumber(request.bizType),
+    createOrderParams, // 下单参数
+    snapshotId, // 订单快照id
+    snapshotInfo, //  订单快照返回信息
     prePayResult = {},
     orderDesc =
       request.bizType === bussinessType.charter
@@ -117,10 +120,19 @@ const createPerpayRequest = async (request) => {
       tradeType: "JSAPI",
     });
 
-    await this.updateAddressInfo();
-    await this.createWaitPayOrder();
-
     prePayResult = Object.assign({}, res, { outTradeNo: _outTradeNo });
+
+    snapshotInfo = await updateOrderSnapshot(createOrderParams);
+    snapshotId = snapshotInfo.resultData
+      ? snapshotInfo.resultData.resultData._id
+      : "";
+
+    createOrderParams = Object.assign({}, request, {
+      outTradeNo: _outTradeNo,
+      snapshot_id: snapshotId,
+    });
+
+    await createWaitPayOrder(createOrderParams);
 
     return {
       resultCode: 0,
@@ -154,11 +166,47 @@ const createWaitPayOrder = async (request) => {
 };
 
 /**
- * @description: 下单更新地址表
+ * @description: 下单更新地址快照表order_snapshot
  * @param {type}
  * @return {type}
  */
-const updateAddressInfo = async () => {};
+const updateOrderSnapshot = async (request) => {
+  const snapshotDb = db.collection("order_snapshot");
+  try {
+    return await snapshotDb
+      .add({
+        data: {
+          order_id: request.outTradeNo,
+          biz_type: request.bizType,
+          contact_name: request.contact_name,
+          contact_phone: request.phone,
+          pick_info: request.departure,
+          drop_info: request.departure ? request.departure : {}, // 通勤存下车点
+          create_time: db.serverDate(),
+          update_time: db.serverDate(),
+        },
+      })
+      .then((res) => {
+        return {
+          resultCode: 0,
+          resultData: res,
+        };
+      })
+      .catch((err) => {
+        return {
+          resultCode: -1,
+          resultData: null,
+          errMsg: err,
+        };
+      });
+  } catch (error) {
+    return {
+      resultCode: -1,
+      resultData: null,
+      errMsg: err,
+    };
+  }
+};
 
 /**
  * @description: 查询订单详情
