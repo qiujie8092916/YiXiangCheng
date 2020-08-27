@@ -154,6 +154,7 @@ const createPerpayRequest = async (request) => {
  * @description: 待支付订单
  * @param {String} order_no 订单id
  * @param {String} order_time 用车时间
+ * @param {String} charter_duration 包车时长
  * @param {Number} order_status 订单状态
  * @param {String} pay_serial_no 支付流水
  * @param {String} pay_time 支付时间
@@ -179,6 +180,7 @@ const createWaitPayOrder = async (request) => {
           order_no: request.outTradeNo,
           order_time: request.departure_time,
           order_status: 1,
+          charter_duration: request.charter_duration,
           pay_serial_no: 0,
           pay_time: db.serverDate(),
           pay_way: null,
