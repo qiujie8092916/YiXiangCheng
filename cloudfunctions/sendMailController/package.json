@@ -1,5 +1,5 @@
 {
-  "name": "userController",
+  "name": "sendMailController",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "wx-server-sdk": "~2.1.2"
+    "nodemailer": "^6.4.11",
+    "wx-server-sdk": "~2.2.0"
   }
 }

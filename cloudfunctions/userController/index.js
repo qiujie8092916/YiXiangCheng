@@ -1,6 +1,5 @@
 // 云函数入口文件
 const cloud = require("wx-server-sdk");
-const nodemailer = require("nodemailer");
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV,
@@ -292,47 +291,11 @@ async function doRegisterCommute(request) {
         ],
       });
 
-      // 发送邮件
-      const auth = { user: "835413463@qq.com", pass: "jddqsbarkcfybcgj" },
-        transporter = nodemailer.createTransport({
-          auth,
-          port: 465, // SMTP 端口
-          service: "qq", // 使用内置传输发送邮件 查看支持列表：https://nodemailer.com/smtp/well-known/
-          // host: 'smtp.ethereal.email',
-          secureConnection: true, // 使用 SSL
-        }),
-        receivers = await db.collection("manager_mailer").get(); //获取收件人列表
-
-      transporter.sendMail(
-        {
-          from: `"service" <${auth.user}>`,
-          to: receivers.data.map(({ user }) => user).join(","),
-          // cc: "",
-          subject: "小享兽注册通知",
-          // 发送text或者html格式
-          // text: 'Hello world?', // plain text body
-          html: `<b>姓名：</b>${request.name}<br/><b>手机号：</b>${request.phone}<br/><br/>请于小程序云开发控制台手动审核<br/><br/>勿回复`, //fs.createReadStream(path.resolve(__dirname, 'email.html')) // 流
-        },
-        (error, info) => {
-          if (error) {
-            return resolve({
-              resultCode: -7,
-              resultData: null,
-              errMsg: error.toString(),
-            });
-          }
-
-          log.info({
-            value: "等待审核",
-            open_id: OPENID,
-          });
-
-          return resolve({
-            resultCode: 0,
-            resultData: true,
-          });
-        }
-      );
+      await cloud.callFunction({
+        name: "sendMailController",
+        action: "sendApprovalUserEmail",
+        params: { name: request.name, phone: request.phone },
+      });
     } catch (e) {
       return resolve({
         resultCode: -6,

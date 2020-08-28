@@ -1,5 +1,5 @@
 /**
- * @description In User Settings Edit
+ * @description polyfill
  * @exports class
  * @Author jieq
  * @Date 2020-05-14 17:28:38

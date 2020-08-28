@@ -104,7 +104,7 @@ const createPerpayRequest = async (request) => {
         : "小享兽-通勤接送";
   try {
     const res = await cloud.cloudPay.unifiedOrder({
-      functionName: "paycontroller",
+      functionName: "payController",
       envId: "test-ey84k",
       subMchId: "1601995626",
       nonceStr: _nonceStr,
@@ -151,6 +151,7 @@ const createPerpayRequest = async (request) => {
  * @param {object} request
  * @param {String} request.outTradeNo 订单id
  * @param {String} request.departure_time 用车时间
+ * @param {String} request.bizType 用车类型
  * @param {String} request.charter_duration 包车时长（包车特殊字段）
  * @param {String} request.commute_way 通勤方式 0-拼车 1-独享（通勤特殊字段）
  * @param {String} request.commute_type 通勤时长 0-回家 1-上班（通勤特殊字段）
@@ -194,9 +195,18 @@ const createWaitPayOrder = async (request) => {
           is_send: false,
           create_time: db.serverDate(),
           update_time: db.serverDate(),
-          charter_duration: request.charter_duration, //包车特殊字段
-          commute_way: request.commute_way, //通勤特殊字段
-          commute_type: request.commute_type, //通勤特殊字段
+          charter_duration:
+            request.bizType === bussinessType.charter
+              ? request.charter_duration
+              : null, //包车特殊字段
+          commute_way:
+            request.bizType === bussinessType.commute
+              ? request.commute_way
+              : null, //通勤特殊字段
+          commute_type:
+            request.bizType === bussinessType.commute
+              ? request.commute_type
+              : null, //通勤特殊字段
         },
       })
       .then((res) => {
@@ -261,6 +271,7 @@ const updateOrderSnapshot = async (request) => {
     return await snapshotDb
       .add({
         data: {
+          order_id: request.outTradeNo,
           pick_info,
           drop_info,
           contact_name,
@@ -300,9 +311,7 @@ const updateOrderSnapshot = async (request) => {
 const getAddressInfo = async (address_id) => {
   try {
     const { result = {} } = await cloud.callFunction({
-      // 要调用的云函数名称
       name: "addressController",
-      // 传递给云函数的event参数
       data: {
         action: "getAddressById",
         id: address_id,

@@ -287,7 +287,6 @@ Page({
     };
 
     const is_subscribe = await Order.subscribeOrderStatus();
-
     this.createWaitPayOrder({ is_subscribe, ..._params });
   },
 
@@ -296,7 +295,6 @@ Page({
    */
   createWaitPayOrder(_params) {
     console.log(_params, "下单参数");
-
     Order.createOrder(_params).then((prePayResult) => {
       Order.invokePay(prePayResult.outTradeNo, prePayResult.payment).finally(
         () => {
@@ -354,7 +352,6 @@ Page({
    */
   checkDeparture() {
     let _departureDefault = Storage.getStorage("charterDeparture");
-
     if (_departureDefault) {
       console.log("_departureDefault", _departureDefault);
       this.setData({
