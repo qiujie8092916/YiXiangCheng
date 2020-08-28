@@ -293,8 +293,10 @@ async function doRegisterCommute(request) {
 
       await cloud.callFunction({
         name: "sendMailController",
-        action: "sendApprovalUserEmail",
-        params: { name: request.name, phone: request.phone },
+        data: {
+          action: "sendApprovalUserEmail",
+          params: { name: request.name, phone: request.phone },
+        },
       });
     } catch (e) {
       return resolve({

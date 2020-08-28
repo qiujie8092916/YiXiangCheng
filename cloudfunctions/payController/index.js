@@ -3,7 +3,7 @@
  * @Author: longzhang6
  * @Date: 2020-08-28 22:09:22
  * @LastEditors: longzhang6
- * @LastEditTime: 2020-08-28 23:37:27
+ * @LastEditTime: 2020-08-29 00:27:55
  */
 // 云函数入口文件
 const cloud = require("wx-server-sdk");
@@ -32,10 +32,14 @@ exports.main = async (event) => {
           pay_serial_no: event.transactionId,
         },
       });
+
+    // todo 多次调用
     await cloud.callFunction({
       name: "sendMailController",
-      action: "sendPickUpOrderEmail",
-      params: {},
+      data: {
+        action: "sendPickUpOrderEmail",
+        params: {},
+      },
     });
   } catch (e) {
     log.info({
