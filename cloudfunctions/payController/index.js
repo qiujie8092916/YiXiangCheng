@@ -41,10 +41,19 @@ exports.main = async (event) => {
         params: {},
       },
     });
+
+    return {
+      errcode: 0,
+      errmsg: null,
+    };
   } catch (e) {
     log.info({
       name: "支付后更新数据库失败",
       value: e,
     });
+    return {
+      errcode: -1,
+      errmsg: "支付后更新数据库失败",
+    };
   }
 };
