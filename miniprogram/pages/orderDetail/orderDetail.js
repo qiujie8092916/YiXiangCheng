@@ -11,9 +11,10 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-    console.log(options.orderId, "订单id");
-    this.init(options.orderId);
+  onLoad: function ({ orderId }) {
+    console.log(orderId, "订单id");
+    this.orderId = orderId;
+    this.init();
   },
 
   /**
@@ -76,19 +77,19 @@ Page({
   /**
    * 订单详情监听器
    */
-  registerWatcher(orderId) {
+  registerWatcher() {
     const db = wx.cloud.database();
     this.watcher = db
       .collection("order_info")
       .where({
-        order_id: orderId,
+        order_no: this.orderId,
       })
       .watch({
         onChange: function (snapshot) {
           console.log(snapshot, "order_info表变化");
         },
         onError: function (err) {
-          console.err(err, "order_info表监听错误");
+          console.error(err, "order_info表监听错误");
         },
       });
   },
@@ -96,8 +97,8 @@ Page({
   /**
    * 初始化
    */
-  init(orderId) {
+  init() {
     // 注册监听
-    this.registerWatcher(orderId);
+    this.registerWatcher();
   },
 });
