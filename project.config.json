@@ -93,16 +93,17 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 5,
 					"name": "订单详情",
 					"pathName": "pages/orderDetail/orderDetail",
-					"query": "",
+					"query": "orderId=159866911071Qk",
 					"scene": null
 				},
 				{
 					"id": -1,
 					"name": "注册",
 					"pathName": "pages/register/register",
+					"query": "",
 					"scene": null
 				}
 			]

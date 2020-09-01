@@ -85,13 +85,45 @@ Page({
         order_no: this.orderId,
       })
       .watch({
-        onChange: function (snapshot) {
+        onChange: (snapshot) => {
           console.log(snapshot, "order_info表变化");
+          this.queryOrderDetail();
         },
         onError: function (err) {
           console.error(err, "order_info表监听错误");
         },
       });
+  },
+
+  /**
+   * 监听到订单变化，查询订单详情（init & update）
+   */
+  async queryOrderDetail() {
+    try {
+      const { result = {} } = await wx.cloud.callFunction({
+        name: "orderController",
+        data: {
+          action: "checkOrderDetail",
+          params: {
+            orderId: this.orderId,
+          },
+        },
+      });
+
+      if (+result.resultCode !== 0) {
+        return wx.showToast({
+          icon: "none",
+          title: result.errMsg,
+        });
+      }
+
+      console.log(result.resultData);
+    } catch (e) {
+      return wx.showToast({
+        icon: "none",
+        title: e.toString(),
+      });
+    }
   },
 
   /**

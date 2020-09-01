@@ -362,23 +362,82 @@ const getUserInfo = async () => {
  * @return {Object} 订单详情
  */
 const checkOrderDetail = async (request) => {
+  const _ = db.command;
+  const $ = _.aggregate;
   const orderInfoDb = db.collection("order_info");
   try {
     const result = await orderInfoDb
-      .where({
+      .aggregate()
+      .lookup({
+        from: "order_snapshot",
+        let: {
+          order_no: "$order_no",
+        },
+        pipeline: $.pipeline()
+          .match(_.expr($.eq(["$order_id", "$$order_no"])))
+          .project({
+            _id: 0,
+            order_id: 0,
+            create_time: 0,
+            update_time: 0,
+          })
+          .done(),
+        as: "snapshotDetail",
+      })
+      .lookup({
+        from: "user_info",
+        let: {
+          driver_id: "$driver_id",
+        },
+        pipeline: $.pipeline()
+          .match(_.expr($.eq(["$_id", "$$driver_id"])))
+          .project({
+            _id: 0,
+            is_send: 0,
+            create_time: 0,
+            update_time: 0,
+            is_subscribe: 0,
+          })
+          .done(),
+        as: "driverDetail",
+      })
+      .match({
         order_no: request.orderId,
       })
-      .get();
+      .project({
+        _id: 1,
+        is_send: 1,
+        pay_way: 1,
+        user_id: 1,
+        order_no: 1,
+        pay_time: 1,
+        use_time: 1,
+        driver_id: 1,
+        pay_price: 1,
+        refund_fee: 1,
+        refund_time: 1,
+        snapshot_id: 1,
+        total_price: 1,
+        commute_way: 1,
+        is_subscribe: 1,
+        order_status: 1,
+        commute_type: 1,
+        pay_serial_no: 1,
+        charter_duration: 1,
+        driverDetail: $.arrayElemAt(["$driverDetail", 0]),
+        snapshotDetail: $.arrayElemAt(["$snapshotDetail", 0]),
+      })
+      .end();
 
     return {
       resultCode: 0,
-      resultData: result.data[0] ? result.data[0] : null,
+      resultData: result.list.length ? result.list[0] : null,
     };
   } catch (e) {
     return {
       resultCode: -1,
       resultData: null,
-      errMsg: e,
+      errMsg: (e.errMsg || e).toString(),
     };
   }
 };
