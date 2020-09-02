@@ -393,6 +393,8 @@ const checkOrderDetail = async (request) => {
           .match(_.expr($.eq(["$_id", "$$driver_id"])))
           .project({
             _id: 0,
+            create_time: 0,
+            update_time: 0,
           })
           .done(),
         as: "driverDetail",
