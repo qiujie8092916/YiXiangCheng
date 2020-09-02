@@ -3,7 +3,7 @@
  * @Author: longzhang6
  * @Date: 2020-08-28 22:09:22
  * @LastEditors: longzhang6
- * @LastEditTime: 2020-09-02 20:25:26
+ * @LastEditTime: 2020-09-02 23:48:21
  */
 // 云函数入口文件
 const cloud = require("wx-server-sdk");
@@ -19,6 +19,7 @@ const db = cloud.database();
 exports.main = async (event) => {
   log.info(event);
   const orderInfoDb = db.collection("order_info");
+  let mailInfo = {};
 
   try {
     await orderInfoDb
@@ -34,11 +35,36 @@ exports.main = async (event) => {
         },
       });
 
+    log.info({
+      name: "支付后查询订单详情订单号",
+      value: event.outTradeNo,
+    });
+
+    const res = await cloud.callFunction({
+      name: "orderController",
+      data: {
+        action: "checkOrderDetail",
+        params: {
+          orderId: event.outTradeNo,
+        },
+      },
+    });
+
+    log.info({
+      name: "支付后查询订单详情",
+      value: res.result.resultData,
+    });
+    if (res && res.result && res.result.resultData) {
+      mailInfo = res.result.resultData;
+    } else {
+      throw "订单详情查询失败";
+    }
+
     await cloud.callFunction({
       name: "sendMailController",
       data: {
         action: "sendPickUpOrderEmail",
-        params: {},
+        params: mailInfo,
       },
     });
 
@@ -53,7 +79,7 @@ exports.main = async (event) => {
     });
     return {
       errcode: -1,
-      errmsg: "支付后更新数据库失败",
+      errmsg: "支付回调失败",
     };
   }
 };

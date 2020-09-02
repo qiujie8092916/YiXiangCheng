@@ -6,6 +6,7 @@ cloud.init({
 });
 
 const db = cloud.database();
+const log = cloud.logger();
 
 const bussinessType = {
   charter: 1,
@@ -365,6 +366,10 @@ const checkOrderDetail = async (request) => {
   const _ = db.command;
   const $ = _.aggregate;
   const orderInfoDb = db.collection("order_info");
+  log.info({
+    name: "查询订单详情入参",
+    value: request,
+  });
   try {
     const result = await orderInfoDb
       .aggregate()

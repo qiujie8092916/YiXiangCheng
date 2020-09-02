@@ -17,6 +17,11 @@ const sendConfig = {
 };
 const sendMailInstance = nodemailer.createTransport(sendConfig);
 
+const bussinessType = {
+  1: "包车",
+  2: "通勤",
+};
+
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
@@ -70,10 +75,22 @@ async function sendApprovalUserEmail(params) {
  */
 async function sendPickUpOrderEmail(params) {
   let mailtemplate = {
-    from: `"service" <${auth.user}>`,
+    from: `"小享兽" <${auth.user}>`,
     to: params.curReceivers,
-    subject: "有新的订单",
-    html: `请尽快进入小程序后台管理系统进行接单`,
+    subject: `有新的${bussinessType[params.snapshotDetail.biz_type]}订单`,
+    html: `<b>订单号：</b>${params.order_no}<br/><b>乘车人：</b>${
+      params.snapshotDetail.contact_name
+    }<br/><b>手机号：</b>${
+      params.snapshotDetail.contact_phone
+    }<br/><b>用车时间：</b>${params.use_time}<br/><b>上车地点：</b>${
+      params.snapshotDetail.pick_info.name
+    }<br/>${
+      params.biz_type === 2
+        ? `<b>下车地点：</b>${params.snapshotDetail.drop_info.name}<br/>`
+        : ``
+    }<b>订单金额：</b>${
+      params.pay_price / 100
+    }元<br/><br/>请于小程序云开发控制台手动接单<br/><br/>勿回复`,
   };
   try {
     await sendMailInstance.sendMail(mailtemplate);
