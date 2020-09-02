@@ -1,0 +1,70 @@
+/* miniprogram/pages/orderDetail/orderDetail.wxss */
+@import "../../fonts/iconfont.wxss";
+@import "../../app.wxss";
+@import "../../style/preset.scss";
+
+.order-detail {
+  padding: 42rpx 67rpx;
+}
+
+.order-status {
+  font-size: 54rpx;
+  color: $blue;
+}
+
+.order-custom {
+  font-size: 22rpx;
+  color: $blue;
+}
+
+.customer {
+  margin-right: 5rpx;
+}
+
+.order-desc {
+  margin-top: 111rpx;
+  margin-bottom: 140rpx;
+  font-size: 36rpx;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(73, 74, 76, 1);
+}
+
+.desc-item {
+  display: flex;
+  margin-bottom: 43rpx;
+}
+
+.desc-one {
+  width: 200rpx;
+}
+
+.desc-two {
+  flex: 1;
+}
+
+.order-more {
+  width: 404rpx;
+  height: 101rpx;
+  font-size: 33rpx;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 1);
+  background: #3184c7;
+  border-radius: 5rpx;
+}
+
+.order-cancel {
+  font-size: 29rpx;
+  color: #3184c7;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+}
+
+.concact {
+  margin-right: 20rpx;
+}
+
+.phone {
+  font-size: 40rpx;
+}

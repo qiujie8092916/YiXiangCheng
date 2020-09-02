@@ -1,10 +1,15 @@
 // miniprogram/pages/orderDetail/orderDetail.js
+import { dateFormat } from "../../utils/index";
+
 Page({
   /**
    * 页面的初始数据
    */
   data: {
+    isFetched: false, //第一次请求数据
     orderDetail: {}, // 订单详情
+    driverDetail: {}, //司机详情
+    snapshotDetail: {}, //快照详情
     watcher: null, // 监听器
   },
 
@@ -118,6 +123,23 @@ Page({
       }
 
       console.log(result.resultData);
+      const {
+        driverDetail,
+        snapshotDetail,
+        ...orderDetail
+      } = result.resultData;
+
+      orderDetail._useTime = dateFormat(
+        orderDetail.useTime,
+        "YYYY年MM月DD日 HH:mm"
+      );
+
+      this.setData({
+        isFetched: true,
+        orderDetail,
+        driverDetail,
+        snapshotDetail,
+      });
     } catch (e) {
       return wx.showToast({
         icon: "none",
@@ -132,5 +154,36 @@ Page({
   init() {
     // 注册监听
     this.registerWatcher();
+  },
+
+  callPhone() {
+    wx.makePhoneCall({
+      phoneNumber: this.data.driverDetail.phone,
+    });
+  },
+
+  reOrder() {
+    if (this.data.snapshotDetail.biz_type === 1) {
+      return wx.navigateTo({
+        url: "/pages/charter/charter",
+      });
+    }
+    if (this.data.snapshotDetail.biz_type === 2) {
+      return wx.navigateTo({
+        url: "/pages/commute/commute",
+      });
+    }
+  },
+
+  cancelOrder() {
+    wx.cloud.callFunction({
+      name: "orderController",
+      data: {
+        action: "cancelOrder",
+        params: {
+          orderId: this.orderId,
+        },
+      },
+    });
   },
 });

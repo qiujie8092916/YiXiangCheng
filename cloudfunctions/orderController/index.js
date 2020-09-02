@@ -29,6 +29,9 @@ exports.main = async (event, context) => {
     case "checkOrderDetail": {
       return checkOrderDetail(event.params);
     }
+    case "cancelOrder": {
+      return cancelOrder(event.params);
+    }
     default: {
       return;
     }
@@ -381,7 +384,6 @@ const checkOrderDetail = async (request) => {
         pipeline: $.pipeline()
           .match(_.expr($.eq(["$order_id", "$$order_no"])))
           .project({
-            _id: 0,
             order_id: 0,
             create_time: 0,
             update_time: 0,
@@ -397,7 +399,6 @@ const checkOrderDetail = async (request) => {
         pipeline: $.pipeline()
           .match(_.expr($.eq(["$_id", "$$driver_id"])))
           .project({
-            _id: 0,
             create_time: 0,
             update_time: 0,
           })
@@ -415,17 +416,14 @@ const checkOrderDetail = async (request) => {
         order_no: 1,
         pay_time: 1,
         use_time: 1,
-        driver_id: 1,
         pay_price: 1,
         refund_fee: 1,
         refund_time: 1,
-        snapshot_id: 1,
         total_price: 1,
         commute_way: 1,
         is_subscribe: 1,
         order_status: 1,
         commute_type: 1,
-        pay_serial_no: 1,
         charter_duration: 1,
         driverDetail: $.arrayElemAt(["$driverDetail", 0]),
         snapshotDetail: $.arrayElemAt(["$snapshotDetail", 0]),
@@ -436,6 +434,31 @@ const checkOrderDetail = async (request) => {
       resultCode: 0,
       resultData: result.list.length ? result.list[0] : null,
     };
+  } catch (e) {
+    return {
+      resultCode: -1,
+      resultData: null,
+      errMsg: (e.errMsg || e).toString(),
+    };
+  }
+};
+
+const cancelOrder = async (request) => {
+  console.log(request.orderId, "order_no");
+  try {
+    const {
+      resultData: orderDetail,
+      resultCode,
+      errMsg,
+    } = await checkOrderDetail(request);
+    if (resultCode !== 0) {
+      throw errMsg;
+    }
+
+    console.log(orderDetail);
+    //TODO 是否支付过
+    //TODO 若支付过，发起微信退款，成功后，取消订单
+    //TODO 若未支付过，取消订单
   } catch (e) {
     return {
       resultCode: -1,

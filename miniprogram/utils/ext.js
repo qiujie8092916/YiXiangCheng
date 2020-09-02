@@ -13,6 +13,9 @@ export const dateFormat = function (date = new Date(), type) {
     case "Hm":
       return moment(date).format("HH:mm");
       break;
+    case "YYYY年MM月DD日 HH:mm":
+      return moment(date).format("YYYY年MM月DD日 HH:mm");
+      break;
     default:
       return moment(date);
   }
