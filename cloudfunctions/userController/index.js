@@ -285,6 +285,7 @@ async function doRegisterCommute(request) {
             user_name: request.name,
             user_phone: request.phone,
             address_id: request.company,
+            car_number: "",
             create_time: db.serverDate(),
             update_time: db.serverDate(),
           },

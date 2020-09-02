@@ -6,7 +6,7 @@
     {
       "name": "registerOrderStatusTrigger",
       "type": "timer",
-      "config": "0 */30 * * * * *"
+      "config": "0 */5 * * * * *"
     }
   ]
 }
