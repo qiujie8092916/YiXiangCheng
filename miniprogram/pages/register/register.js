@@ -260,7 +260,7 @@ Page({
       },
       success: ({ result = {} }) => {
         wx.hideLoading({
-          complete() {
+          complete: () => {
             if (+result.resultCode !== 0) {
               console.error(result.errMsg);
               return wx.showToast({

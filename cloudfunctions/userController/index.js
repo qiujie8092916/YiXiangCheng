@@ -294,6 +294,11 @@ async function doRegisterCommute(request) {
           params: { name: request.name, phone: request.phone },
         },
       });
+
+      return resolve({
+        resultCode: 0,
+        resultData: true,
+      });
     } catch (e) {
       return resolve({
         resultCode: -6,

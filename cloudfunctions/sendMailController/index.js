@@ -8,7 +8,7 @@ cloud.init({
 
 const db = cloud.database();
 
-const auth = { user: "835413463@qq.com", pass: "jddqsbarkcfybcgj" };
+const auth = { user: "835413463@qq.com", pass: "sousifbnpxujbbif" };
 const sendConfig = {
   auth,
   port: 465, // SMTP 端口
