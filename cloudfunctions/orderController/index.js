@@ -385,7 +385,7 @@ const checkOrderDetail = async (request) => {
         as: "snapshotDetail",
       })
       .lookup({
-        from: "user_info",
+        from: "driver_info",
         let: {
           driver_id: "$driver_id",
         },
@@ -393,10 +393,6 @@ const checkOrderDetail = async (request) => {
           .match(_.expr($.eq(["$_id", "$$driver_id"])))
           .project({
             _id: 0,
-            is_send: 0,
-            create_time: 0,
-            update_time: 0,
-            is_subscribe: 0,
           })
           .done(),
         as: "driverDetail",

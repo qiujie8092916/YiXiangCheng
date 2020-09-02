@@ -58,13 +58,13 @@ async function sendSubscribeMessage({ order_no, user_id }) {
     const result = await cloud.openapi.subscribeMessage.send({
       data: {
         name1: {
-          value: driverDetail.user_name,
+          value: driverDetail.name,
         },
         car_number2: {
           value: driverDetail.car_number,
         },
         phone_number3: {
-          value: driverDetail.user_phone,
+          value: driverDetail.phone,
         },
         amount5: {
           value: pay_price,

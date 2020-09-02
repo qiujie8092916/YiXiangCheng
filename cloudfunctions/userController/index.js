@@ -125,7 +125,6 @@ async function doReigsterCharter(request) {
       data: [
         {
           status: 0,
-          user_type: 1,
           user_id: OPENID,
           union_id: UNIONID,
           employment_certificate: "",
@@ -164,7 +163,6 @@ async function isRegisterCommute(request) {
       const { data } = await db
         .collection("user_info")
         .where({
-          user_type: 1,
           user_id: OPENID,
         })
         .get();
@@ -251,7 +249,6 @@ async function doRegisterCommute(request) {
       const exist = await db
         .collection("user_info")
         .where({
-          user_type: 1,
           user_id: OPENID,
         })
         .get();
@@ -276,7 +273,6 @@ async function doRegisterCommute(request) {
         data: [
           {
             status: 0,
-            user_type: 1,
             is_send: false,
             user_id: OPENID,
             union_id: UNIONID,
@@ -285,7 +281,6 @@ async function doRegisterCommute(request) {
             user_name: request.name,
             user_phone: request.phone,
             address_id: request.company,
-            car_number: "",
             create_time: db.serverDate(),
             update_time: db.serverDate(),
           },
@@ -320,7 +315,6 @@ const setSubscribe = async () => {
     await db
       .collection("user_info")
       .where({
-        user_type: 1,
         user_id: OPENID,
       })
       .update({
@@ -388,7 +382,6 @@ const getUserCompany = async (request) => {
         status: 0,
         company: 0,
         user_id: 0,
-        user_type: 0,
         user_name: 0,
         address_id: 0,
         user_phone: 0,

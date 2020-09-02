@@ -16,7 +16,6 @@ exports.main = async (event, context) => {
     const res = await db
       .collection("user_info")
       .where({
-        user_type: 1,
         is_send: false,
         is_subscribe: true,
       })
@@ -67,7 +66,6 @@ async function approvalUserMessage(user) {
 
         db.collection("user_info")
           .where({
-            user_type: 1,
             user_id: user.user_id,
           })
           .update({
