@@ -22,10 +22,6 @@ exports.main = async (event, context) => {
       })
       .get();
 
-    log.info({
-      value: "准备下发",
-    });
-
     res.data.map(async (order) => {
       log.info({
         value: order,
@@ -45,7 +41,11 @@ exports.main = async (event, context) => {
  * @return {type}
  */
 async function sendSubscribeMessage({ order_no, user_id }) {
-  const { resultData } = await cloud.callFunction({
+  log.info({
+    value: "准备下发",
+  });
+  try {
+    const res = await cloud.callFunction({
       name: "orderController",
       data: {
         action: "checkOrderDetail",
@@ -53,9 +53,9 @@ async function sendSubscribeMessage({ order_no, user_id }) {
           orderId: order_no,
         },
       },
-    }),
-    { driverDetail, pay_price, use_time } = resultData,
-    result = await cloud.openapi.subscribeMessage.send({
+    });
+    const { driverDetail, pay_price, use_time } = res.result.resultData;
+    const result = await cloud.openapi.subscribeMessage.send({
       data: {
         name1: {
           value: driverDetail.user_name,
@@ -75,27 +75,32 @@ async function sendSubscribeMessage({ order_no, user_id }) {
       },
       lang: "zh_CN",
       touser: user_id,
-      page: "pages/home/home",
+      page: `pages/orderDetail/orderDetail?orderId=${order_no}`,
       miniprogramState: "developer", // developer为开发版；trial为体验版；formal为正式版；默认为正式版
       templateId: subscribeMessageId,
     });
-  if (result.errCode === 0) {
-    log.info({
-      value: "已经接单，消息下发",
-    });
-
-    db.collection("order_info")
-      .where({
-        order_no: order_no,
-      })
-      .update({
-        data: {
-          is_send: true,
-        },
+    if (result.errCode === 0) {
+      log.info({
+        value: "已经接单，消息下发",
       });
-  } else {
+
+      db.collection("order_info")
+        .where({
+          order_no: order_no,
+        })
+        .update({
+          data: {
+            is_send: true,
+          },
+        });
+    } else {
+      log.error({
+        value: result.errMsg,
+      });
+    }
+  } catch (error) {
     log.error({
-      value: result.errMsg,
+      value: error,
     });
   }
 }
