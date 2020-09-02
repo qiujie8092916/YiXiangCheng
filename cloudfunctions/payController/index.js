@@ -3,7 +3,7 @@
  * @Author: longzhang6
  * @Date: 2020-08-28 22:09:22
  * @LastEditors: longzhang6
- * @LastEditTime: 2020-08-29 00:27:55
+ * @LastEditTime: 2020-09-02 20:25:26
  */
 // 云函数入口文件
 const cloud = require("wx-server-sdk");
@@ -29,11 +29,11 @@ exports.main = async (event) => {
         data: {
           pay_time: event.timeEnd.toString(),
           pay_price: event.totalFee,
+          order_status: 2,
           pay_serial_no: event.transactionId,
         },
       });
 
-    // todo 多次调用
     await cloud.callFunction({
       name: "sendMailController",
       data: {
