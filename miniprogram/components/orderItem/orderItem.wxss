@@ -20,15 +20,12 @@
   padding: 0 38rpx;
 }
 
-.cancel-item {
-  color: rgba(176, 176, 176, 1);
-}
-
 .pay-item .order-desc,
 .order-money {
   color: #3184c7;
 }
 
+.pay-item,
 .done-item .order-desc {
   color: #000;
 }
@@ -37,7 +34,12 @@
   color: #3184c7;
 }
 
-.cancel-item .order-money {
+.cancel-item .order-money,
+order-desc {
+  color: rgba(176, 176, 176, 1);
+}
+
+.cancel-item {
   color: rgba(176, 176, 176, 1);
 }
 

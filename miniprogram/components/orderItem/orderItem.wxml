@@ -1,7 +1,7 @@
 <!--components/orderItem/orderItem.wxml-->
 <view
   bindtap="chooseCurOrder"
-  class="order-item {{status === 4 || status === 5 || status === 6 || status === 7 ? 'cancel-item' : status === 1 ? 'done-item' : 'pay-item'}}"
+  class="order-item {{status === 4 || status === 5 || status === 6 || status === 7 ? 'cancel-item' : status === 1 || status === 2 || status === 3 ? 'pay-item' : 'done-item'}}"
 >
   <view class="order-header flex-between">
     <view class="order-desc">{{orderStatusMap[status]}}</view>
@@ -14,7 +14,7 @@
       <text class="split-tag">-</text>
       <text>{{chartertime}}小时</text>
     </view>
-    <view wx:else>
+    <view wx:else class="order-line">
       <text>{{commutedepart}}</text>
       <text class="split-tag">-></text>
       <text>{{commutedestination}}</text>
