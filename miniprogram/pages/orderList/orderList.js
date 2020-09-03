@@ -84,7 +84,7 @@ Page({
    * 获取订单列表
    */
   getOrderList: async function () {
-    wx.showLoading();
+    wx.showLoading({ title: "加载中" });
     try {
       const { result = {} } = await wx.cloud.callFunction({
         name: "orderController",

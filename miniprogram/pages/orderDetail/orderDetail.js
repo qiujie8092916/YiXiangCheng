@@ -110,7 +110,7 @@ Page({
    */
   async queryOrderDetail() {
     if (this.data.isloading) {
-      wx.showLoading();
+      wx.showLoading({ title: "加载中" });
     }
     try {
       const { result = {} } = await wx.cloud.callFunction({
