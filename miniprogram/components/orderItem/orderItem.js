@@ -32,6 +32,10 @@ Component({
       type: String,
       value: "通勤目的地",
     },
+    useTime: {
+      type: String,
+      value: "2020-09-01 09:00",
+    },
   },
 
   /**
@@ -39,9 +43,13 @@ Component({
    */
   data: {
     orderStatusMap: {
-      0: "待支付",
-      1: "已完成",
-      2: "已取消",
+      1: "待支付",
+      2: "待接单",
+      3: "已接单",
+      4: "已上车",
+      5: "已取消",
+      6: "已退款",
+      7: "已完成",
     },
     travelType: {
       charter: "包车",

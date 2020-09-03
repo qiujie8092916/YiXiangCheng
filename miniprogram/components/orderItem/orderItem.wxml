@@ -1,11 +1,11 @@
 <!--components/orderItem/orderItem.wxml-->
 <view
   bindtap="chooseCurOrder"
-  class="order-item {{status === 2 ? 'cancel-item' : status === 1 ? 'done-item' : 'pay-item'}}"
+  class="order-item {{status === 4 || status === 5 || status === 6 || status === 7 ? 'cancel-item' : status === 1 ? 'done-item' : 'pay-item'}}"
 >
   <view class="order-header flex-between">
     <view class="order-desc">{{orderStatusMap[status]}}</view>
-    <view class="order-money">¥{{money}}</view>
+    <view class="order-money">¥{{money}}元</view>
   </view>
   <view class="order-border"></view>
   <view class="order-detail">
@@ -20,7 +20,7 @@
       <text>{{commutedestination}}</text>
     </view>
     <view class="order-bottom flex-between">
-      <view class="order-time">06-27 08:00</view>
+      <view class="order-time">{{useTime}}</view>
       <view class="order-type">{{travelType[type]}}</view>
     </view>
   </view>

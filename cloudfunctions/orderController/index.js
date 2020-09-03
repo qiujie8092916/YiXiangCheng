@@ -32,6 +32,9 @@ exports.main = async (event, context) => {
     case "cancelOrder": {
       return cancelOrder(event.params);
     }
+    case "checkOrderList": {
+      return checkOrderList(event.params);
+    }
     default: {
       return;
     }
@@ -443,6 +446,11 @@ const checkOrderDetail = async (request) => {
   }
 };
 
+/**
+ * @description: 取消订单
+ * @param {type}
+ * @return {type}
+ */
 const cancelOrder = async (request) => {
   console.log(request.orderId, "order_no");
   try {
@@ -459,6 +467,86 @@ const cancelOrder = async (request) => {
     //TODO 是否支付过
     //TODO 若支付过，发起微信退款，成功后，取消订单
     //TODO 若未支付过，取消订单
+  } catch (e) {
+    return {
+      resultCode: -1,
+      resultData: null,
+      errMsg: (e.errMsg || e).toString(),
+    };
+  }
+};
+
+/**
+ * @description: 获取订单列表
+ * @param {type}
+ * @return {type}
+ */
+const checkOrderList = async (request) => {
+  const { OPENID } = cloud.getWXContext();
+  const _ = db.command;
+  const $ = _.aggregate;
+  const orderInfoDb = db.collection("order_info");
+  try {
+    const result = await orderInfoDb
+      .aggregate()
+      .lookup({
+        from: "order_snapshot",
+        let: {
+          order_no: "$order_no",
+        },
+        pipeline: $.pipeline()
+          .match(_.expr($.eq(["$order_id", "$$order_no"])))
+          .project({
+            order_id: 0,
+            create_time: 0,
+            update_time: 0,
+          })
+          .done(),
+        as: "snapshotDetail",
+      })
+      .lookup({
+        from: "driver_info",
+        let: {
+          driver_id: "$driver_id",
+        },
+        pipeline: $.pipeline()
+          .match(_.expr($.eq(["$_id", "$$driver_id"])))
+          .project({
+            create_time: 0,
+            update_time: 0,
+          })
+          .done(),
+        as: "driverDetail",
+      })
+      .match({
+        user_id: OPENID,
+      })
+      .project({
+        _id: 1,
+        is_send: 1,
+        pay_way: 1,
+        user_id: 1,
+        order_no: 1,
+        pay_time: 1,
+        use_time: 1,
+        pay_price: 1,
+        refund_fee: 1,
+        refund_time: 1,
+        total_price: 1,
+        commute_way: 1,
+        is_subscribe: 1,
+        order_status: 1,
+        commute_type: 1,
+        charter_duration: 1,
+        driverDetail: $.arrayElemAt(["$driverDetail", 0]),
+        snapshotDetail: $.arrayElemAt(["$snapshotDetail", 0]),
+      })
+      .end();
+
+    return {
+      resultCode: 0,
+      resultData: result.list.length ? result.list : null,
+    };
   } catch (e) {
     return {
       resultCode: -1,

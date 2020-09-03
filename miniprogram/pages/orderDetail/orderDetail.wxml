@@ -42,24 +42,22 @@
           <view class="desc-two">--</view>
         </block>
       </view>
-      <view class="desc-item">
+      <view class="desc-item" wx:if="{{driverDetail._id}}">
         <view class="desc-one">司机：</view>
         <view class="desc-two">
-          <block wx:if="{{driverDetail._id}}">
+          <block>
             <text class="concact">{{driverDetail.name}}</text>
             <text class="concact">{{driverDetail.phone}}</text>
             <text class="iconfont dianhua phone" catchtap="callPhone" />
           </block>
-          <block wx:else>--</block>
         </view>
       </view>
-      <view class="desc-item">
+      <view class="desc-item" wx:if="{{driverDetail._id}}">
         <view class="desc-one">车牌：</view>
         <view class="desc-two">
-          <block wx:if="{{driverDetail._id}}">
+          <block>
             <text class="concact">{{driverDetail.car_number}}</text>
           </block>
-          <block wx:else>--</block>
         </view>
       </view>
       <view class="desc-item">
@@ -106,11 +104,10 @@
         <view class="desc-one">时间：</view>
         <view class="desc-two">{{orderDetail._useTime || '--'}}</view>
       </view>
-      <view class="desc-item">
+      <view class="desc-item" wx:if="{{driverDetail._id}}">
         <view class="desc-one">车型：</view>
         <view class="desc-two">
           <block wx:if="{{driverDetail._id}}">{{driverDetail.car_type}}</block>
-          <block wx:else>--</block>
         </view>
       </view>
       <view class="desc-item">
