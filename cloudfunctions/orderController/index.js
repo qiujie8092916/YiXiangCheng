@@ -489,6 +489,9 @@ const checkOrderList = async (request) => {
   try {
     const result = await orderInfoDb
       .aggregate()
+      .sort({
+        create_time: -1,
+      })
       .lookup({
         from: "order_snapshot",
         let: {
