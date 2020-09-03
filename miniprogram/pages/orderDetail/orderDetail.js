@@ -203,6 +203,7 @@ Page({
       content: "是否需要取消订单？",
       success: async ({ confirm }) => {
         if (confirm) {
+          wx.showLoading({ title: "加载中" });
           try {
             const { result = {} } = await wx.cloud.callFunction({
               name: "orderController",
@@ -217,10 +218,7 @@ Page({
             console.error(result);
 
             if (+result.resultCode !== 0) {
-              return wx.showToast({
-                icon: "none",
-                title: result.errMsg,
-              });
+              throw result.errMsg;
             }
 
             return wx.showToast({
@@ -228,6 +226,7 @@ Page({
               title: "订单取消成功！",
             });
           } catch (e) {
+            wx.hideLoading();
             return wx.showToast({
               icon: "none",
               title: e.toString(),
