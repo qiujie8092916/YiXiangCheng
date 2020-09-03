@@ -13,6 +13,14 @@ const bussinessType = {
   commute: 2,
 };
 
+/**
+ * 微信支付 共同参数
+ */
+const wxPayComm = {
+  sub_mch_id: "1601995626",
+  env_id: cloud.DYNAMIC_CURRENT_ENV,
+};
+
 // 云函数入口函数
 /**
  * @desc 订单
@@ -29,8 +37,8 @@ exports.main = async (event, context) => {
     case "checkOrderDetail": {
       return checkOrderDetail(event.params);
     }
-    case "cancelOrder": {
-      return cancelOrder(event.params);
+    case "doCancelOrder": {
+      return doCancelOrder(event.params);
     }
     case "checkOrderList": {
       return checkOrderList(event.params);
@@ -112,8 +120,8 @@ const createPerpayRequest = async (request) => {
   try {
     const res = await cloud.cloudPay.unifiedOrder({
       functionName: "payController",
-      envId: "test-ey84k",
-      subMchId: "1601995626",
+      envId: wxPayComm.env_id,
+      subMchId: wxPayComm.sub_mch_id,
       nonceStr: _nonceStr,
       body: orderDesc,
       outTradeNo: _outTradeNo,
@@ -427,6 +435,7 @@ const checkOrderDetail = async (request) => {
         is_subscribe: 1,
         order_status: 1,
         commute_type: 1,
+        pay_serial_no: 1,
         charter_duration: 1,
         driverDetail: $.arrayElemAt(["$driverDetail", 0]),
         snapshotDetail: $.arrayElemAt(["$snapshotDetail", 0]),
@@ -451,7 +460,7 @@ const checkOrderDetail = async (request) => {
  * @param {type}
  * @return {type}
  */
-const cancelOrder = async (request) => {
+const doCancelOrder = async (request) => {
   console.log(request.orderId, "order_no");
   try {
     const {
@@ -463,16 +472,95 @@ const cancelOrder = async (request) => {
       throw errMsg;
     }
 
+    log.info({ name: "取消订单发起参数", ...orderDetail });
     console.log(orderDetail);
-    //TODO 是否支付过
-    //TODO 若支付过，发起微信退款，成功后，取消订单
-    //TODO 若未支付过，取消订单
+
+    if (orderDetail.order_status === 1) {
+      //未支付 可取消
+    } else if (orderDetail.order_status === 4) {
+      return {
+        resultCode: -1,
+        errMsg: "已上车，不能取消订单",
+      };
+    } else if (orderDetail.order_status === 5) {
+      return {
+        resultCode: -1,
+        errMsg: "订单已取消，请勿重复取消订单",
+      };
+    } else if (orderDetail.order_status === 6) {
+      return {
+        resultCode: -1,
+        errMsg: "订单已退款，请勿重复取消订单",
+      };
+    } else if (orderDetail.order_status === 10) {
+      return {
+        resultCode: -1,
+        errMsg: "订单已完成，不能取消订单",
+      };
+    } else {
+      // 已支付 可取消
+      // 发起微信退款
+      const { returnCode, returnMsg } = await cloud.cloudPay.refund({
+        sub_mch_id: wxPayComm.sub_mch_id, // 子商户号
+        nonce_str: payRandomWord(), // 随机字符串
+        transaction_id: orderDetail.pay_serial_no, // 微信订单号（与商户订单号二选一填入）
+        // out_trade_no: orderDetail.order_no, // 商户订单号
+        out_refund_no: orderDetail.order_no, //商户退款单号？用订单号？
+        total_fee: orderDetail.pay_price, // 订单金额（支付金额）
+        refund_fee: orderDetail.pay_price, // 退款金额
+        // refund_fee_type: 'CNY', // 货币种类
+        // refund_desc: '用户主动发起退款',  // 退款原因
+        // refund_account: // 退款资金来源
+      });
+
+      log.info({ name: "微信退款返回参数", ...returnCode, ...returnMsg });
+
+      if (returnCode === "FAIL") {
+        return {
+          resultCode: -2,
+          errMsg: returnMsg,
+        };
+      }
+    }
+
+    // 更新订单状态
+    await updateOrderStatusToCancel(request.orderId);
+
+    return {
+      resultCode: 0,
+      resultData: true,
+    };
+    // TODO 待验证
   } catch (e) {
     return {
       resultCode: -1,
       resultData: null,
       errMsg: (e.errMsg || e).toString(),
     };
+  }
+};
+
+/**
+ * @desc 取消订单，更新订单状态
+ * @param {string} order_no
+ * @return {Promise<void|ErrorEvent>}
+ */
+const updateOrderStatusToCancel = async (order_no) => {
+  try {
+    const orderInfoDb = db.collection("order_info");
+    await orderInfoDb
+      .where({
+        order_no,
+      })
+      .update({
+        data: {
+          order_status: 5,
+          update_time: db.serverDate(),
+        },
+      });
+    return await Promise.resolve();
+  } catch (e) {
+    return await Promise.reject(e);
   }
 };
 

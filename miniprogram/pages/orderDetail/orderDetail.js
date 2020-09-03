@@ -163,12 +163,18 @@ Page({
     this.registerWatcher();
   },
 
+  /**
+   * 联系司机
+   */
   callPhone() {
     wx.makePhoneCall({
       phoneNumber: this.data.driverDetail.phone,
     });
   },
 
+  /**
+   * 再来一单
+   */
   reOrder() {
     if (this.data.snapshotDetail.biz_type === 1) {
       return wx.navigateTo({
@@ -182,14 +188,49 @@ Page({
     }
   },
 
+  /**
+   * 取消订单
+   */
   cancelOrder() {
-    wx.cloud.callFunction({
-      name: "orderController",
-      data: {
-        action: "cancelOrder",
-        params: {
-          orderId: this.orderId,
-        },
+    wx.showModal({
+      title: "提示",
+      showCancel: true,
+      confirmText: "想好了",
+      cancelText: "我再想想",
+      content: "是否需要取消订单？",
+      success: async ({ confirm }) => {
+        if (confirm) {
+          try {
+            const { result = {} } = await wx.cloud.callFunction({
+              name: "orderController",
+              data: {
+                action: "doCancelOrder",
+                params: {
+                  orderId: this.orderId,
+                },
+              },
+            });
+
+            console.error(result);
+
+            if (+result.resultCode !== 0) {
+              return wx.showToast({
+                icon: "none",
+                title: result.errMsg,
+              });
+            }
+
+            return wx.showToast({
+              icon: "none",
+              title: "订单取消成功！",
+            });
+          } catch (e) {
+            return wx.showToast({
+              icon: "none",
+              title: e.toString(),
+            });
+          }
+        }
       },
     });
   },
