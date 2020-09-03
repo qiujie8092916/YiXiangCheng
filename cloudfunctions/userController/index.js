@@ -33,9 +33,6 @@ exports.main = async (event, context) => {
     case "getUserCompany": {
       return getUserCompany(event);
     }
-    case "setSubscribe": {
-      return setSubscribe(event);
-    }
     default: {
       return;
     }
@@ -208,6 +205,7 @@ async function isRegisterCommute(request) {
  * @param {string} request.name 用户名
  * @param {string} request.company 公司id
  * @param {string} request.fileId 工作证明云文件id
+ * @param {boolean} request.isSubscribe 用户是否订阅了审核通过消息
  * @returns {Promise<{resultCode: number, resultData: any, errMsg: string,}>}
  */
 async function doRegisterCommute(request) {
@@ -268,7 +266,7 @@ async function doRegisterCommute(request) {
           });
         }
       }
-
+      log.info(request);
       await db.collection("user_info").add({
         data: [
           {
@@ -276,13 +274,13 @@ async function doRegisterCommute(request) {
             is_send: false,
             user_id: OPENID,
             union_id: UNIONID,
-            is_subscribe: false,
-            employment_certificate: request.fileId,
             user_name: request.name,
             user_phone: request.phone,
             address_id: request.company,
             create_time: db.serverDate(),
             update_time: db.serverDate(),
+            is_subscribe: request.isSubscribe,
+            employment_certificate: request.fileId,
           },
         ],
       });
@@ -308,39 +306,6 @@ async function doRegisterCommute(request) {
     }
   });
 }
-
-/**
- * @description: 审核用户订阅
- * @param {type}
- * @return {type}
- */
-const setSubscribe = async () => {
-  try {
-    const { OPENID } = cloud.getWXContext();
-    await db
-      .collection("user_info")
-      .where({
-        user_id: OPENID,
-      })
-      .update({
-        data: {
-          is_subscribe: true,
-        },
-      });
-
-    return {
-      resultCode: 0,
-      resultData: true,
-      errMsg: null,
-    };
-  } catch (e) {
-    return {
-      resultCode: -1,
-      resultData: null,
-      errMsg: e.toString(),
-    };
-  }
-};
 
 /**
  * @desc 获取通勤注册用户的公司地址
