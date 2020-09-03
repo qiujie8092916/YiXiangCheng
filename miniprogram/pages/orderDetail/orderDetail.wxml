@@ -36,7 +36,7 @@
       <view class="desc-item">
         <view class="desc-one">总额：</view>
         <block wx:if="{{orderDetail && orderDetail.pay_price !== undefined}}">
-          <view class="desc-two">¥{{orderDetail.pay_price / 100}}元</view>
+          <view class="desc-two">¥{{orderDetail.total_price / 100}}元</view>
         </block>
         <block wx:else>
           <view class="desc-two">--</view>
