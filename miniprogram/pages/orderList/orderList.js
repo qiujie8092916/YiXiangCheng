@@ -41,7 +41,6 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-    debugger;
     this.setData(
       {
         pageIndex: 0,
@@ -56,7 +55,6 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-    debugger;
     this.setData(
       {
         pageIndex: this.data.pageIndex + 1,
