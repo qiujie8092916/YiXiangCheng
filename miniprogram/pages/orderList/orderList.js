@@ -6,6 +6,7 @@ Page({
   data: {
     orderList: [], // 订单列表
     loading: true,
+    rows: 0, // 总条数
     pageIndex: 0,
     pageSize: 5,
   },
@@ -45,8 +46,9 @@ Page({
       {
         pageIndex: 0,
       },
-      () => {
-        this.getOrderList();
+      async () => {
+        await this.getOrderList();
+        wx.stopPullDownRefresh();
       }
     );
   },
@@ -55,9 +57,13 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
+    const newPageIndex = this.data.pageIndex + 1;
+
+    if (Math.ceil(this.data.rows / this.data.pageSize) <= newPageIndex) return;
+
     this.setData(
       {
-        pageIndex: this.data.pageIndex + 1,
+        pageIndex: newPageIndex,
       },
       () => {
         this.getOrderList();
@@ -91,23 +97,30 @@ Page({
         },
       });
       wx.hideLoading();
-      if (this.data.pageIndex === 0) {
-        this.setData({
-          orderList: result.resultData,
-        });
-      } else {
-        this.setData({
-          orderList: [...this.data.orderList, ...result.resultData],
+
+      if (+result.resultCode !== 0) {
+        return wx.showToast({
+          icon: "none",
+          title: result.errMsg,
         });
       }
 
       console.log(result);
+      const { rows, data } = result.resultData;
+
+      this.setData({
+        rows,
+        orderList:
+          this.data.pageIndex === 0 ? data : [...this.data.orderList, ...data],
+      });
+      return await Promise.resolve();
     } catch (e) {
       wx.hideLoading();
-      return wx.showToast({
+      wx.showToast({
         icon: "none",
         title: e.toString(),
       });
+      return await Promise.resolve();
     }
   },
 
