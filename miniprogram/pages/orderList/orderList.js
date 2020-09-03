@@ -7,7 +7,7 @@ Page({
     orderList: [], // 订单列表
     loading: true,
     pageIndex: 0,
-    pageSize: 20,
+    pageSize: 5,
   },
 
   /**

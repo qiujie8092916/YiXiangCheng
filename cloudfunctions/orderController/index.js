@@ -577,7 +577,6 @@ const checkOrderList = async (request) => {
   try {
     const result = await orderInfoDb
       .aggregate()
-      .skip(request.pageIndex * request.pageSize)
       .sort({
         create_time: -1,
       })
@@ -633,6 +632,8 @@ const checkOrderList = async (request) => {
         driverDetail: $.arrayElemAt(["$driverDetail", 0]),
         snapshotDetail: $.arrayElemAt(["$snapshotDetail", 0]),
       })
+      .skip(request.pageIndex * request.pageSize)
+      .limit(request.pageSize)
       .end();
 
     return {
