@@ -6,11 +6,12 @@ Page({
    * 页面的初始数据
    */
   data: {
-    isFetched: false, //第一次请求数据
+    isFetched: false, // 第一次请求数据
     orderDetail: {}, // 订单详情
-    driverDetail: {}, //司机详情
-    snapshotDetail: {}, //快照详情
+    driverDetail: {}, // 司机详情
+    snapshotDetail: {}, // 快照详情
     watcher: null, // 监听器
+    loading: true,
   },
 
   /**
@@ -104,6 +105,7 @@ Page({
    * 监听到订单变化，查询订单详情（init & update）
    */
   async queryOrderDetail() {
+    wx.showLoading();
     try {
       const { result = {} } = await wx.cloud.callFunction({
         name: "orderController",
@@ -114,7 +116,6 @@ Page({
           },
         },
       });
-
       if (+result.resultCode !== 0) {
         return wx.showToast({
           icon: "none",
@@ -139,7 +140,9 @@ Page({
         orderDetail,
         driverDetail,
         snapshotDetail,
+        loading: false,
       });
+      wx.hideLoading();
     } catch (e) {
       return wx.showToast({
         icon: "none",

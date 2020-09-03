@@ -440,6 +440,7 @@ page {
 /** 默认字体颜色 */
 .order-detail {
   padding: 42rpx 67rpx;
+  height: 100%;
 }
 
 .order-status {
@@ -448,7 +449,7 @@ page {
 }
 
 .order-custom {
-  font-size: 22rpx;
+  font-size: 30rpx;
   color: #3184c7;
 }
 
@@ -502,4 +503,8 @@ page {
 
 .phone {
   font-size: 40rpx;
+}
+
+.empty-result {
+  height: 100%;
 }

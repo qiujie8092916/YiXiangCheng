@@ -1,133 +1,139 @@
 <!--miniprogram/pages/orderDetail/orderDetail.wxml-->
 <view class="order-detail">
-  <view class="order-header flex-between">
-    <block wx:if="{{orderDetail.order_status === 1}}">
-      <view class="order-status">待支付</view>
-    </block>
-    <block wx:elif="{{orderDetail.order_status === 2}}">
-      <view class="order-status">待接单</view>
-    </block>
-    <block wx:elif="{{orderDetail.order_status === 3}}">
-      <view class="order-status">已接单</view>
-    </block>
-    <block wx:elif="{{orderDetail.order_status === 4}}">
-      <view class="order-status">已上车</view>
-    </block>
-    <block wx:elif="{{orderDetail.order_status === 5}}">
-      <view class="order-status">已取消</view>
-    </block>
-    <block wx:elif="{{orderDetail.order_status === 6}}">
-      <view class="order-status">已退款</view>
-    </block>
-    <block wx:elif="{{orderDetail.order_status === 7}}">
-      <view class="order-status">已完成</view>
-    </block>
-    <view class="order-custom flex-center">
-      <text class="iconfont tubiao- customer"></text>
-      <text>客服</text>
-    </view>
-  </view>
-  <view class="order-desc">
-    <view class="desc-item">
-      <view class="desc-one">总额：</view>
-      <block wx:if="{{orderDetail && orderDetail.pay_price !== undefined}}">
-        <view class="desc-two">¥{{orderDetail.pay_price / 100}}元</view>
+  <view wx:if="{{loading}}" class="rowcc empty-result"> </view>
+  <view wx:else>
+    <view class="order-header flex-between">
+      <block wx:if="{{orderDetail.order_status === 1}}">
+        <view class="order-status">待支付</view>
+      </block>
+      <block wx:elif="{{orderDetail.order_status === 2}}">
+        <view class="order-status">待接单</view>
+      </block>
+      <block wx:elif="{{orderDetail.order_status === 3}}">
+        <view class="order-status">已接单</view>
+      </block>
+      <block wx:elif="{{orderDetail.order_status === 4}}">
+        <view class="order-status">已上车</view>
+      </block>
+      <block wx:elif="{{orderDetail.order_status === 5}}">
+        <view class="order-status">已取消</view>
+      </block>
+      <block wx:elif="{{orderDetail.order_status === 6}}">
+        <view class="order-status">已退款</view>
+      </block>
+      <block wx:elif="{{orderDetail.order_status === 7}}">
+        <view class="order-status">已完成</view>
       </block>
       <block wx:else>
-        <view class="desc-two">--</view>
+        <view class="order-status">查询中...</view>
       </block>
-    </view>
-    <view class="desc-item">
-      <view class="desc-one">联系人：</view>
-      <view class="desc-two">
-        <block wx:if="{{driverDetail._id}}">
-          <text class="concact">{{driverDetail.name}}</text>
-          <text class="concact">{{driverDetail.phone}}</text>
-          <text class="iconfont dianhua phone" catchtap="callPhone" />
-        </block>
-        <block wx:else>--</block>
+      <view class="order-custom flex-center">
+        <text class="iconfont tubiao- customer"></text>
+        <text>客服</text>
       </view>
     </view>
-    <view class="desc-item">
-      <view class="desc-one">车牌：</view>
-      <view class="desc-two">
-        <block wx:if="{{driverDetail._id}}">
-          <text class="concact">{{driverDetail.car_number}}</text>
-        </block>
-        <block wx:else>--</block>
-      </view>
-    </view>
-    <view class="desc-item">
-      <view class="desc-one">服务类型：</view>
-      <view class="desc-two">
-        <block wx:if="{{snapshotDetail.biz_type === 1}}">
-          包车
-        </block>
-        <block wx:elif="{{snapshotDetail.biz_type === 2}}"
-          >通勤 /
-          <block wx:if="{{!orderDetail.commute_type}}">回家</block>
-          <block wx:else>上班</block>
-        </block>
-        <block wx:else>--</block>
-      </view>
-    </view>
-    <view class="desc-item">
-      <view class="desc-one">出发地：</view>
-      <view class="desc-two">
-        <block
-          wx:if="{{snapshotDetail.pick_info.province || snapshotDetail.pick_info.city || snapshotDetail.pick_info.name}}"
-        >
-          {{snapshotDetail.pick_info.province + snapshotDetail.pick_info.city +
-          snapshotDetail.pick_info.name}}
-        </block>
-        <block wx:else>--</block>
-      </view>
-    </view>
-    <block wx:if="{{snapshotDetail.biz_type === 2}}">
+    <view class="order-desc">
       <view class="desc-item">
-        <view class="desc-one">目的地：</view>
+        <view class="desc-one">总额：</view>
+        <block wx:if="{{orderDetail && orderDetail.pay_price !== undefined}}">
+          <view class="desc-two">¥{{orderDetail.pay_price / 100}}元</view>
+        </block>
+        <block wx:else>
+          <view class="desc-two">--</view>
+        </block>
+      </view>
+      <view class="desc-item">
+        <view class="desc-one">司机：</view>
         <view class="desc-two">
-          <block
-            wx:if="{{snapshotDetail.drop_info.province || snapshotDetail.drop_info.city || snapshotDetail.drop_info.name}}"
-          >
-            {{snapshotDetail.drop_info.province + snapshotDetail.drop_info.city
-            + snapshotDetail.drop_info.name}}
+          <block wx:if="{{driverDetail._id}}">
+            <text class="concact">{{driverDetail.name}}</text>
+            <text class="concact">{{driverDetail.phone}}</text>
+            <text class="iconfont dianhua phone" catchtap="callPhone" />
           </block>
           <block wx:else>--</block>
         </view>
       </view>
-    </block>
-    <view class="desc-item">
-      <view class="desc-one">时间：</view>
-      <view class="desc-two">{{orderDetail._useTime || '--'}}</view>
-    </view>
-    <view class="desc-item">
-      <view class="desc-one">车型：</view>
-      <view class="desc-two">
-        <block wx:if="{{driverDetail._id}}">{{driverDetail.car_type}}</block>
-        <block wx:else>--</block>
+      <view class="desc-item">
+        <view class="desc-one">车牌：</view>
+        <view class="desc-two">
+          <block wx:if="{{driverDetail._id}}">
+            <text class="concact">{{driverDetail.car_number}}</text>
+          </block>
+          <block wx:else>--</block>
+        </view>
+      </view>
+      <view class="desc-item">
+        <view class="desc-one">服务类型：</view>
+        <view class="desc-two">
+          <block wx:if="{{snapshotDetail.biz_type === 1}}">
+            包车
+          </block>
+          <block wx:elif="{{snapshotDetail.biz_type === 2}}"
+            >通勤 /
+            <block wx:if="{{!orderDetail.commute_type}}">回家</block>
+            <block wx:else>上班</block>
+          </block>
+          <block wx:else>--</block>
+        </view>
+      </view>
+      <view class="desc-item">
+        <view class="desc-one">出发地：</view>
+        <view class="desc-two">
+          <block
+            wx:if="{{snapshotDetail.pick_info.province || snapshotDetail.pick_info.city || snapshotDetail.pick_info.name}}"
+          >
+            {{snapshotDetail.pick_info.province + snapshotDetail.pick_info.city
+            + snapshotDetail.pick_info.name}}
+          </block>
+          <block wx:else>--</block>
+        </view>
+      </view>
+      <block wx:if="{{snapshotDetail.biz_type === 2}}">
+        <view class="desc-item">
+          <view class="desc-one">目的地：</view>
+          <view class="desc-two">
+            <block
+              wx:if="{{snapshotDetail.drop_info.province || snapshotDetail.drop_info.city || snapshotDetail.drop_info.name}}"
+            >
+              {{snapshotDetail.drop_info.province +
+              snapshotDetail.drop_info.city + snapshotDetail.drop_info.name}}
+            </block>
+            <block wx:else>--</block>
+          </view>
+        </view>
+      </block>
+      <view class="desc-item">
+        <view class="desc-one">时间：</view>
+        <view class="desc-two">{{orderDetail._useTime || '--'}}</view>
+      </view>
+      <view class="desc-item">
+        <view class="desc-one">车型：</view>
+        <view class="desc-two">
+          <block wx:if="{{driverDetail._id}}">{{driverDetail.car_type}}</block>
+          <block wx:else>--</block>
+        </view>
+      </view>
+      <view class="desc-item">
+        <view class="desc-one">套餐：</view>
+        <view class="desc-two">
+          <block wx:if="{{snapshotDetail.biz_type === 1}}">
+            {{orderDetail.charter_duration}}小时
+          </block>
+          <block wx:elif="{{snapshotDetail.biz_type === 2}}">
+            <block wx:if="{{!orderDetail.commute_way}}">拼车</block>
+            <block wx:else>独享</block>
+          </block>
+          <block wx:else>--</block>
+        </view>
       </view>
     </view>
-    <view class="desc-item">
-      <view class="desc-one">套餐：</view>
-      <view class="desc-two">
-        <block wx:if="{{snapshotDetail.biz_type === 1}}">
-          {{orderDetail.charter_duration}}小时
-        </block>
-        <block wx:elif="{{snapshotDetail.biz_type === 2}}">
-          <block wx:if="{{!orderDetail.commute_way}}">拼车</block>
-          <block wx:else>独享</block>
-        </block>
-        <block wx:else>--</block>
-      </view>
+    <view wx:if="{{isFetched}}" class="order-control flex-between">
+      <view class="order-more flex-center" catchtap="reOrder">再来一单</view>
+      <block
+        wx:if="{{orderDetail.order_status === 1 || orderDetail.order_status === 2 || orderDetail.order_status === 3}}"
+      >
+        <view class="order-cancel" catchtap="cancelOrder">我要取消</view>
+      </block>
     </view>
-  </view>
-  <view wx:if="{{isFetched}}" class="order-control flex-between">
-    <view class="order-more flex-center" catchtap="reOrder">再来一单</view>
-    <block
-      wx:if="{{orderDetail.order_status === 1 || orderDetail.order_status === 2 || orderDetail.order_status === 3}}"
-    >
-      <view class="order-cancel" catchtap="cancelOrder">我要取消</view>
-    </block>
   </view>
 </view>
