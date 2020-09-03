@@ -296,13 +296,13 @@ Page({
   createWaitPayOrder(_params) {
     console.log(_params, "下单参数");
     Order.createOrder(_params).then((prePayResult) => {
-      Order.invokePay(prePayResult.outTradeNo, prePayResult.payment).finally(
-        () => {
+      Order.invokePay(prePayResult.outTradeNo, prePayResult.payment)
+        .catch((e) => console.error(e))
+        .finally(() => {
           wx.navigateTo({
             url: `/pages/orderDetail/orderDetail?orderId=${prePayResult.outTradeNo}`,
           });
-        }
-      );
+        });
     });
   },
 

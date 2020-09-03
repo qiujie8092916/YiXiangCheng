@@ -83,7 +83,7 @@ export default class Order {
         },
         fail(err) {
           console.error("pay_fail", err);
-          reject();
+          reject(err);
         },
       });
     });

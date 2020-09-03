@@ -18,7 +18,7 @@ const bussinessType = {
  */
 const wxPayComm = {
   sub_mch_id: "1601995626",
-  env_id: cloud.DYNAMIC_CURRENT_ENV,
+  env_id: "test-ey84k", // cloud.DYNAMIC_CURRENT_ENV,
 };
 
 // 云函数入口函数

@@ -345,13 +345,13 @@ Page({
     const params = this.genParams();
 
     Order.createOrder({ is_subscribe, ...params }).then((prePayResult) => {
-      Order.invokePay(prePayResult.outTradeNo, prePayResult.payment).finally(
-        () => {
+      Order.invokePay(prePayResult.outTradeNo, prePayResult.payment)
+        .catch((e) => console.error(e))
+        .finally(() => {
           wx.navigateTo({
             url: `/pages/orderDetail/orderDetail?orderId=${prePayResult.outTradeNo}`,
           });
-        }
-      );
+        });
     });
   },
 });
