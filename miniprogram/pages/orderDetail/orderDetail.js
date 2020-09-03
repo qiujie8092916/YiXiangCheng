@@ -133,8 +133,8 @@ Page({
         ...orderDetail
       } = result.resultData;
 
-      orderDetail._useTime = dateFormat(
-        orderDetail.useTime,
+      orderDetail._use_time = dateFormat(
+        orderDetail.use_time,
         "YYYY年MM月DD日 HH:mm"
       );
 
