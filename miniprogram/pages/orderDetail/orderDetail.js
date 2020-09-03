@@ -12,6 +12,7 @@ Page({
     snapshotDetail: {}, // 快照详情
     watcher: null, // 监听器
     loading: true,
+    isloading: true, // 是否要显示loading 第一次进入需要 watch时不需要
   },
 
   /**
@@ -105,7 +106,9 @@ Page({
    * 监听到订单变化，查询订单详情（init & update）
    */
   async queryOrderDetail() {
-    wx.showLoading();
+    if (this.data.isloading) {
+      wx.showLoading();
+    }
     try {
       const { result = {} } = await wx.cloud.callFunction({
         name: "orderController",
@@ -141,6 +144,7 @@ Page({
         driverDetail,
         snapshotDetail,
         loading: false,
+        isloading: false,
       });
       wx.hideLoading();
     } catch (e) {
