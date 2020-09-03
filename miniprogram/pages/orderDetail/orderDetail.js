@@ -62,7 +62,7 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {},
+  // onShareAppMessage: function () {},
 
   /**
    * 订单详情(watch默认触发一次 不再需要手动查询)

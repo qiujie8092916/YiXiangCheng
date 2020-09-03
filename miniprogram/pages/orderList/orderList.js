@@ -68,7 +68,7 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {},
+  // onShareAppMessage: function () {},
 
   init() {
     this.getOrderList();
@@ -103,6 +103,7 @@ Page({
 
       console.log(result);
     } catch (e) {
+      wx.hideLoading();
       return wx.showToast({
         icon: "none",
         title: e.toString(),
