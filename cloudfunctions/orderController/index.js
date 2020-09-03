@@ -489,6 +489,7 @@ const checkOrderList = async (request) => {
   try {
     const result = await orderInfoDb
       .aggregate()
+      .skip(request.pageIndex * request.pageSize)
       .sort({
         create_time: -1,
       })
@@ -548,7 +549,7 @@ const checkOrderList = async (request) => {
 
     return {
       resultCode: 0,
-      resultData: result.list.length ? result.list : null,
+      resultData: result.list.length ? result.list : [],
     };
   } catch (e) {
     return {

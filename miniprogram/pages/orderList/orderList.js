@@ -6,6 +6,8 @@ Page({
   data: {
     orderList: [], // 订单列表
     loading: true,
+    pageIndex: 0,
+    pageSize: 20,
   },
 
   /**
@@ -39,13 +41,31 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-    this.getOrderList();
+    debugger;
+    this.setData(
+      {
+        pageIndex: 0,
+      },
+      () => {
+        this.getOrderList();
+      }
+    );
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {},
+  onReachBottom: function () {
+    debugger;
+    this.setData(
+      {
+        pageIndex: this.data.pageIndex + 1,
+      },
+      () => {
+        this.getOrderList();
+      }
+    );
+  },
 
   /**
    * 用户点击右上角分享
@@ -66,12 +86,23 @@ Page({
         name: "orderController",
         data: {
           action: "checkOrderList",
+          params: {
+            pageIndex: this.data.pageIndex,
+            pageSize: this.data.pageSize,
+          },
         },
       });
       wx.hideLoading();
-      this.setData({
-        orderList: result.resultData,
-      });
+      if (this.data.pageIndex === 0) {
+        this.setData({
+          orderList: result.resultData,
+        });
+      } else {
+        this.setData({
+          orderList: [...this.data.orderList, ...result.resultData],
+        });
+      }
+
       console.log(result);
     } catch (e) {
       return wx.showToast({

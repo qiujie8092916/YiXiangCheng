@@ -70,7 +70,7 @@ exports.main = async (event) => {
 
     return {
       errcode: 0,
-      errmsg: null,
+      errmsg: "支付回调成功",
     };
   } catch (e) {
     log.info({
