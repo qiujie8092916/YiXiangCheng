@@ -22,6 +22,9 @@ Page({
     console.log(orderId, "订单id");
     this.orderId = orderId;
     this.init();
+    wx.setNavigationBarTitle({
+      title: `订单号：${this.orderId}`,
+    });
   },
 
   /**
