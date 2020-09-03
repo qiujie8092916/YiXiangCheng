@@ -211,52 +211,40 @@ Page({
    * 订阅
    */
   registerSubscribe() {
-    wx.requestSubscribeMessage({
-      tmplIds: [subscribeMessageIds.registerId],
-      success: (res) => {
-        if (res[subscribeMessageIds.registerId] === "accept") {
-          console.log("订阅成功");
-          wx.cloud.callFunction({
-            name: "userController",
-            data: {
-              action: "setSubscribe",
-            },
-            success: ({ result = {} }) => {
-              if (+result.resultCode !== 0) {
-                console.error(result.errMsg);
-              }
-            },
-            fail: (e) => {
-              console.error(e);
-              wx.showToast({
-                icon: "none",
-                title: JSON.stringify(e),
-              });
-            },
-          });
-        } else {
-          console.log("用户不订阅");
-        }
-      },
-      fail: ({ errCode, errMsg }) => {
-        console.log("订阅接口失败");
-        console.error(errCode, errMsg);
-      },
+    return new Promise((resolve) => {
+      wx.requestSubscribeMessage({
+        tmplIds: [subscribeMessageIds.registerId],
+        success: (res) => {
+          if (res[subscribeMessageIds.registerId] === "accept") {
+            console.log("订阅成功");
+            resolve(true);
+          } else {
+            console.log("用户不订阅");
+            resolve(false);
+          }
+        },
+        fail: ({ errCode, errMsg }) => {
+          console.log("订阅接口失败");
+          console.error(errCode, errMsg);
+          resolve(false);
+        },
+      });
     });
   },
 
   /**
    * 通勤注册
    */
-  commuteRegister(fileID) {
+  commuteRegister({ fileId, isSubscribe }) {
     wx.cloud.callFunction({
       name: "userController",
       data: {
         action: "doRegisterCommute",
+        fileId,
+        isSubscribe,
         phone: this.data.phone,
         name: this.data.name.trim(),
         company: this.data.companyObj.id,
-        fileId: fileID,
       },
       success: ({ result = {} }) => {
         wx.hideLoading({
@@ -271,11 +259,6 @@ Page({
             wx.showModal({
               showCancel: false,
               content: "提交成功，等待审核",
-              success: ({ confirm }) => {
-                if (confirm) {
-                  this.registerSubscribe();
-                }
-              },
             });
           },
         });
@@ -292,31 +275,52 @@ Page({
   },
 
   /**
+   * 上传图片
+   */
+  uploadImage() {
+    return new Promise((resolve, reject) => {
+      wx.cloud.uploadFile({
+        cloudPath: `employmentCertificate/${
+          this.data.employment_certificate.path.match(
+            new RegExp("[^/]+(?!.*/)")
+          )[0]
+        }`,
+        filePath: this.data.employment_certificate.path,
+        success: ({ fileID }) => {
+          resolve(fileID);
+        },
+        fail: ({ errMsg }) => {
+          reject(errMsg);
+        },
+      });
+    });
+  },
+
+  /**
    * 提交注册
    */
-  onsubmit({ detail: { value } }) {
+  async onsubmit({ detail: { value } }) {
+    // 校验字段
     if (!this.preSubmit()) return;
+
+    // 获取订阅状态
+    const isSubscribe = await this.registerSubscribe();
+    console.log("isSubscribe", isSubscribe);
     wx.showLoading({ title: "加载中" });
-    wx.cloud.uploadFile({
-      cloudPath: `employmentCertificate/${
-        this.data.employment_certificate.path.match(
-          new RegExp("[^/]+(?!.*/)")
-        )[0]
-      }`,
-      filePath: this.data.employment_certificate.path,
-      success: ({ fileID }) => {
-        this.commuteRegister(fileID);
-      },
-      fail: ({ errMsg }) => {
-        wx.hideLoading({
-          complete() {
-            wx.showToast({
-              icon: "none",
-              title: errMsg,
-            });
-          },
-        });
-      },
-    });
+
+    //上传图片
+    try {
+      const fileId = await this.uploadImage();
+      this.commuteRegister({ fileId, isSubscribe });
+    } catch (e) {
+      wx.hideLoading({
+        complete() {
+          wx.showToast({
+            icon: "none",
+            title: e,
+          });
+        },
+      });
+    }
   },
 });
