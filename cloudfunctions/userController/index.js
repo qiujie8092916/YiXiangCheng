@@ -254,18 +254,20 @@ async function doRegisterCommute(request) {
         .get();
 
       if (exist.data.length) {
-        if (exist.data[0].status === 0) {
-          return resolve({
-            resultCode: -8,
-            resultData: null,
-            errMsg: "管理员正在审核您的注册信息，请勿重复提交",
-          });
-        } else {
-          return resolve({
-            resultCode: -8,
-            resultData: null,
-            errMsg: "用户已注册",
-          });
+        if (exist.data[0].employment_certificate && exist.data[0].address_id) {
+          if (exist.data[0].status === 0) {
+            return resolve({
+              resultCode: -8,
+              resultData: null,
+              errMsg: "管理员正在审核您的注册信息，请勿重复提交",
+            });
+          } else {
+            return resolve({
+              resultCode: -8,
+              resultData: null,
+              errMsg: "用户已注册",
+            });
+          }
         }
       }
       log.info(request);
