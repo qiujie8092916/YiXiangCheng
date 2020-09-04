@@ -28,8 +28,7 @@
         <view class="order-status">查询中...</view>
       </block>
       <view class="order-custom flex-center">
-        <text class="iconfont tubiao- customer"></text>
-        <text>客服</text>
+        <button open-type="contact" class="iconfont tubiao- customer"></button>
       </view>
     </view>
     <view class="order-desc">

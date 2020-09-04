@@ -449,16 +449,19 @@ page {
 }
 
 .order-custom {
-  font-size: 30rpx;
+  width: 40rpx;
   color: #3184c7;
 }
 
 .customer {
   margin-right: 5rpx;
+  background: #f2f2f7;
+  font-size: 40rpx;
+  color: #3184c7;
 }
 
 .order-desc {
-  margin-top: 111rpx;
+  margin-top: 100rpx;
   margin-bottom: 140rpx;
   font-size: 36rpx;
   font-family: PingFangSC-Medium, PingFang SC;

@@ -67,7 +67,7 @@ async function sendSubscribeMessage({ order_no, user_id }) {
           value: driverDetail.phone,
         },
         amount5: {
-          value: pay_price,
+          value: `${pay_price / 100}元`,
         },
         time8: {
           value: use_time,
