@@ -124,12 +124,16 @@
         </view>
       </view>
     </view>
-    <view wx:if="{{isFetched}}" class="order-control flex-between">
-      <view class="order-more flex-center" catchtap="reOrder">再来一单</view>
+    <view wx:if="{{isFetched}}" class="order-control flex-center">
       <block
         wx:if="{{orderDetail.order_status === 1 || orderDetail.order_status === 2 || orderDetail.order_status === 3}}"
       >
-        <view class="order-cancel" catchtap="cancelOrder">我要取消</view>
+        <view class="order-more flex-center" catchtap="cancelOrder"
+          >取消订单</view
+        >
+      </block>
+      <block wx:else>
+        <view class="order-more flex-center" catchtap="reOrder">再来一单</view>
       </block>
     </view>
   </view>
