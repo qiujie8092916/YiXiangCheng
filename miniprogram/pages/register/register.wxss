@@ -98,6 +98,7 @@ page {
   border-radius: 5rpx;
   width: 610rpx !important;
   color: white;
+  padding-bottom: 30rpx;
   min-height: 100rpx !important;
   font-family: PingFangSC-Medium, PingFang SC;
 }

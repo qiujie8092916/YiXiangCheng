@@ -260,6 +260,10 @@ Page({
               showCancel: false,
               content: "提交成功，等待审核",
             });
+
+            wx.navigateTo({
+              url: "/pages/home/home",
+            });
           },
         });
       },
