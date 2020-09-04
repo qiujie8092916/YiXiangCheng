@@ -51,7 +51,7 @@ exports.main = async (event, context) => {
  */
 async function sendApprovalUserEmail(params) {
   let mailtemplate = {
-    from: `"service" <${auth.user}>`,
+    from: `"小享兽" <${auth.user}>`,
     to: params.curReceivers,
     subject: "小享兽注册通知",
     html: `<b>姓名：</b>${params.name}<br/><b>手机号：</b>${params.phone}<br/><br/>请于小程序云开发控制台手动审核<br/><br/>勿回复`,

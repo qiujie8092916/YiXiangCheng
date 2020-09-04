@@ -26,13 +26,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    const userInfo = Storage.getStorage("userInfo");
-    if (userInfo.user_phone) {
-      this.setData({
-        phone: userInfo.user_phone,
-      });
-    }
-
+    this.getCloudUserInfo();
     this.createAnimation();
   },
 
@@ -333,6 +327,44 @@ Page({
           });
         },
       });
+    }
+  },
+
+  /**
+   * 获取用户信息
+   */
+  getCloudUserInfo() {
+    const userInfo = Storage.getStorage("userInfo");
+
+    if (userInfo && userInfo.user_phone) {
+      // 已经注册过无需再授权
+      this.setData({
+        phone: userInfo.user_phone,
+      });
+    } else {
+      wx.cloud
+        .callFunction({
+          name: "userController",
+          data: {
+            action: "getUserInfo",
+          },
+        })
+        .then((res) => {
+          if (res && res.result && res.result.resultData) {
+            this.setData({
+              phone: res.result.resultData.user_phone,
+            });
+            Storage.setStorage(
+              "userInfo",
+              JSON.stringify(res.result.resultData)
+            );
+          } else {
+            console.log("当前用户未注册");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   },
 });
