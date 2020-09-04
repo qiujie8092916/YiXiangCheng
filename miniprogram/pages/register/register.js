@@ -1,6 +1,7 @@
 // miniprogram/pages/register/register.js
 import { arrayToJson } from "../../utils/ext";
 import { bussinessType, subscribeMessageIds } from "../../config";
+import { Storage } from "../../utils/index";
 
 Page({
   /**
@@ -8,7 +9,7 @@ Page({
    */
   data: {
     name: "",
-    phone: "15502858542",
+    phone: "",
     // 公司地址id
     companyObj: {},
     // 错误项
@@ -25,6 +26,13 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    const userInfo = Storage.getStorage("userInfo");
+    if (userInfo.user_phone) {
+      this.setData({
+        phone: userInfo.user_phone,
+      });
+    }
+
     this.createAnimation();
   },
 
