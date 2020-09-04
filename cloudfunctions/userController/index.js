@@ -167,20 +167,22 @@ async function isRegisterCommute(request) {
       if (data.length) {
         // resolve();
         const user = data[0];
-        if (user.status === 1) {
-          // 已通过审核
-          return resolve({
-            resultCode: 0,
-            resultData: "/pages/commute/commute",
-            errMsg: null,
-          });
-        } else if (user.status === 0) {
-          // 未通过审核
-          return resolve({
-            resultCode: -1,
-            resultData: null,
-            errMsg: "管理员正在审核您的注册信息，请稍等...",
-          });
+        if (user.employment_certificate && user.address_id) {
+          if (user.status === 1) {
+            // 已通过审核
+            return resolve({
+              resultCode: 0,
+              resultData: "/pages/commute/commute",
+              errMsg: null,
+            });
+          } else if (user.status === 0) {
+            // 未通过审核
+            return resolve({
+              resultCode: -1,
+              resultData: null,
+              errMsg: "管理员正在审核您的注册信息，请稍等...",
+            });
+          }
         }
       }
       return resolve({
