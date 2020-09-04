@@ -98,7 +98,6 @@ page {
   border-radius: 5rpx;
   width: 610rpx !important;
   color: white;
-  padding-bottom: 30rpx;
   min-height: 100rpx !important;
   font-family: PingFangSC-Medium, PingFang SC;
 }
@@ -110,4 +109,9 @@ page {
 
 .checkbox.error {
   border: initial;
+}
+
+.register-form {
+  margin-top: 30rpx;
+  padding-bottom: 30rpx;
 }

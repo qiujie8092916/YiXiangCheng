@@ -2,7 +2,7 @@
 <!-- logo -->
 <logo-header is-show-order="{{false}}" />
 <!--    <view class="title rowcc full">用户注册</view>-->
-<form bindsubmit="onsubmit" class="collt" style="margin-top: 30rpx;">
+<form bindsubmit="onsubmit" class="collt register-form">
   <view class="block collt full">
     <view class="label">手机号</view>
     <view class="rowst full">
