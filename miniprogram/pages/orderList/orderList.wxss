@@ -3,4 +3,18 @@
 @import "../../app.wxss";
 
 .order-list {
+  height: 100%;
+}
+
+.order-empty {
+  height: 100%;
+}
+
+.order-empty-icon {
+  font-size: 100rpx;
+}
+
+.empty-desc {
+  margin-top: 10px;
+  font-size: 30rpx;
 }

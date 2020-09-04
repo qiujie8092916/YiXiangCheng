@@ -9,6 +9,7 @@ page {
 
 .content {
   background: #fff;
+  padding-bottom: 50rpx;
   height: 100%;
 }
 
@@ -109,10 +110,6 @@ page {
 .price-desc {
   font-size: 28rpx;
   color: #3184c7;
-}
-
-.pay {
-  padding-bottom: 50rpx;
 }
 
 .pay-btn {

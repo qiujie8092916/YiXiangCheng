@@ -1,19 +1,29 @@
 <!--miniprogram/pages/orderList/orderList.wxml-->
 <view class="order-list">
-  <order-item
-    bindchooseOrder="chooseCurOrder"
-    data-id="{{order.order_no}}"
-    wx:for="{{orderList}}"
-    wx:key="idx"
-    wx:for-item="order"
-    status="{{order.order_status}}"
-    money="{{order.total_price / 100}}"
-    type="{{order.snapshotDetail.biz_type === 1 ? 'charter' : 'commute'}}"
-    chartertime="{{order.charter_duration}}"
-    charterdepart="{{order.snapshotDetail.pick_info.name}}"
-    commutedepart="{{order.snapshotDetail.pick_info.name}}"
-    commutedestination="{{order.snapshotDetail.drop_info.name}}"
-    useTime="{{order.use_time}}"
-  >
-  </order-item>
+  <block wx:if="{{orderList.length > 0}}">
+    <order-item
+      bindchooseOrder="chooseCurOrder"
+      data-id="{{order.order_no}}"
+      wx:for="{{orderList}}"
+      wx:key="idx"
+      wx:for-item="order"
+      status="{{order.order_status}}"
+      money="{{order.total_price / 100}}"
+      type="{{order.snapshotDetail.biz_type === 1 ? 'charter' : 'commute'}}"
+      chartertime="{{order.charter_duration}}"
+      charterdepart="{{order.snapshotDetail.pick_info.name}}"
+      commutedepart="{{order.snapshotDetail.pick_info.name}}"
+      commutedestination="{{order.snapshotDetail.drop_info.name}}"
+      useTime="{{order.use_time}}"
+    >
+    </order-item>
+  </block>
+  <block wx:else>
+    <view class="order-empty rowcc" wx:if="{{loading}}">
+      <view class="colcc">
+        <view class="iconfont shiliangzhinengduixiang- order-empty-icon"></view>
+        <view class="empty-desc">快去下单吧</view>
+      </view>
+    </view>
+  </block>
 </view>
