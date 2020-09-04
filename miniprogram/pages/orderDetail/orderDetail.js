@@ -220,16 +220,10 @@ Page({
             if (+result.resultCode !== 0) {
               throw result.errMsg;
             }
-            wx.showToast({
+            return wx.showToast({
               icon: "none",
               title: "订单取消成功！",
             });
-
-            setTimeout(() => {
-              this.reOrder();
-            }, 2000);
-
-            return;
           } catch (e) {
             wx.hideLoading();
             return wx.showToast({
