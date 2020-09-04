@@ -220,15 +220,21 @@ Page({
             if (+result.resultCode !== 0) {
               throw result.errMsg;
             }
-            return wx.showToast({
-              icon: "none",
-              title: "订单取消成功！",
+
+            wx.hideLoading();
+            return wx.showModal({
+              showCancel: false,
+              title: "提示",
+              confirmText: "知道了",
+              content: "订单取消成功！",
             });
           } catch (e) {
             wx.hideLoading();
-            return wx.showToast({
-              icon: "none",
-              title: e.toString(),
+            return wx.showModal({
+              showCancel: false,
+              title: "提示",
+              confirmText: "知道了",
+              content: e.toString(),
             });
           }
         }
