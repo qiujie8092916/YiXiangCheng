@@ -36,6 +36,9 @@ exports.main = async (event, context) => {
     case "sendPickUpOrderEmail": {
       return sendPickUpOrderEmail(_params);
     }
+    case "sendCancelOrderEmail": {
+      return sendCancelOrderEmail(_params);
+    }
     default:
       return;
   }
@@ -91,6 +94,49 @@ async function sendPickUpOrderEmail(params) {
     }<b>订单金额：</b>${
       params.pay_price / 100
     }元<br/><br/>请于小程序云开发控制台手动接单<br/><br/>勿回复`,
+  };
+  try {
+    await sendMailInstance.sendMail(mailtemplate);
+    return {
+      resultCode: 0,
+      resultData: true,
+    };
+  } catch (err) {
+    return {
+      resultCode: -7,
+      resultData: null,
+      errMsg: err.toString(),
+    };
+  }
+}
+
+/**
+ * @description: 发送取消订单邮件
+ * @param {type}
+ * @return {type}
+ */
+async function sendCancelOrderEmail(params) {
+  let mailtemplate = {
+    from: `"小享兽" <${auth.user}>`,
+    to: params.curReceivers,
+    subject: `用户取消${bussinessType[params.snapshotDetail.biz_type]}订单`,
+    html: `<b>用户取消订单${
+      params.order_no
+    }，请勿再次接单</b><br/><b>订单号：</b>${
+      params.order_no
+    }<br/><b>乘车人：</b>${
+      params.snapshotDetail.contact_name
+    }<br/><b>手机号：</b>${
+      params.snapshotDetail.contact_phone
+    }<br/><b>用车时间：</b>${params.use_time}<br/><b>上车地点：</b>${
+      params.snapshotDetail.pick_info.name
+    }<br/>${
+      params.biz_type === 2
+        ? `<b>下车地点：</b>${params.snapshotDetail.drop_info.name}<br/>`
+        : ``
+    }<b>订单金额：</b>${
+      params.pay_price / 100
+    }元<br/><br/>用户取消已支付订单！请与客户确认<br/><br/>勿回复`,
   };
   try {
     await sendMailInstance.sendMail(mailtemplate);

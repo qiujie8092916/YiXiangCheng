@@ -484,7 +484,7 @@ const doCancelOrder = async (request) => {
     console.log(orderDetail);
 
     if (orderDetail.order_status === 1) {
-      //未支付 可取消
+      // 未支付 可取消但不发邮件
     } else if (orderDetail.order_status === 4) {
       return {
         resultCode: -1,
@@ -507,6 +507,14 @@ const doCancelOrder = async (request) => {
       };
     } else {
       is_refund = true;
+
+      await cloud.callFunction({
+        name: "sendMailController",
+        data: {
+          action: "sendCancelOrderEmail",
+          params: orderDetail,
+        },
+      });
 
       // 已支付 可取消
       const refundOrder = await createRefundOrder(orderDetail.order_no);
