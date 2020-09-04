@@ -40,6 +40,9 @@ exports.main = async (event, context) => {
     case "doCancelOrder": {
       return doCancelOrder(event.params);
     }
+    case "queryRefund": {
+      return queryRefund(event.params);
+    }
     case "checkOrderList": {
       return checkOrderList(event.params);
     }
@@ -198,6 +201,7 @@ const createWaitPayOrder = async (request) => {
           order_status: 1,
           pay_serial_no: null,
           pay_time: null,
+          refund_id: null,
           pay_way: 0,
           pay_price: 0,
           total_price: request.total_price,
@@ -428,6 +432,7 @@ const checkOrderDetail = async (request) => {
         pay_time: 1,
         use_time: 1,
         pay_price: 1,
+        refund_id: 1,
         refund_fee: 1,
         refund_time: 1,
         total_price: 1,
@@ -461,6 +466,9 @@ const checkOrderDetail = async (request) => {
  * @return {type}
  */
 const doCancelOrder = async (request) => {
+  let is_refund = false,
+    refund_id,
+    refund_fee;
   console.log(request.orderId, "order_no");
   try {
     const {
@@ -498,20 +506,27 @@ const doCancelOrder = async (request) => {
         errMsg: "订单已完成，不能取消订单",
       };
     } else {
+      is_refund = true;
+
       // 已支付 可取消
+      const refundOrder = await createRefundOrder(orderDetail.order_no);
+
       // 发起微信退款
-      const { returnCode, returnMsg } = await cloud.cloudPay.refund({
+      const { returnCode, returnMsg, ...rest } = await cloud.cloudPay.refund({
         sub_mch_id: wxPayComm.sub_mch_id, // 子商户号
         nonce_str: payRandomWord(), // 随机字符串
         transaction_id: orderDetail.pay_serial_no, // 微信订单号（与商户订单号二选一填入）
-        // out_trade_no: orderDetail.order_no, // 商户订单号
-        out_refund_no: orderDetail.order_no, //商户退款单号？用订单号？
+        out_trade_no: orderDetail.order_no, // 商户订单号
+        out_refund_no: refundOrder.refund_no, //商户退款单号？用订单号？
         total_fee: orderDetail.pay_price, // 订单金额（支付金额）
         refund_fee: orderDetail.pay_price, // 退款金额
         // refund_fee_type: 'CNY', // 货币种类
         // refund_desc: '用户主动发起退款',  // 退款原因
         // refund_account: // 退款资金来源
       });
+
+      refund_fee = rest.cashRefundFee;
+      refund_id = refundOrder.refund_id;
 
       log.info({ name: "微信退款返回参数", ...returnCode, ...returnMsg });
 
@@ -520,17 +535,29 @@ const doCancelOrder = async (request) => {
           resultCode: -2,
           errMsg: returnMsg,
         };
+      } else {
+        await updateRefundOrder(refund_id, rest);
       }
     }
 
     // 更新订单状态
-    await updateOrderStatusToCancel(request.orderId);
+    await updateOrderStatusToCancel({
+      order_no: request.orderId,
+      refund_id,
+      refund_fee,
+    });
 
-    return {
-      resultCode: 0,
-      resultData: true,
-    };
-    // TODO 待验证
+    if (is_refund) {
+      return {
+        resultCode: -2,
+        errMsg: "已发起退款，款项将会原路返回，请耐心等待",
+      };
+    } else {
+      return {
+        resultCode: 0,
+        resultData: true,
+      };
+    }
   } catch (e) {
     return {
       resultCode: -1,
@@ -540,12 +567,66 @@ const doCancelOrder = async (request) => {
   }
 };
 
+const createRefundOrder = async (order_no) => {
+  return new Promise((resolve, reject) => {
+    const { OPENID } = cloud.getWXContext();
+    const refund_no = genOrderNumber(+order_no.slice(0, 1));
+    const refundInfoDb = db.collection("refund_info");
+    refundInfoDb
+      .add({
+        data: {
+          user_id: OPENID,
+          update_time: null,
+          order_no: order_no,
+          refund_no: refund_no,
+          create_time: db.serverDate(),
+        },
+      })
+      .then((res) => {
+        resolve({ refund_id: res._id, refund_no });
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+const updateRefundOrder = async (refund_id, rest) => {
+  const refundInfoDb = db.collection("refund_info");
+  try {
+    await refundInfoDb
+      .where({
+        _id: refund_id,
+      })
+      .update({
+        data: {
+          ...rest,
+          update_time: db.serverDate(),
+        },
+      });
+    return {
+      resultCode: 0,
+      resultData: true,
+    };
+  } catch (e) {
+    return {
+      resultCode: -1,
+      resultData: null,
+      errMsg: e.toString(),
+    };
+  }
+};
+
 /**
  * @desc 取消订单，更新订单状态
  * @param {string} order_no
  * @return {Promise<void|ErrorEvent>}
  */
-const updateOrderStatusToCancel = async (order_no) => {
+const updateOrderStatusToCancel = async ({
+  order_no,
+  refund_id,
+  refund_fee,
+}) => {
   try {
     const orderInfoDb = db.collection("order_info");
     await orderInfoDb
@@ -555,6 +636,9 @@ const updateOrderStatusToCancel = async (order_no) => {
       .update({
         data: {
           order_status: 5,
+          refund_fee: refund_fee || 0,
+          refund_id: refund_id || null,
+          refund_time: db.serverDate(),
           update_time: db.serverDate(),
         },
       });
@@ -640,6 +724,23 @@ const genOrderListSql = () => {
         .done(),
       as: "driverDetail",
     })
+    .lookup({
+      from: "refund_info",
+      let: {
+        order_no: "$order_no",
+      },
+      pipeline: $.pipeline()
+        .match(_.expr($.eq(["$order_no", "$$order_no"])))
+        .project({
+          _id: 0,
+          user_id: 0,
+          order_id: 0,
+          create_time: 0,
+          update_time: 0,
+        })
+        .done(),
+      as: "refundDetail",
+    })
     .match({
       user_id: OPENID,
     })
@@ -652,6 +753,7 @@ const genOrderListSql = () => {
       pay_time: 1,
       use_time: 1,
       pay_price: 1,
+      refund_id: 1,
       refund_fee: 1,
       refund_time: 1,
       total_price: 1,
@@ -660,7 +762,32 @@ const genOrderListSql = () => {
       order_status: 1,
       commute_type: 1,
       charter_duration: 1,
+      refundDetail: $.arrayElemAt(["$refundDetail", 0]),
       driverDetail: $.arrayElemAt(["$driverDetail", 0]),
       snapshotDetail: $.arrayElemAt(["$snapshotDetail", 0]),
     });
+};
+
+const queryRefund = async (request) => {
+  try {
+    const { returnCode, returnMsg, ...rest } = await cloud.cloudPay.refund({
+      nonce_str: payRandomWord(), // 随机字符串
+      out_trade_no: request.orderId,
+      sub_mch_id: wxPayComm.sub_mch_id,
+    });
+
+    if (returnCode === "FAIL") {
+      throw returnMsg;
+    }
+
+    return {
+      resultCode: 0,
+      resultData: rest,
+    };
+  } catch (e) {
+    return {
+      resultCode: -1,
+      errMsg: (e.errMsg || e).toString(),
+    };
+  }
 };

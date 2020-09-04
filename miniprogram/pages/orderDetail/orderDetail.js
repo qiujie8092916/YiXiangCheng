@@ -241,4 +241,21 @@ Page({
       },
     });
   },
+
+  async queryRefund() {
+    const { result = {} } = await wx.cloud.callFunction({
+      name: "orderController",
+      data: {
+        action: "queryRefund",
+        params: {
+          orderId: this.orderId,
+        },
+      },
+    });
+
+    wx.showToast({
+      title: "请查看控制台",
+    });
+    console.log(result);
+  },
 });
