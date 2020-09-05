@@ -6,6 +6,7 @@ cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV,
 });
 
+const log = cloud.logger();
 const db = cloud.database();
 
 const auth = { user: "835413463@qq.com", pass: "sousifbnpxujbbif" };
@@ -62,11 +63,15 @@ async function sendApprovalUserEmail(params) {
       resultCode: 0,
       resultData: true,
     };
-  } catch (err) {
+  } catch (e) {
+    log.error({
+      func: "sendApprovalUserEmail",
+      abnormal: e,
+    });
     return {
       resultCode: -7,
       resultData: null,
-      errMsg: err.toString(),
+      errMsg: e.toString(),
     };
   }
 }
@@ -101,11 +106,15 @@ async function sendPickUpOrderEmail(params) {
       resultCode: 0,
       resultData: true,
     };
-  } catch (err) {
+  } catch (e) {
+    log.error({
+      func: "sendPickUpOrderEmail",
+      abnormal: e,
+    });
     return {
       resultCode: -7,
       resultData: null,
-      errMsg: err.toString(),
+      errMsg: e.toString(),
     };
   }
 }
@@ -144,11 +153,15 @@ async function sendCancelOrderEmail(params) {
       resultCode: 0,
       resultData: true,
     };
-  } catch (err) {
+  } catch (e) {
+    log.error({
+      func: "sendCancelOrderEmail",
+      abnormal: e,
+    });
     return {
       resultCode: -7,
       resultData: null,
-      errMsg: err.toString(),
+      errMsg: e.toString(),
     };
   }
 }

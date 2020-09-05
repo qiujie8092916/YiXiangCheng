@@ -62,9 +62,20 @@ async function getCellphone(event) {
     });
     const resultData = res.list[0].data;
 
-    return { resultCode: 0, resultData: resultData };
+    return {
+      resultCode: 0,
+      resultData: resultData,
+    };
   } catch (e) {
-    return { resultCode: -1, resultData: null, errMsg: e };
+    log.error({
+      func: "getCellphone",
+      abnormal: e,
+    });
+    return {
+      resultCode: -1,
+      resultData: null,
+      errMsg: e,
+    };
   }
 }
 
@@ -88,6 +99,10 @@ async function getUserInfo(request) {
       resultData: result.data[0] ? result.data[0] : null,
     };
   } catch (e) {
+    log.error({
+      func: "getUserInfo",
+      abnormal: e,
+    });
     return {
       resultCode: -1,
       resultData: null,
@@ -140,6 +155,10 @@ async function doReigsterCharter(request) {
       resultData: true,
     };
   } catch (e) {
+    log.error({
+      func: "doReigsterCharter",
+      abnormal: e,
+    });
     return {
       resultCode: -5,
       resultData: null,
@@ -191,6 +210,10 @@ async function isRegisterCommute(request) {
         errMsg: null,
       });
     } catch (e) {
+      log.error({
+        func: "isRegisterCommute",
+        abnormal: e,
+      });
       return resolve({
         resultCode: -1,
         resultData: null,
@@ -297,6 +320,10 @@ async function doRegisterCommute(request) {
         resultData: true,
       });
     } catch (e) {
+      log.error({
+        func: "doRegisterCommute",
+        abnormal: e,
+      });
       return resolve({
         resultCode: -6,
         resultData: null,
@@ -333,6 +360,10 @@ const updateUserInfoFromCharterToCommute = async (request) => {
         });
       return resolve();
     } catch (e) {
+      log.error({
+        func: "updateUserInfoFromCharterToCommute",
+        abnormal: e,
+      });
       return reject(e);
     }
   });
@@ -366,6 +397,10 @@ const addUserInfoToCommute = async (request) => {
       });
       return resolve();
     } catch (e) {
+      log.error({
+        func: "addUserInfoToCommute",
+        abnormal: e,
+      });
       return reject(e);
     }
   });
@@ -439,6 +474,10 @@ const getUserCompany = async (request) => {
       errMsg: null,
     };
   } catch (e) {
+    log.error({
+      func: "getUserCompany",
+      abnormal: e,
+    });
     return {
       resultCode: -1,
       resultData: null,

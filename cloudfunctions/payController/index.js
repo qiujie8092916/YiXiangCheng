@@ -43,8 +43,8 @@ exports.main = async (event) => {
     };
   } catch (e) {
     log.error({
-      name: "支付后回调失败",
-      value: e,
+      func: "payController",
+      abnormal: e,
     });
     return {
       errcode: -1,
@@ -84,8 +84,8 @@ const sendEmail = (event) => {
       resolve();
     } catch (e) {
       log.error({
-        name: "sendEmail",
-        value: e,
+        func: "sendEmail",
+        abnormal: e,
       });
       reject(e);
     }

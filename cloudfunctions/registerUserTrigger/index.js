@@ -26,7 +26,8 @@ exports.main = async (event, context) => {
     });
   } catch (e) {
     log.error({
-      value: e,
+      func: "registerUserTrigger",
+      abnormal: e,
     });
   }
 };
@@ -75,13 +76,15 @@ async function approvalUserMessage(user) {
           });
       } else {
         log.error({
+          name: "发送注册成功订阅消息失败",
           value: result.errMsg,
         });
       }
     }
-  } catch (error) {
+  } catch (e) {
     log.error({
-      value: error.errMsg,
+      func: "approvalUserMessage",
+      abnormal: e,
     });
   }
 }

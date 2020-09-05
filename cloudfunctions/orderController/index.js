@@ -156,6 +156,10 @@ const createPerpayRequest = async (request) => {
       resultData: prePayResult,
     };
   } catch (e) {
+    log.error({
+      func: "createPerpayRequest",
+      abnormal: e,
+    });
     return {
       resultCode: -1,
       resultData: null,
@@ -235,14 +239,13 @@ const createWaitPayOrder = async (request) => {
         };
       })
       .catch((err) => {
-        return {
-          resultCode: -1,
-          resultData: null,
-          errMsg: err,
-        };
+        throw err;
       });
   } catch (e) {
-    console.log(e);
+    log.error({
+      func: "createWaitPayOrder",
+      abnormal: e,
+    });
     return {
       resultCode: -1,
       resultData: null,
@@ -306,18 +309,18 @@ const updateOrderSnapshot = async (request) => {
           resultData: res,
         };
       })
-      .catch((err) => {
-        return {
-          resultCode: -1,
-          resultData: null,
-          errMsg: err,
-        };
+      .catch((e) => {
+        throw e;
       });
-  } catch (error) {
+  } catch (e) {
+    log.error({
+      func: "updateOrderSnapshot",
+      abnormal: e,
+    });
     return {
       resultCode: -1,
       resultData: null,
-      errMsg: err,
+      errMsg: e,
     };
   }
 };
@@ -345,6 +348,10 @@ const getAddressInfo = async (address_id) => {
         }
       : {};
   } catch (e) {
+    log.error({
+      func: "getAddressInfo",
+      abnormal: e,
+    });
     return {};
   }
 };
@@ -371,6 +378,10 @@ const getUserInfo = async () => {
         }
       : {};
   } catch (e) {
+    log.error({
+      func: "getUserInfo",
+      abnormal: e,
+    });
     return {};
   }
 };
@@ -470,6 +481,10 @@ const checkOrderDetail = async (request) => {
       resultData: result.list.length ? result.list[0] : null,
     };
   } catch (e) {
+    log.error({
+      func: "checkOrderDetail",
+      abnormal: e,
+    });
     return {
       resultCode: -1,
       resultData: null,
@@ -585,6 +600,10 @@ const doCancelOrder = async (request) => {
       };
     }
   } catch (e) {
+    log.error({
+      func: "doCancelOrder",
+      abnormal: e,
+    });
     return {
       resultCode: -1,
       resultData: null,
@@ -612,6 +631,10 @@ const createRefundOrder = async (order_no) => {
         resolve({ refund_id: res._id, refund_no });
       })
       .catch((err) => {
+        log.error({
+          func: "createRefundOrder",
+          abnormal: err,
+        });
         reject(err);
       });
   });
@@ -635,6 +658,10 @@ const updateRefundOrder = async (refund_id, rest) => {
       resultData: true,
     };
   } catch (e) {
+    log.error({
+      func: "updateRefundOrder",
+      abnormal: e,
+    });
     return {
       resultCode: -1,
       resultData: null,
@@ -670,6 +697,10 @@ const updateOrderStatusToCancel = async ({
       });
     return await Promise.resolve();
   } catch (e) {
+    log.error({
+      func: "updateOrderStatusToCancel",
+      abnormal: e,
+    });
     return await Promise.reject(e);
   }
 };
@@ -698,6 +729,10 @@ const checkOrderList = async (request) => {
       },
     };
   } catch (e) {
+    log.error({
+      func: "checkOrderList",
+      abnormal: e,
+    });
     return {
       resultCode: -1,
       resultData: null,
@@ -811,6 +846,10 @@ const queryRefund = async (request) => {
       resultData: rest,
     };
   } catch (e) {
+    log.error({
+      func: "queryRefund",
+      abnormal: e,
+    });
     return {
       resultCode: -1,
       errMsg: (e.errMsg || e).toString(),

@@ -26,6 +26,7 @@ cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV,
 });
 
+const log = cloud.logger();
 const db = cloud.database();
 
 // 云函数入口函数
@@ -61,7 +62,10 @@ const getCompany = async () => {
       errMsg: null,
     };
   } catch (e) {
-    console.error(e);
+    log.error({
+      func: "getCompany",
+      abnormal: e,
+    });
     return {
       resultCode: -1,
       resultData: null,
@@ -84,7 +88,10 @@ const getPick = async (request) => {
       errMsg: null,
     };
   } catch (e) {
-    console.error(e);
+    log.error({
+      func: "getPick",
+      abnormal: e,
+    });
     return {
       resultCode: -1,
       resultData: null,
@@ -106,7 +113,10 @@ const getAddressById = async (request) => {
       errMsg: null,
     };
   } catch (e) {
-    console.error(e);
+    log.error({
+      func: "getAddressById",
+      abnormal: e,
+    });
     return {
       resultCode: -1,
       resultData: null,

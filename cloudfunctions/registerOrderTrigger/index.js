@@ -30,7 +30,8 @@ exports.main = async (event, context) => {
     });
   } catch (e) {
     log.error({
-      value: e,
+      func: "registerOrderTrigger",
+      abnormal: e,
     });
   }
 };
@@ -98,9 +99,10 @@ async function sendSubscribeMessage({ order_no, user_id }) {
         value: result.errMsg,
       });
     }
-  } catch (error) {
+  } catch (e) {
     log.error({
-      value: error,
+      func: "sendSubscribeMessage",
+      abnormal: e,
     });
   }
 }
