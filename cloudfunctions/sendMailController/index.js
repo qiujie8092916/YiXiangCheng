@@ -140,7 +140,7 @@ async function sendCancelOrderEmail(params) {
     }<br/><b>用车时间：</b>${params.use_time}<br/><b>上车地点：</b>${
       params.snapshotDetail.pick_info.name
     }<br/>${
-      params.biz_type === 2
+      params.snapshotDetail.biz_type === 2
         ? `<b>下车地点：</b>${params.snapshotDetail.drop_info.name}<br/>`
         : ``
     }<b>订单金额：</b>${
