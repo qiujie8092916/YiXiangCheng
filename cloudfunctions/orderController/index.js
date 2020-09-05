@@ -420,6 +420,23 @@ const checkOrderDetail = async (request) => {
           .done(),
         as: "driverDetail",
       })
+      .lookup({
+        from: "refund_info",
+        let: {
+          order_no: "$order_no",
+        },
+        pipeline: $.pipeline()
+          .match(_.expr($.eq(["$order_no", "$$order_no"])))
+          .project({
+            _id: 0,
+            user_id: 0,
+            order_id: 0,
+            create_time: 0,
+            update_time: 0,
+          })
+          .done(),
+        as: "refundDetail",
+      })
       .match({
         order_no: request.orderId,
       })
@@ -442,6 +459,7 @@ const checkOrderDetail = async (request) => {
         commute_type: 1,
         pay_serial_no: 1,
         charter_duration: 1,
+        refundDetail: $.arrayElemAt(["$refundDetail", 0]),
         driverDetail: $.arrayElemAt(["$driverDetail", 0]),
         snapshotDetail: $.arrayElemAt(["$snapshotDetail", 0]),
       })
