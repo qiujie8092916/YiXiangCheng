@@ -4,6 +4,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    isInit: true, // 是否是第一次初始化
     orderList: [], // 订单列表
     loading: true,
     rows: 0, // 总条数
@@ -110,6 +111,7 @@ Page({
 
       this.setData({
         rows,
+        isInit: false,
         orderList:
           this.data.pageIndex === 0 ? data : [...this.data.orderList, ...data],
       });

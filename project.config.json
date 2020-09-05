@@ -26,7 +26,7 @@
 		},
 		"bundle": false,
 		"useIsolateContext": true,
-		"useCompilerModule": false,
+		"useCompilerModule": true,
 		"userConfirmedUseCompilerModuleSwitch": false
 	},
 	"appid": "wx94d678914b78155d",
@@ -96,7 +96,7 @@
 					"id": 5,
 					"name": "订单详情",
 					"pathName": "pages/orderDetail/orderDetail",
-					"query": "orderId=259907029782Sc",
+					"query": "orderId=259915205962Sc",
 					"scene": null
 				},
 				{

@@ -1,5 +1,6 @@
 /* miniprogram/pages/orderList/orderList.wxss */
 @import "../../fonts/iconfont.wxss";
+@import "./orderList.skeleton.wxss";
 @import "../../app.wxss";
 
 .order-list {
