@@ -79,8 +79,9 @@
           <block
             wx:if="{{snapshotDetail.pick_info.province || snapshotDetail.pick_info.city || snapshotDetail.pick_info.name}}"
           >
-            {{snapshotDetail.pick_info.province + snapshotDetail.pick_info.city
-            + snapshotDetail.pick_info.name}}
+            {{(snapshotDetail.pick_info.province || '') +
+            (snapshotDetail.pick_info.city || '') +
+            (snapshotDetail.pick_info.name || '')}}
           </block>
           <block wx:else>--</block>
         </view>
@@ -92,8 +93,9 @@
             <block
               wx:if="{{snapshotDetail.drop_info.province || snapshotDetail.drop_info.city || snapshotDetail.drop_info.name}}"
             >
-              {{snapshotDetail.drop_info.province +
-              snapshotDetail.drop_info.city + snapshotDetail.drop_info.name}}
+              {{(snapshotDetail.drop_info.province || '') +
+              (snapshotDetail.drop_info.city || '') +
+              (snapshotDetail.drop_info.name || '')}}
             </block>
             <block wx:else>--</block>
           </view>
