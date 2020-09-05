@@ -18,8 +18,8 @@ const db = cloud.database();
 // 云函数入口函数
 exports.main = async (event) => {
   log.info(event);
+
   const orderInfoDb = db.collection("order_info");
-  let mailInfo = {};
 
   try {
     await orderInfoDb
@@ -35,46 +35,15 @@ exports.main = async (event) => {
         },
       });
 
-    log.info({
-      name: "支付后查询订单详情订单号",
-      value: event.outTradeNo,
-    });
-
-    const res = await cloud.callFunction({
-      name: "orderController",
-      data: {
-        action: "checkOrderDetail",
-        params: {
-          orderId: event.outTradeNo,
-        },
-      },
-    });
-
-    log.info({
-      name: "支付后查询订单详情",
-      value: res.result.resultData,
-    });
-    if (res && res.result && res.result.resultData) {
-      mailInfo = res.result.resultData;
-    } else {
-      throw "订单详情查询失败";
-    }
-
-    await cloud.callFunction({
-      name: "sendMailController",
-      data: {
-        action: "sendPickUpOrderEmail",
-        params: mailInfo,
-      },
-    });
+    sendEmail(event).catch();
 
     return {
       errcode: 0,
       errmsg: "支付回调成功",
     };
   } catch (e) {
-    log.info({
-      name: "支付后更新数据库失败",
+    log.error({
+      name: "支付后回调失败",
       value: e,
     });
     return {
@@ -82,4 +51,43 @@ exports.main = async (event) => {
       errmsg: "支付回调失败",
     };
   }
+};
+
+const sendEmail = (event) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      //查询订单详情 给到邮件内容
+      const { result = {} } = await cloud.callFunction({
+        name: "orderController",
+        data: {
+          action: "checkOrderDetail",
+          params: {
+            orderId: event.outTradeNo,
+          },
+        },
+      });
+
+      const orderInfo = result.resultData;
+
+      log.info({
+        name: "支付后查询订单详情",
+        value: orderInfo,
+      });
+
+      cloud.callFunction({
+        name: "sendMailController",
+        data: {
+          action: "sendPickUpOrderEmail",
+          params: orderInfo,
+        },
+      });
+      resolve();
+    } catch (e) {
+      log.error({
+        name: "sendEmail",
+        value: e,
+      });
+      reject(e);
+    }
+  });
 };
