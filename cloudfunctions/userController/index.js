@@ -121,7 +121,7 @@ async function doReigsterCharter(request) {
     await db.collection("user_info").add({
       data: [
         {
-          status: 0,
+          status: 1, //包车注册，直接通过
           user_id: OPENID,
           union_id: UNIONID,
           employment_certificate: "",
@@ -244,18 +244,25 @@ async function doRegisterCommute(request) {
       });
     }
 
+    log.info({ name: "用户注册参数", ...request });
+
     try {
       const { OPENID, UNIONID } = cloud.getWXContext();
-      const exist = await db
-        .collection("user_info")
+      const userInfoDB = db.collection("user_info");
+
+      const exist = await userInfoDB
         .where({
           user_id: OPENID,
         })
         .get();
 
       if (exist.data.length) {
-        if (exist.data[0].employment_certificate && exist.data[0].address_id) {
-          if (exist.data[0].status === 0) {
+        //找到用户数据
+        const userInfo = exist.data[0];
+
+        if (userInfo.employment_certificate && userInfo.address_id) {
+          // 如果用户已经通勤注册，则友好提示
+          if (userInfo.status === 0) {
             return resolve({
               resultCode: -8,
               resultData: null,
@@ -268,26 +275,14 @@ async function doRegisterCommute(request) {
               errMsg: "用户已注册",
             });
           }
+        } else {
+          // 用户已经包车注册，则更新数据
+          await updateUserInfoFromCharterToCommute(request);
         }
+      } else {
+        //为找到用户数据，则插入数据
+        await addUserInfoToCommute(request);
       }
-      log.info(request);
-      await db.collection("user_info").add({
-        data: [
-          {
-            status: 0,
-            is_send: false,
-            user_id: OPENID,
-            union_id: UNIONID,
-            user_name: request.name,
-            user_phone: request.phone,
-            address_id: request.company,
-            create_time: db.serverDate(),
-            update_time: db.serverDate(),
-            is_subscribe: request.isSubscribe,
-            employment_certificate: request.fileId,
-          },
-        ],
-      });
 
       await cloud.callFunction({
         name: "sendMailController",
@@ -310,6 +305,71 @@ async function doRegisterCommute(request) {
     }
   });
 }
+
+/**
+ * @desc 若用户已经包车注册过，则更新数据
+ * @return {Promise<void>}
+ */
+const updateUserInfoFromCharterToCommute = async (request) => {
+  return new Promise(async (resolve, reject) => {
+    const { OPENID, UNIONID } = cloud.getWXContext();
+    const userInfoDB = db.collection("user_info");
+    try {
+      await userInfoDB
+        .where({
+          user_id: OPENID,
+        })
+        .update({
+          data: {
+            status: 0,
+            is_send: false,
+            user_name: request.name,
+            user_phone: request.phone,
+            address_id: request.company,
+            update_time: db.serverDate(),
+            is_subscribe: request.isSubscribe,
+            employment_certificate: request.fileId,
+          },
+        });
+      return resolve();
+    } catch (e) {
+      return reject(e);
+    }
+  });
+};
+
+/**
+ * @desc 若用户未注册，则插入数据
+ * @return {Promise<void>}
+ */
+const addUserInfoToCommute = async (request) => {
+  return new Promise(async (resolve, reject) => {
+    const { OPENID, UNIONID } = cloud.getWXContext();
+    const userInfoDB = db.collection("user_info");
+    try {
+      await userInfoDB.add({
+        data: [
+          {
+            status: 0,
+            is_send: false,
+            user_id: OPENID,
+            union_id: UNIONID,
+            user_name: request.name,
+            user_phone: request.phone,
+            address_id: request.company,
+            create_time: db.serverDate(),
+            update_time: db.serverDate(),
+            is_subscribe: request.isSubscribe,
+            employment_certificate: request.fileId,
+          },
+        ],
+      });
+      return resolve();
+    } catch (e) {
+      return reject(e);
+    }
+  });
+};
 
 /**
  * @desc 获取通勤注册用户的公司地址
