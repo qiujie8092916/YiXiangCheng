@@ -1,5 +1,5 @@
 // miniprogram/pages/orderDetail/orderDetail.js
-import { dateFormat } from "../../utils/index";
+import { dateFormat, Order } from "../../utils/index";
 
 Page({
   /**
@@ -11,7 +11,7 @@ Page({
     driverDetail: {}, // 司机详情
     snapshotDetail: {}, // 快照详情
     watcher: null, // 监听器
-    loading: true,
+    loading: true, // loading
     isloading: true, // 是否要显示loading 第一次进入需要 watch时不需要
   },
 
@@ -19,12 +19,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function ({ orderId }) {
-    console.log(orderId, "订单id");
     this.orderId = orderId;
-    this.init();
     wx.setNavigationBarTitle({
       title: `订单号：${this.orderId}`,
     });
+    this.init();
   },
 
   /**
@@ -242,6 +241,11 @@ Page({
     });
   },
 
+  /**
+   * @description: 发起退款
+   * @param {type}
+   * @return {type}
+   */
   async queryRefund() {
     const { result = {} } = await wx.cloud.callFunction({
       name: "orderController",
@@ -257,5 +261,26 @@ Page({
       title: "请查看控制台",
     });
     console.log(result);
+  },
+
+  /**
+   * @description: 重新支付
+   * @param {type}
+   * @return {type}
+   */
+  requestRePayment() {
+    Order.invokePay(this.orderId, this.data.snapshotDetail.payment_info)
+      .then(() => {
+        wx.showToast({
+          title: "支付成功",
+        });
+      })
+      .catch((e) => {
+        console.error(e);
+        wx.showToast({
+          title: "网络异常",
+        });
+      })
+      .finally(() => {});
   },
 });

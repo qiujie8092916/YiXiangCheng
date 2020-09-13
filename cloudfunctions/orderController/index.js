@@ -46,6 +46,9 @@ exports.main = async (event, context) => {
     case "checkOrderList": {
       return checkOrderList(event.params);
     }
+    case "checkWaitPayOrder": {
+      return checkWaitPayOrder(event.params);
+    }
     default: {
       return;
     }
@@ -136,6 +139,7 @@ const createPerpayRequest = async (request) => {
     prePayResult = Object.assign({}, res, { outTradeNo: _outTradeNo });
 
     createOrderParams = Object.assign({}, request, {
+      payment: res.payment,
       outTradeNo: _outTradeNo,
     });
 
@@ -304,6 +308,7 @@ const updateOrderSnapshot = async (request) => {
           contact_name,
           contact_phone,
           biz_type: request.bizType,
+          payment_info: request.payment,
           create_time: db.serverDate(),
           update_time: db.serverDate(),
         },
@@ -860,6 +865,34 @@ const queryRefund = async (request) => {
     return {
       resultCode: -1,
       errMsg: (e.errMsg || e).toString(),
+    };
+  }
+};
+
+/**
+ * @description: 检查有无待支付订单
+ * @param {type}
+ * @return {type}
+ */
+const checkWaitPayOrder = async (request) => {
+  const { OPENID } = cloud.getWXContext();
+  try {
+    const orderInfoDb = db.collection("order_info");
+    const list = await orderInfoDb
+      .where({
+        order_status: 1,
+        user_id: OPENID,
+      })
+      .get();
+
+    return {
+      resultCode: 0,
+      resultData: list.data,
+    };
+  } catch (error) {
+    return {
+      resultCode: -1,
+      resultData: null,
     };
   }
 };

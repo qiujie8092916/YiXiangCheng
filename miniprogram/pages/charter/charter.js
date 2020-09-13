@@ -309,7 +309,7 @@ Page({
   /**
    * 预支付询问订阅
    */
-  async gotoPayforOrder() {
+  gotoPayforOrder() {
     if (!this.preSubmit()) return;
     let _params = {
       departure: this.data.departureDefault,
@@ -330,9 +330,37 @@ Page({
       bizType: bussinessType.charter,
       total_price: 1, // this.data.charterMoney
     };
-
-    const is_subscribe = await Order.subscribeOrderStatus();
-    this.createWaitPayOrder({ is_subscribe, ..._params });
+    wx.cloud
+      .callFunction({
+        name: "orderController",
+        data: {
+          action: "checkWaitPayOrder",
+        },
+      })
+      .then(async (res) => {
+        if (
+          res &&
+          res.result &&
+          res.result.resultData &&
+          res.result.resultData.length > 0
+        ) {
+          wx.showModal({
+            title: "提示",
+            content: "您还有未支付订单",
+            showCancel: false,
+          });
+        } else {
+          const is_subscribe = await Order.subscribeOrderStatus();
+          this.createWaitPayOrder({ is_subscribe, ..._params });
+        }
+      })
+      .catch((e) => {
+        wx.showModal({
+          title: "提示",
+          content: "请稍后重试",
+          showCancel: false,
+        });
+      });
   },
 
   /**
@@ -342,7 +370,9 @@ Page({
     console.log(_params, "下单参数");
     Order.createOrder(_params).then((prePayResult) => {
       Order.invokePay(prePayResult.outTradeNo, prePayResult.payment)
-        .catch((e) => console.error(e))
+        .catch((e) => {
+          console.error(e);
+        })
         .finally(() => {
           wx.navigateTo({
             url: `/pages/orderDetail/orderDetail?orderId=${prePayResult.outTradeNo}`,

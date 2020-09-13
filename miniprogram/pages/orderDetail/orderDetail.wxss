@@ -494,8 +494,9 @@ page {
 }
 
 .order-cancel {
-  font-size: 29rpx;
+  font-size: 35rpx;
   color: #3184c7;
+  margin-left: 20rpx;
   font-family: PingFangSC-Medium, PingFang SC;
   font-weight: 500;
 }

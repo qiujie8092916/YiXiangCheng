@@ -127,9 +127,17 @@
     </view>
     <view wx:if="{{isFetched}}" class="order-control flex-center">
       <block
-        wx:if="{{orderDetail.order_status === 1 || orderDetail.order_status === 2 || orderDetail.order_status === 3}}"
+        wx:if="{{orderDetail.order_status === 2 || orderDetail.order_status === 3}}"
       >
         <view class="order-more flex-center" catchtap="cancelOrder"
+          >取消订单</view
+        >
+      </block>
+      <block wx:elif="{{orderDetail.order_status === 1}}">
+        <view class="order-more flex-center" catchtap="requestRePayment"
+          >重新支付</view
+        >
+        <view class="order-cancel flex-center" catchtap="cancelOrder"
           >取消订单</view
         >
       </block>
