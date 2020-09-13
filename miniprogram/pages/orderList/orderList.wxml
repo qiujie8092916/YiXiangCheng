@@ -15,6 +15,7 @@
         money="{{order.total_price / 100}}"
         type="{{order.snapshotDetail.biz_type === 1 ? 'charter' : 'commute'}}"
         chartertime="{{order.charter_duration}}"
+        charterday="{{order.charter_day}}"
         charterdepart="{{order.snapshotDetail.pick_info.name}}"
         commutedepart="{{order.snapshotDetail.pick_info.name}}"
         commutedestination="{{order.snapshotDetail.drop_info.name}}"

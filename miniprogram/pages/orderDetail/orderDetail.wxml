@@ -115,7 +115,7 @@
         <view class="desc-one">套餐：</view>
         <view class="desc-two">
           <block wx:if="{{snapshotDetail.biz_type === 1}}">
-            {{orderDetail.charter_duration}}小时
+            {{orderDetail.charter_day}}天{{orderDetail.charter_duration}}小时
           </block>
           <block wx:elif="{{snapshotDetail.biz_type === 2}}">
             <block wx:if="{{!orderDetail.commute_way}}">拼车</block>

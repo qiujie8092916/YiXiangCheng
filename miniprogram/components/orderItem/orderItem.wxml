@@ -12,7 +12,7 @@
     <view wx:if="{{type === 'charter'}}" class="order-line">
       <text>{{charterdepart}}</text>
       <text class="split-tag">-</text>
-      <text>{{chartertime}}小时</text>
+      <text>{{charterday}}天{{chartertime}}小时</text>
     </view>
     <view wx:else class="order-line">
       <text>{{commutedepart}}</text>

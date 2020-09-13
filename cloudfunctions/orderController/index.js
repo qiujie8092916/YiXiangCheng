@@ -175,6 +175,7 @@ const createPerpayRequest = async (request) => {
  * @param {String} request.departure_time 用车时间
  * @param {String} request.bizType 用车类型
  * @param {String} request.charter_duration 包车时长（包车特殊字段）
+ * @param {String} request.charter_day 包车天数（包车特殊字段）
  * @param {String} request.commute_way 通勤方式 0-拼车 1-独享（通勤特殊字段）
  * @param {String} request.commute_type 通勤时长 0-回家 1-上班（通勤特殊字段）
  * @param {Number} request.order_status 订单状态
@@ -221,6 +222,10 @@ const createWaitPayOrder = async (request) => {
           charter_duration:
             request.bizType === bussinessType.charter
               ? request.charter_duration
+              : null, //包车特殊字段
+          charter_day:
+            request.bizType === bussinessType.charter
+              ? request.charter_day
               : null, //包车特殊字段
           commute_way:
             request.bizType === bussinessType.commute
@@ -470,6 +475,7 @@ const checkOrderDetail = async (request) => {
         commute_type: 1,
         pay_serial_no: 1,
         charter_duration: 1,
+        charter_day: 1,
         refundDetail: $.arrayElemAt(["$refundDetail", 0]),
         driverDetail: $.arrayElemAt(["$driverDetail", 0]),
         snapshotDetail: $.arrayElemAt(["$snapshotDetail", 0]),
@@ -823,6 +829,7 @@ const genOrderListSql = () => {
       order_status: 1,
       commute_type: 1,
       charter_duration: 1,
+      charter_day: 1,
       refundDetail: $.arrayElemAt(["$refundDetail", 0]),
       driverDetail: $.arrayElemAt(["$driverDetail", 0]),
       snapshotDetail: $.arrayElemAt(["$snapshotDetail", 0]),

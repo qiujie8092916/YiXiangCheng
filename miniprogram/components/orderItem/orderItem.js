@@ -20,6 +20,10 @@ Component({
       type: Number,
       value: 8,
     },
+    charterday: {
+      type: Number,
+      value: 1,
+    },
     charterdepart: {
       type: String,
       value: "包车出发地",

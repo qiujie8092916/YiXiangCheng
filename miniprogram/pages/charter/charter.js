@@ -27,7 +27,45 @@ Page({
         value: "8小时",
         money: 800,
       },
+      {
+        key: "twelve",
+        value: "12小时",
+        money: 1200,
+      },
     ],
+    charterdays: [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+    ],
+    charterDayIdx: 0,
     moneyMap: {
       four: 400,
       eight: 800,
@@ -279,7 +317,13 @@ Page({
         isAfter(normalDateformat(this.data.departure_time))
           ? this.data.departure_time
           : currentDatetime(),
-      charter_duration: this.data.activeDuration === "four" ? 4 : 8,
+      charter_duration:
+        this.data.activeDuration === "four"
+          ? 4
+          : this.data.activeDuration === "eight"
+          ? 8
+          : 12,
+      charter_day: JSON.parse(this.data.charterDayIdx) + 1, // 包车天数
       phone: this.data.phone,
       contact_name: this.data.contact_name,
       bizType: bussinessType.charter,
@@ -367,6 +411,12 @@ Page({
   checkCharterPrice() {
     this.setData({
       charterMoney: this.data.moneyMap[this.data.activeDuration],
+    });
+  },
+
+  bindDayChange(e) {
+    this.setData({
+      charterDayIdx: e.detail.value,
     });
   },
 

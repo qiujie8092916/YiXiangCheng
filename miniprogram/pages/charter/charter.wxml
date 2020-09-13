@@ -15,7 +15,7 @@
   </view>
   <!-- 套餐选择 -->
   <view class="duration flex-center">
-    <view class="duration-con flex-between">
+    <view class="duration-con">
       <view
         wx:for="{{duration}}"
         wx:key="key"
@@ -28,6 +28,25 @@
           wx:if="{{activeDuration === item.key}}"
           class="iconfont youxiajiaogouxuan duration-selected"
         ></view>
+      </view>
+    </view>
+  </view>
+  <view class="charter-day colcc">
+    <view class="collt marginbot full">
+      <view class="label">用车天数</view>
+      <view class="rowst full">
+        <picker
+          header-text="用车天数"
+          bindchange="bindDayChange"
+          value="{{charterDayIdx}}"
+          range="{{charterdays}}"
+          class="picker-day"
+        >
+          <view class="day-picker flex-between">
+            <view>{{charterdays[charterDayIdx]}}</view>
+            <view class="iconfont shangxiajiantou- jiantou"></view>
+          </view>
+        </picker>
       </view>
     </view>
   </view>

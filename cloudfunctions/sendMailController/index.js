@@ -93,6 +93,11 @@ async function sendPickUpOrderEmail(params) {
     }<br/><b>用车时间：</b>${params.use_time}<br/><b>上车地点：</b>${
       params.snapshotDetail.pick_info.name
     }<br/>${
+      params.snapshotDetail.biz_type === 1
+        ? `<b>包车时长：</b>${params.charter_day}天${params.charter_duration}小时<br/>`
+        : ``
+    }<br/>
+    ${
       params.snapshotDetail.biz_type === 2
         ? `<b>下车地点：</b>${params.snapshotDetail.drop_info.name}<br/>`
         : ``

@@ -17,10 +17,14 @@ page {
   padding-bottom: 35rpx;
   margin-top: 60rpx;
 }
+.duration {
+  padding-left: 195rpx;
+  padding-right: 120rpx;
+}
 
 .duration-con {
-  padding-left: 185rpx;
-  padding-right: 138rpx;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .duration-it {
@@ -32,7 +36,8 @@ page {
 }
 
 .duration-it:first-child {
-  margin-right: 47rpx;
+  margin-right: 45rpx;
+  margin-bottom: 30rpx;
 }
 
 .duration-active {
@@ -51,8 +56,13 @@ page {
   bottom: -2rpx;
 }
 
-.register-info {
+.charter-day {
   margin-top: 45rpx;
+  padding-left: 162rpx;
+  padding-right: 95rpx;
+}
+
+.register-info {
   padding-left: 162rpx;
   padding-right: 95rpx;
 }
@@ -136,4 +146,22 @@ page {
 
 .checkbox.error {
   border: initial;
+}
+
+.picker-day {
+  width: 100%;
+}
+
+.day-picker {
+  height: 65rpx;
+  color: #212b36;
+  padding-left: 24rpx;
+  padding-right: 24rpx;
+  border-radius: 5rpx;
+  font-size: 27rpx;
+  border: 2rpx solid #cecece;
+}
+
+.jiantou {
+  font-size: 22rpx;
 }
