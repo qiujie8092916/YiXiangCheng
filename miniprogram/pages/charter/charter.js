@@ -69,6 +69,7 @@ Page({
     moneyMap: {
       four: 400,
       eight: 800,
+      twelve: 1200,
     }, // 价格表
     activeDuration: "four", // 套餐时长
     charterMoney: 0, // 当前时间
