@@ -340,11 +340,46 @@ Page({
   async onsubmit() {
     if (!this.preSubmit()) return;
 
-    const is_subscribe = await Order.subscribeOrderStatus();
+    wx.cloud
+      .callFunction({
+        name: "orderController",
+        data: {
+          action: "checkWaitPayOrder",
+        },
+      })
+      .then(async (res) => {
+        if (
+          res &&
+          res.result &&
+          res.result.resultData &&
+          res.result.resultData.length > 0
+        ) {
+          wx.showModal({
+            title: "提示",
+            content: "您还有未支付订单",
+            showCancel: false,
+          });
+        } else {
+          const params = this.genParams();
+          const is_subscribe = await Order.subscribeOrderStatus();
+          this.createWaitPayOrder({ is_subscribe, ...params });
+        }
+      })
+      .catch((e) => {
+        wx.showModal({
+          title: "提示",
+          content: "请稍后重试",
+          showCancel: false,
+        });
+      });
+  },
 
-    const params = this.genParams();
-
-    Order.createOrder({ is_subscribe, ...params }).then((prePayResult) => {
+  /**
+   * 下待支付订单
+   */
+  createWaitPayOrder(params) {
+    console.log(params, "下单参数");
+    Order.createOrder(params).then((prePayResult) => {
       Order.invokePay(prePayResult.outTradeNo, prePayResult.payment)
         .catch((e) => console.error(e))
         .finally(() => {
