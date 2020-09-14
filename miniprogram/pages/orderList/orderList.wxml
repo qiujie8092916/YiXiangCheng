@@ -7,10 +7,11 @@
     <block wx:if="{{orderList.length > 0}}">
       <order-item
         bindchooseOrder="chooseCurOrder"
-        data-id="{{order.order_no}}"
         wx:for="{{orderList}}"
-        wx:key="idx"
+        wx:key="index"
         wx:for-item="order"
+        data-index="{{index}}"
+        data-id="{{order.order_no}}"
         status="{{order.order_status}}"
         money="{{order.total_price / 100}}"
         type="{{order.snapshotDetail.biz_type === 1 ? 'charter' : 'commute'}}"
