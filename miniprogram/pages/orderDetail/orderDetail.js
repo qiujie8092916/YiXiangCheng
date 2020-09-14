@@ -64,26 +64,6 @@ Page({
   // onShareAppMessage: function () {},
 
   /**
-   * 订单详情(watch默认触发一次 不再需要手动查询)
-   */
-  checkOrderDetail: function (orderId) {
-    wx.cloud
-      .callFunction({
-        name: "orderController",
-        data: {
-          action: "createPerpayRequest",
-          params: _params,
-        },
-      })
-      .then((res) => {
-        console.log(res, "订单详情查询成功");
-      })
-      .catch((err) => {
-        console.log(err, "订单详情查询失败");
-      });
-  },
-
-  /**
    * 订单详情监听器
    */
   registerWatcher() {
@@ -140,6 +120,14 @@ Page({
         "YYYY年MM月DD日 HH:mm"
       );
 
+      if (snapshotDetail.pick_info.province === snapshotDetail.pick_info.city) {
+        snapshotDetail.pick_info.province = "";
+      }
+
+      if (snapshotDetail.drop_info.province === snapshotDetail.drop_info.city) {
+        snapshotDetail.drop_info.province = "";
+      }
+
       this.setData({
         isFetched: true,
         orderDetail,
@@ -148,7 +136,17 @@ Page({
         loading: false,
         isloading: false,
       });
+
       wx.hideLoading();
+
+      if (orderDetail.order_status === 1) {
+        // 待支付
+        wx.showToast({
+          icon: "none",
+          duration: 3000,
+          title: "请尽快支付！15分钟后未支付，则会自动取消该订单",
+        });
+      }
     } catch (e) {
       return wx.showToast({
         icon: "none",
