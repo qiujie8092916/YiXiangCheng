@@ -283,6 +283,7 @@ page {
   opacity: 1;
   animation-fill-mode: both;
   background-color: #f0f2f5;
+  color: transparent !important;
   animation: bounce 1s ease-in 0s infinite normal both;
 }
 
