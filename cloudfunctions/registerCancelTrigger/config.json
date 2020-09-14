@@ -4,9 +4,9 @@
   },
   "triggers": [
     {
-      "name": "registerOrderCancelTrigger",
+      "name": "registerCancelTrigger",
       "type": "timer",
-      "config": "0 */2 * * * * *"
+      "config": "0 */1 * * * * *"
     }
   ]
 }
