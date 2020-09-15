@@ -16,7 +16,7 @@
 <view class="biz-block rowcc">
   <view class="rowsc fx-1">
     <view class="collc fx-1">
-      <text class="biz-name">包车</text>
+      <text class="biz-name">享定制</text>
       <text class="biz-desc">专属司机，随走随停</text>
     </view>
     <view
@@ -24,14 +24,15 @@
       hover-class="act-btn"
       data-biz="charter"
       catchtap="goBizBooking"
-      >预订</view
     >
+      预订
+    </view>
   </view>
 </view>
 <view class="biz-block rowcc">
   <view class="rowsc fx-1">
     <view class="collc fx-1">
-      <text class="biz-name">通勤接送</text>
+      <text class="biz-name">享上班</text>
       <text class="biz-desc">专属司机，随走随停</text>
     </view>
     <view
