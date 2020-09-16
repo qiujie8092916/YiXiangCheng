@@ -138,15 +138,6 @@ Page({
       });
 
       wx.hideLoading();
-
-      if (orderDetail.order_status === 1) {
-        // 待支付
-        wx.showToast({
-          icon: "none",
-          duration: 3000,
-          title: "请尽快支付！15分钟后未支付，则会自动取消该订单",
-        });
-      }
     } catch (e) {
       return wx.showToast({
         icon: "none",

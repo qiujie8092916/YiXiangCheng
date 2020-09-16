@@ -1,7 +1,10 @@
 <!--miniprogram/pages/orderDetail/orderDetail.wxml-->
-<view class="order-detail">
-  <view wx:if="{{loading}}" class="rowcc empty-result"> </view>
-  <view wx:else>
+<view wx:if="{{loading}}" class="rowcc empty-result" />
+<block wx:else>
+  <view wx:if="{{orderDetail.order_status === 1}}" class="rowcc tip">
+    <text>请尽快支付！15分钟后未支付，则会自动取消该订单</text>
+  </view>
+  <view class="order-detail">
     <view class="order-header flex-between">
       <block wx:if="{{orderDetail.order_status === 1}}">
         <view class="order-status">待支付</view>
@@ -27,8 +30,11 @@
       <block wx:else>
         <view class="order-status">查询中...</view>
       </block>
-      <view class="order-custom flex-center">
-        <button open-type="contact" class="iconfont tubiao- customer"></button>
+      <view class="order-custom">
+        <button
+          open-type="contact"
+          class="iconfont tubiao- customer rowrc"
+        ></button>
       </view>
     </view>
     <view class="order-desc">
@@ -146,4 +152,4 @@
       </block>
     </view>
   </view>
-</view>
+</block>

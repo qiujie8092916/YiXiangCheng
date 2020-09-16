@@ -7,6 +7,13 @@
   padding: 42rpx 67rpx;
 }
 
+.tip {
+  font-size: 22rpx;
+  padding: 13rpx 3rpx;
+  color: rgb(255, 134, 13);
+  background-color: rgb(255, 242, 228);
+}
+
 .order-status {
   font-size: 54rpx;
   color: $blue;
@@ -18,6 +25,7 @@
 }
 
 .customer {
+  max-width: 80rpx;
   margin-right: 5rpx;
 }
 
@@ -55,10 +63,11 @@
 }
 
 .order-cancel {
+  color: $blue;
+  width: 250rpx;
   font-size: 29rpx;
-  color: #3184c7;
-  font-family: PingFangSC-Medium, PingFang SC;
   font-weight: 500;
+  font-family: PingFangSC-Medium, PingFang SC;
 }
 
 .concact {
