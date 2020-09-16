@@ -96,13 +96,20 @@
 					"id": 5,
 					"name": "订单详情",
 					"pathName": "pages/orderDetail/orderDetail",
-					"query": "orderId=259915205962Sc",
+					"query": "orderId=260027019814Sc",
 					"scene": null
 				},
 				{
 					"id": -1,
 					"name": "注册",
 					"pathName": "pages/register/register",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "协议",
+					"pathName": "pages/protocol/protocol",
 					"query": "",
 					"scene": null
 				}

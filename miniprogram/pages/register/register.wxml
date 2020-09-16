@@ -68,7 +68,7 @@
         class="checkbox{{error_field === 'protocol' ? ' error' : ''}}"
       />
     </checkbox-group>
-    <view class="protocol-desc">免责申明</view>
+    <view class="protocol-desc" catchtap="goPrototol">免责申明</view>
   </view>
 
   <!-- 提交 -->

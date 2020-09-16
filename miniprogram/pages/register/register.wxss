@@ -87,10 +87,10 @@ page {
 }
 
 .protocol-desc {
+  color: #3184c7;
   font-size: 27rpx;
   margin-left: 15rpx;
   font-family: Helvetica;
-  color: #212b36;
 }
 
 .submit {
