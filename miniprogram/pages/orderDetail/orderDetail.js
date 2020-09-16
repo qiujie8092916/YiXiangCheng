@@ -266,9 +266,6 @@ Page({
       })
       .catch((e) => {
         console.error(e);
-        wx.showToast({
-          title: "网络异常",
-        });
       })
       .finally(() => {});
   },
