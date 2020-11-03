@@ -153,6 +153,14 @@ Page({
         snapshotDetail.drop_info.province = "";
       }
 
+      if (snapshotDetail.pick_info.province === snapshotDetail.pick_info.city) {
+        snapshotDetail.pick_info.province = "";
+      }
+
+      if (snapshotDetail.drop_info.province === snapshotDetail.drop_info.city) {
+        snapshotDetail.drop_info.province = "";
+      }
+
       this.setData({
         isFetched: true,
         orderDetail,
