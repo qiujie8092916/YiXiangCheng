@@ -1,7 +1,8 @@
 {
   "usingComponents": {
+    "total-loss": "../../components/totalLoss/totalLoss",
     "logo-header": "../../components/logoHeader/logoHeader",
     "poi-picker": "../../components/poiPicker/poiPicker",
-    "date-picker": "../../components/datePicker/datePicker"
+    "calendar-picker": "../../components/calendarPicker/calendarPicker"
   }
 }

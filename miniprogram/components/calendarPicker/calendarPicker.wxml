@@ -1,0 +1,18 @@
+<view class="time flex-center">
+  <view class="iconfont shijian00 icon"></view>
+  <view class="time-con rowlc">
+    <picker
+      mode="multiSelector"
+      bindchange="bindMultiPickerChange"
+      bindcolumnchange="bindMultiPickerColumnChange"
+      value="{{MutileIdx}}"
+      range="{{MutileArray}}"
+    >
+      <view class="picker flex-between">
+        <view wx:if="{{!time}}">{{showText}}</view>
+        <view wx:else>{{time}}</view>
+        <view class="iconfont shangxiajiantou- jiantou"></view>
+      </view>
+    </picker>
+  </view>
+</view>

@@ -47,14 +47,17 @@
       <!-- 享上班 -->
       <swiper-item item-id="goWork">
         <!-- 拼车 -->
-        <view hidden="{{ activeType === 'individual' }}">
+        <view hidden="{{ activeType === 'individual' }}" class="marginbot">
           <template
             is="poi-address-tmpl"
             data="{{activeType, currentTab: current, activeTab: 'goWork', error_field, choosePoi, type: 'departure', animate: shakeInvalidAnimate.sharing, defaultValue: pickObj.sharing}}"
           />
         </view>
         <!-- 独享 -->
-        <view hidden="{{ activeType === 'sharing' }}" class="block flex-center">
+        <view
+          hidden="{{ activeType === 'sharing' }}"
+          class="block flex-center marginbot"
+        >
           <view class="{{['iconfont', 'icon', 'chakantiezidingwei']}}" />
           <template
             is="area-address-tmpl"
@@ -65,10 +68,36 @@
       </swiper-item>
     </swiper>
 
-    <date-picker bindchangeTime="changeTime" id="datePicker" />
+    <view class="marginbot">
+      <calendar-picker
+        biz-type="{{bussinessType}}"
+        bind:calendarChange="calendarChange"
+      />
+    </view>
+
+    <view class="charter-car">
+      <view class="collt marginbot full">
+        <view class="label">选择车型</view>
+        <view class="rowst full">
+          <picker
+            header-text="选择车型"
+            bindchange="bindCarChange"
+            value="{{charterCarIdx}}"
+            range="{{chartercars}}"
+            range-key="name"
+            class="picker-day"
+          >
+            <view class="day-picker flex-between">
+              <view>{{chartercars[charterCarIdx].name}}</view>
+              <view class="iconfont shangxiajiantou- jiantou"></view>
+            </view>
+          </picker>
+        </view>
+      </view>
+    </view>
 
     <!-- 拼车 独享 -->
-    <view class="type colct">
+    <view class="colct marginbot">
       <view class="type-con flex-between">
         <view
           wx:for="{{type}}"
@@ -93,10 +122,16 @@
         '--'}}元</text
       >
       <text class="desc"
-        >车型：奔驰E系列 乘坐人数：{{activeType === 'sharing' ? '1':
-        '4'}}人</text
+        >车型：{{chartercars[charterCarIdx].name}} 乘坐人数：{{activeType ===
+        'sharing' ? '1': '4'}}人</text
       >
     </view>
+
+    <total-loss
+      biz-type="{{bussinessType}}"
+      use-time="{{time}}"
+      bindchangeLossTime="changeLossTime"
+    />
 
     <!-- 提交 -->
     <button class="submit rowcc" hover-class="act-btn" form-type="submit">

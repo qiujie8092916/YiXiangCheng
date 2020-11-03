@@ -1,4 +1,3 @@
-/* components/datePicker/datePicker.wxss */
 @import "../../fonts/iconfont.wxss";
 @import "../../app.wxss";
 @import "../../style/preset.scss";
@@ -21,27 +20,17 @@
 }
 
 .picker {
-  width: 190rpx;
+  width: 450rpx;
   height: 65rpx;
   color: $fontcolor;
   padding-left: 24rpx;
   padding-right: 24rpx;
-  //background: linear-gradient(
-  //  180deg,
-  //  rgba(255, 255, 255, 1) 0%,
-  //  rgba(249, 250, 251, 1) 100%
-  //);
-  //box-shadow: 0rpx 2rpx 0rpx 0rpx rgba(22, 29, 37, 0.05);
   border-radius: 5rpx;
   border: 2rpx solid $gray;
 }
 
 .time-picker {
   margin-left: 20rpx;
-}
-
-.jiantou {
-  font-size: 22rpx;
 }
 
 .jiantou {

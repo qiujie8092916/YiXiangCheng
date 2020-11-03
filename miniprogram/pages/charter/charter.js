@@ -1,78 +1,38 @@
 // miniprogram/pages/charter/charter.js
 // 包车下单页
-import { bussinessType } from "../../config";
 import {
-  Order,
-  Storage,
-  isAfter,
-  isBefore,
-  debounce,
-  currentDatetime,
-  normalDateformat,
-} from "../../utils/index";
+  bussinessType,
+  charterDays,
+  CHARTER_USER_TIME_DURATION,
+} from "../../config";
+import { Order, Storage, debounce } from "../../utils/index";
 
 Page({
   data: {
-    departure: "", // 上车地点: 三里庵合肥市蜀山区人民政府(南一环路南)
-    departureDefault: {}, // 上车地点初始化: {name: "三里庵合肥市蜀山区人民政府(南一环路南)", latitude: 31.8512, longitude:117.26061, city:"合肥市", address:"安徽省合肥市蜀山区梅山路105号", district: "蜀山区", province: "安徽省"}
+    bussinessType: bussinessType.charter,
+    departure: "", // 三里庵
+    departureDefault: {}, // {name: "三里庵", latitude: 31.8512, longitude:117.26061, city:"合肥市", address:"105号", district: "蜀山区", province: "安徽省"}
     departure_time: "", // 选择时间
     duration: [
       {
-        key: "four",
+        key: 4,
         value: "4小时",
-        money: 400,
       },
       {
-        key: "eight",
+        key: 8,
         value: "8小时",
-        money: 800,
       },
       {
-        key: "twelve",
+        key: 12,
         value: "12小时",
-        money: 1200,
       },
     ],
-    charterdays: [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      16,
-      17,
-      18,
-      19,
-      20,
-      21,
-      22,
-      23,
-      24,
-      25,
-      26,
-      27,
-      28,
-      29,
-      30,
-    ],
+    charterdays: charterDays,
+    chartercars: [],
+    charterCarIdx: 0,
     charterDayIdx: 0,
-    moneyMap: {
-      four: 400,
-      eight: 800,
-      twelve: 1200,
-    }, // 价格表
-    activeDuration: "four", // 套餐时长
-    charterMoney: 0, // 当前时间
+    activeDuration: 4, // 套餐时长
+    charterMoney: 0, // 价格
     phone: "", // 手机号
     contact_name: "", // 乘车联系人
     error_field: null, // 错误项
@@ -94,48 +54,12 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
-    this.resetDepartureTime();
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {},
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: async function () {},
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {},
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {},
+  onShow: function () {},
 
   /**
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {},
-
-  /**
-   * 重置包车时间
-   * 若离开此页面后重新回到此页面时当前显示时间已经是过去时间则重置显示时间
-   */
-  resetDepartureTime() {
-    if (
-      !this.data.departure_time ||
-      isBefore(normalDateformat(this.data.departure_time))
-    ) {
-      console.log("重置时间");
-      this.selectComponent("#datePicker").formatDateAndTime();
-    }
-  },
 
   /**
    * 校验动画
@@ -228,8 +152,8 @@ Page({
   /**
    * 选择时间
    */
-  changeTime(d) {
-    console.log(d.detail);
+  calendarChange(d) {
+    console.log(d.detail, "callback");
     this.setData({
       departure_time: d.detail,
     });
@@ -241,8 +165,39 @@ Page({
   changeDuration(duration) {
     let _duration = duration.currentTarget.dataset.duration;
     this.setData({
-      activeDuration: _duration,
-      charterMoney: this.data.moneyMap[_duration],
+      activeDuration: parseInt(_duration),
+    });
+    this.checkCharterPrice();
+  },
+
+  /**
+   * 获取车型
+   */
+  getCloudCarInfo() {
+    return new Promise((resolve, reject) => {
+      wx.cloud
+        .callFunction({
+          name: "commonController",
+          data: {
+            action: "getCarInfoList",
+          },
+        })
+        .then((res) => {
+          if (res && res.result && res.result.resultData) {
+            this.setData({
+              chartercars: res.result.resultData,
+            });
+            this.checkCharterPrice();
+            resolve();
+          } else {
+            console.log("获取车型失败");
+            reject("获取车型失败");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          reject(err);
+        });
     });
   },
 
@@ -252,36 +207,41 @@ Page({
   getCloudUserInfo() {
     const userInfo = Storage.getStorage("userInfo");
 
-    if (userInfo && userInfo.user_phone) {
-      // 已经注册过无需再授权
-      this.setData({
-        phone: userInfo.user_phone,
-      });
-    } else {
-      wx.cloud
-        .callFunction({
-          name: "userController",
-          data: {
-            action: "getUserInfo",
-          },
-        })
-        .then((res) => {
-          if (res && res.result && res.result.resultData) {
-            this.setData({
-              phone: res.result.resultData.user_phone,
-            });
-            Storage.setStorage(
-              "userInfo",
-              JSON.stringify(res.result.resultData)
-            );
-          } else {
-            console.log("当前用户未注册");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
+    return new Promise((resolve, reject) => {
+      if (userInfo && userInfo.user_phone) {
+        // 已经注册过无需再授权
+        this.setData({
+          phone: userInfo.user_phone,
         });
-    }
+        resolve();
+      } else {
+        wx.cloud
+          .callFunction({
+            name: "userController",
+            data: {
+              action: "getUserInfo",
+            },
+          })
+          .then((res) => {
+            if (res && res.result && res.result.resultData) {
+              this.setData({
+                phone: res.result.resultData.user_phone,
+              });
+              Storage.setStorage(
+                "userInfo",
+                JSON.stringify(res.result.resultData)
+              );
+            } else {
+              console.log("当前用户未注册");
+            }
+            resolve();
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      }
+    });
   },
 
   /**
@@ -296,6 +256,11 @@ Page({
    * 乘车人debounce
    */
   debounceInputName(_name) {
+    Storage.setStorage(
+      "charterContactname",
+      JSON.stringify(_name),
+      9999 * 24 * 60
+    );
     this.setData({
       contact_name: _name,
     });
@@ -309,58 +274,76 @@ Page({
   /**
    * 预支付询问订阅
    */
-  gotoPayforOrder() {
+  async gotoPayforOrder() {
     if (!this.preSubmit()) return;
     let _params = {
       departure: this.data.departureDefault,
-      departure_time:
-        this.data.departure_time &&
-        isAfter(normalDateformat(this.data.departure_time))
-          ? this.data.departure_time
-          : currentDatetime(),
-      charter_duration:
-        this.data.activeDuration === "four"
-          ? 4
-          : this.data.activeDuration === "eight"
-          ? 8
-          : 12,
+      departure_time: this.data.departure_time,
+      charter_duration: this.data.activeDuration,
       charter_day: JSON.parse(this.data.charterDayIdx) + 1, // 包车天数
       phone: this.data.phone,
       contact_name: this.data.contact_name,
-      bizType: bussinessType.charter,
+      bizType: this.data.bussinessType,
+      car_type: this.data.chartercars[this.data.charterCarIdx].type,
       total_price: 1, // this.data.charterMoney
     };
-    wx.cloud
-      .callFunction({
-        name: "orderController",
-        data: {
-          action: "checkWaitPayOrder",
-        },
-      })
-      .then(async (res) => {
-        if (
-          res &&
-          res.result &&
-          res.result.resultData &&
-          res.result.resultData.length > 0
-        ) {
-          wx.showModal({
-            title: "提示",
-            content: "您还有未支付订单",
-            showCancel: false,
-          });
-        } else {
-          const is_subscribe = await Order.subscribeOrderStatus();
-          this.createWaitPayOrder({ is_subscribe, ..._params });
-        }
-      })
-      .catch((e) => {
-        wx.showModal({
-          title: "提示",
-          content: "请稍后重试",
-          showCancel: false,
-        });
+    // wx.cloud
+    //   .callFunction({
+    //     name: "orderController",
+    //     data: {
+    //       action: "checkWaitPayOrder",
+    //     },
+    //   })
+    //   .then(async (res) => {
+    //     if (
+    //       res &&
+    //       res.result &&
+    //       res.result.resultData &&
+    //       res.result.resultData.length > 0
+    //     ) {
+    //       wx.showModal({
+    //         title: "提示",
+    //         content: "您还有未支付订单",
+    //         showCancel: false,
+    //       });
+    //     } else {
+
+    if (Order.checkUserTime(bussinessType.charter, _params.departure_time)) {
+      if (
+        await Order.checkLossToAlert({
+          biz_type: bussinessType.commute,
+          use_time: _params.departure_time,
+          loss_time: this.loss_time_obj.time,
+          is_loss_time_history: this.loss_time_obj.isHistory,
+        })
+      ) {
+        console.info("下单");
+        const is_subscribe = await Order.subscribeOrderStatus();
+        this.createWaitPayOrder({ is_subscribe, ..._params });
+      } else {
+        console.info("取消预订");
+      }
+    } else {
+      wx.showModal({
+        title: "",
+        showCancel: false,
+        content: `请选择未来${
+          CHARTER_USER_TIME_DURATION[0] / 60 / 60 / 1000
+        }小时至${
+          CHARTER_USER_TIME_DURATION[1] / 24 / 60 / 60 / 1000
+        }天内的用车时间`,
       });
+    }
+
+    //   }
+    // })
+    // .catch((e) => {
+    //   wx.showModal({
+    //     title: "提示",
+    //     content: "请稍后重试",
+    //     showCancel: false,
+    //   });
+    // });
   },
 
   /**
@@ -440,30 +423,80 @@ Page({
    * 初始化价格
    */
   checkCharterPrice() {
+    let _carPriceInfo = this.data.chartercars[this.data.charterCarIdx],
+      carPrice =
+        _carPriceInfo.charter_hour_price *
+        this.data.charterdays[this.data.charterDayIdx] *
+        JSON.parse(this.data.activeDuration);
+
     this.setData({
-      charterMoney: this.data.moneyMap[this.data.activeDuration],
+      charterMoney: carPrice,
     });
   },
 
+  /**
+   * 包车天数选择
+   */
   bindDayChange(e) {
     this.setData({
       charterDayIdx: e.detail.value,
+    });
+    this.checkCharterPrice();
+  },
+
+  /**
+   * 包车车型选择
+   */
+  bindCarChange(e) {
+    this.setData({
+      charterCarIdx: e.detail.value,
+    });
+    this.checkCharterPrice();
+  },
+
+  changeLossTime({ detail }) {
+    this.loss_time_obj = detail;
+  },
+
+  /**
+   * 初始化乘车人
+   */
+  initContactname() {
+    this.setData({
+      contact_name: Storage.getStorage("charterContactname"),
     });
   },
 
   /**
    * 初始化
    */
-  init() {
+  async init() {
+    /**
+     * 全损时间obj
+     * @default null
+     * @type {?{ time: string, isHistory: boolean }}
+     */
+    this.loss_time_obj = null;
     // 输入乘车联系人debounce
     this.debounce = debounce(this.debounceInputName, 200);
-    // 获取用户信息
-    this.getCloudUserInfo();
+    wx.showLoading();
+    try {
+      // 获取用户信息
+      await this.getCloudUserInfo();
+      // 获取车型信息
+      await this.getCloudCarInfo();
+      wx.hideLoading();
+    } catch (error) {
+      wx.showToast({
+        title: error,
+        icon: "none",
+      });
+    }
     // 初始化出发地
     this.checkDeparture();
-    // 初始化套餐价格
-    this.checkCharterPrice();
     // 创建动画
     this.createAnimation();
+    // 初始化乘车人
+    this.initContactname();
   },
 });

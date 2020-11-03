@@ -3,7 +3,7 @@
   <!-- logo -->
   <logo-header />
   <!-- 地址时间选择 -->
-  <view class="poi-time">
+  <view class="poi-time marginbot">
     <poi-picker
       icon="chakantiezidingwei"
       is-error="{{error_field === 'poi'}}"
@@ -11,11 +11,53 @@
       default-value="{{departureDefault}}"
       bindchoosePoi="choosePoi"
     />
-    <date-picker id="datePicker" bindchangeTime="changeTime" />
+    <view class="marginbot" />
+    <calendar-picker
+      biz-type="{{bussinessType}}"
+      bind:calendarChange="calendarChange"
+    />
+  </view>
+  <view class="charter-day rowlt">
+    <view class="collt marginbot full" style="margin-right: 20rpx;">
+      <view class="label">用车天数</view>
+      <view class="rowst full">
+        <picker
+          header-text="用车天数"
+          bindchange="bindDayChange"
+          value="{{charterDayIdx}}"
+          range="{{charterdays}}"
+          class="picker-day full"
+        >
+          <view class="day-picker flex-between">
+            <view>{{charterdays[charterDayIdx]}}</view>
+            <view class="iconfont shangxiajiantou- jiantou"></view>
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="collt marginbot full">
+      <view class="label">选择车型</view>
+      <view class="rowst full">
+        <picker
+          header-text="选择车型"
+          bindchange="bindCarChange"
+          value="{{charterCarIdx}}"
+          range="{{chartercars}}"
+          range-key="name"
+          class="picker-day full"
+        >
+          <view class="day-picker flex-between">
+            <view>{{chartercars[charterCarIdx].name}}</view>
+            <view class="iconfont shangxiajiantou- jiantou"></view>
+          </view>
+        </picker>
+      </view>
+    </view>
   </view>
   <!-- 套餐选择 -->
-  <view class="duration flex-center">
-    <view class="duration-con">
+  <view class="collt duration-con marginbot">
+    <view class="label">时长套餐（每天）</view>
+    <view class="rowst full">
       <view
         wx:for="{{duration}}"
         wx:key="key"
@@ -31,49 +73,36 @@
       </view>
     </view>
   </view>
-  <view class="charter-day colcc">
-    <view class="collt marginbot full">
-      <view class="label">用车天数</view>
-      <view class="rowst full">
-        <picker
-          header-text="用车天数"
-          bindchange="bindDayChange"
-          value="{{charterDayIdx}}"
-          range="{{charterdays}}"
-          class="picker-day"
-        >
-          <view class="day-picker flex-between">
-            <view>{{charterdays[charterDayIdx]}}</view>
-            <view class="iconfont shangxiajiantou- jiantou"></view>
-          </view>
-        </picker>
+  <!-- 注册信息 -->
+  <view class="flex-center">
+    <view class="iconfont dianhua1 _icon_" />
+    <view class="block">
+      <view class="collt marginbot full">
+        <view class="label">手机号</view>
+        <view class="rowst full">
+          <input
+            class="input disabled fx-1 rowlc {{error_field === 'phone' ? ' error' : ''}}"
+            animation="{{shakeInvalidAnimate.phone}}"
+            placeholder="请授权手机号"
+            disabled
+            value="{{phone}}"
+          />
+          <button
+            class="authorization-btn rowcc"
+            disabled="{{phone}}"
+            hover-class="act-btn"
+            open-type="getPhoneNumber"
+            bindgetphonenumber="getPhoneNumber"
+          >
+            授权
+          </button>
+        </view>
       </view>
     </view>
   </view>
-  <!-- 注册信息 -->
-  <view class="register-info colcc">
-    <view class="collt marginbot full">
-      <view class="label">手机号</view>
-      <view class="rowst full">
-        <input
-          class="input disabled fx-1 rowlc {{error_field === 'phone' ? ' error' : ''}}"
-          animation="{{shakeInvalidAnimate.phone}}"
-          placeholder="请授权手机号"
-          disabled
-          value="{{phone}}"
-        />
-        <button
-          class="authorization-btn rowcc"
-          disabled="{{phone}}"
-          hover-class="act-btn"
-          open-type="getPhoneNumber"
-          bindgetphonenumber="getPhoneNumber"
-        >
-          授权
-        </button>
-      </view>
-    </view>
-    <view class="collt marginbot full">
+  <view class="flex-center">
+    <view class="iconfont lianxiren _icon_" />
+    <view class="block collt full marginbot">
       <view class="label">乘车联系人</view>
       <input
         class="input fx-1 rowlc {{error_field === 'contact_name' ? ' error' : ''}}"
@@ -87,8 +116,17 @@
   <!-- 价格信息 -->
   <view class="price colcc">
     <view class="price-detail">一口价：￥{{charterMoney}}元</view>
-    <view class="price-desc">车型：奔驰E系列 乘坐人数：4人</view>
+    <view class="price-desc"
+      >车型：{{chartercars[charterCarIdx].name}} 乘坐人数：4人</view
+    >
   </view>
+
+  <total-loss
+    biz-type="{{bussinessType}}"
+    use-time="{{departure_time}}"
+    bindchangeLossTime="changeLossTime"
+  />
+
   <!-- 支付按钮 -->
   <view class="pay flex-center">
     <view class="pay-btn" hover-class="act-btn" bindtap="gotoPayforOrder"

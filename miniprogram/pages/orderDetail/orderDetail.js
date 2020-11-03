@@ -1,11 +1,24 @@
 // miniprogram/pages/orderDetail/orderDetail.js
-import { dateFormat, Order } from "../../utils/index";
+import {
+  bussinessType,
+  orderStatusMap,
+  CHARTER_LOSS,
+  COMMUTE_LOSS,
+} from "../../config";
+import {
+  Order,
+  dateFormatYyMmDdHh,
+  stampFormatYyMmDdHh,
+} from "../../utils/index";
 
 Page({
   /**
    * 页面的初始数据
    */
   data: {
+    bussinessType,
+    biz_type: 0,
+    orderStatusMap: orderStatusMap, // 订单状态枚举
     isFetched: false, // 第一次请求数据
     orderDetail: {}, // 订单详情
     driverDetail: {}, // 司机详情
@@ -20,9 +33,9 @@ Page({
    */
   onLoad: function ({ orderId }) {
     this.orderId = orderId;
-    wx.setNavigationBarTitle({
-      title: `订单号：${this.orderId}`,
-    });
+    // wx.setNavigationBarTitle({
+    //   title: `订单号：${this.orderId}`,
+    // });
     this.init();
   },
 
@@ -62,26 +75,6 @@ Page({
    * 用户点击右上角分享
    */
   // onShareAppMessage: function () {},
-
-  /**
-   * 订单详情(watch默认触发一次 不再需要手动查询)
-   */
-  checkOrderDetail: function (orderId) {
-    wx.cloud
-      .callFunction({
-        name: "orderController",
-        data: {
-          action: "createPerpayRequest",
-          params: _params,
-        },
-      })
-      .then((res) => {
-        console.log(res, "订单详情查询成功");
-      })
-      .catch((err) => {
-        console.log(err, "订单详情查询失败");
-      });
-  },
 
   /**
    * 订单详情监听器
@@ -135,10 +128,30 @@ Page({
         ...orderDetail
       } = result.resultData;
 
-      orderDetail._use_time = dateFormat(
-        orderDetail.use_time,
-        "YYYY年MM月DD日 HH:mm"
-      );
+      orderDetail.use_time_format = dateFormatYyMmDdHh(orderDetail.use_time);
+
+      orderDetail.loss_time =
+        new Date(orderDetail.use_time.replace(/-/g, "/")).valueOf() -
+        (snapshotDetail.biz_type === bussinessType.charter
+          ? CHARTER_LOSS
+          : COMMUTE_LOSS);
+
+      orderDetail.loss_time_format = stampFormatYyMmDdHh(orderDetail.loss_time);
+
+      orderDetail.is_loss_time_history =
+        orderDetail.loss_time < new Date().getTime();
+
+      orderDetail.order_status_reflection = Object.values(orderStatusMap).find(
+        (it) => +it.key === +orderDetail.order_status
+      ) || { key: -1, value: "查询中..." };
+
+      if (snapshotDetail.pick_info.province === snapshotDetail.pick_info.city) {
+        snapshotDetail.pick_info.province = "";
+      }
+
+      if (snapshotDetail.drop_info.province === snapshotDetail.drop_info.city) {
+        snapshotDetail.drop_info.province = "";
+      }
 
       this.setData({
         isFetched: true,
@@ -147,7 +160,9 @@ Page({
         snapshotDetail,
         loading: false,
         isloading: false,
+        biz_type: snapshotDetail.biz_type,
       });
+
       wx.hideLoading();
     } catch (e) {
       return wx.showToast({
@@ -178,12 +193,12 @@ Page({
    * 再来一单
    */
   reOrder() {
-    if (this.data.snapshotDetail.biz_type === 1) {
+    if (this.data.biz_type === bussinessType.charter) {
       return wx.navigateTo({
         url: "/pages/charter/charter",
       });
     }
-    if (this.data.snapshotDetail.biz_type === 2) {
+    if (this.data.biz_type === bussinessType.commute) {
       return wx.navigateTo({
         url: "/pages/commute/commute",
       });
@@ -194,12 +209,16 @@ Page({
    * 取消订单并重新下单
    */
   cancelOrder() {
+    const { orderDetail } = this.data;
+    const is_loss = orderDetail.loss_time < new Date().getTime();
     wx.showModal({
       title: "提示",
       showCancel: true,
       confirmText: "想好了",
       cancelText: "我再想想",
-      content: "是否需要取消订单？",
+      content: is_loss
+        ? "超时取消，将扣除订单金额，请确认是否继续取消"
+        : "是否需要取消订单？",
       success: async ({ confirm }) => {
         if (confirm) {
           wx.showLoading({ title: "加载中" });
@@ -209,6 +228,7 @@ Page({
               data: {
                 action: "doCancelOrder",
                 params: {
+                  isLoss: is_loss,
                   orderId: this.orderId,
                 },
               },
@@ -241,27 +261,27 @@ Page({
     });
   },
 
-  /**
-   * @description: 发起退款
-   * @param {type}
-   * @return {type}
-   */
-  async queryRefund() {
-    const { result = {} } = await wx.cloud.callFunction({
-      name: "orderController",
-      data: {
-        action: "queryRefund",
-        params: {
-          orderId: this.orderId,
-        },
-      },
-    });
+  // /**
+  //  * @description: 发起退款
+  //  * @param {type}
+  //  * @return {type}
+  //  */
+  // async queryRefund() {
+  //   const { result = {} } = await wx.cloud.callFunction({
+  //     name: "orderController",
+  //     data: {
+  //       action: "queryRefund",
+  //       params: {
+  //         orderId: this.orderId,
+  //       },
+  //     },
+  //   });
 
-    wx.showToast({
-      title: "请查看控制台",
-    });
-    console.log(result);
-  },
+  //   wx.showToast({
+  //     title: "请查看控制台",
+  //   });
+  //   console.log(result);
+  // },
 
   /**
    * @description: 重新支付
@@ -277,10 +297,13 @@ Page({
       })
       .catch((e) => {
         console.error(e);
-        wx.showToast({
-          title: "网络异常",
-        });
       })
       .finally(() => {});
+  },
+
+  copy() {
+    wx.setClipboardData({
+      data: this.orderId,
+    });
   },
 });

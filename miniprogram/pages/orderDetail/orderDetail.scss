@@ -7,9 +7,17 @@
   padding: 42rpx 67rpx;
 }
 
+.tip {
+  font-size: 26rpx;
+  padding: 12rpx 4rpx;
+  color: rgb(255, 134, 13);
+  background-color: rgb(255, 242, 228);
+}
+
 .order-status {
-  font-size: 54rpx;
   color: $blue;
+  font-size: 54rpx;
+  font-weight: bold;
 }
 
 .order-custom {
@@ -17,13 +25,19 @@
   color: $blue;
 }
 
+.customer-btn {
+  max-width: 80rpx;
+  max-height: 80rpx;
+}
+
 .customer {
-  margin-right: 5rpx;
+  color: #494a4c;
+  font-size: 50rpx;
 }
 
 .order-desc {
-  margin-top: 111rpx;
-  margin-bottom: 140rpx;
+  margin-top: 80rpx;
+  margin-bottom: 80rpx;
   font-size: 36rpx;
   font-family: PingFangSC-Medium, PingFang SC;
   font-weight: 500;
@@ -32,7 +46,7 @@
 
 .desc-item {
   display: flex;
-  margin-bottom: 43rpx;
+  margin-bottom: 40rpx;
 }
 
 .desc-one {
@@ -55,10 +69,11 @@
 }
 
 .order-cancel {
+  color: $blue;
+  width: 250rpx;
   font-size: 29rpx;
-  color: #3184c7;
-  font-family: PingFangSC-Medium, PingFang SC;
   font-weight: 500;
+  font-family: PingFangSC-Medium, PingFang SC;
 }
 
 .concact {
@@ -67,4 +82,14 @@
 
 .phone {
   font-size: 40rpx;
+}
+
+.blue {
+  color: $blue;
+}
+
+.copy {
+  color: #555;
+  font-size: 40rpx;
+  margin-left: 20rpx;
 }

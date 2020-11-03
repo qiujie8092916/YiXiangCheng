@@ -17,45 +17,13 @@ const db = cloud.database();
 
 // 云函数入口函数
 exports.main = async (event) => {
-  log.info(event);
-
-  const orderInfoDb = db.collection("order_info");
+  log.info({
+    name: "回调payController",
+    event,
+  });
 
   try {
-    await orderInfoDb
-      .where({
-        order_no: event.outTradeNo,
-      })
-      .update({
-        data: {
-          pay_time: event.timeEnd.toString(),
-          pay_price: event.totalFee,
-          order_status: 2,
-          pay_serial_no: event.transactionId,
-        },
-      });
-
-    sendEmail(event).catch();
-
-    return {
-      errcode: 0,
-      errmsg: "支付回调成功",
-    };
-  } catch (e) {
-    log.error({
-      func: "payController",
-      abnormal: e,
-    });
-    return {
-      errcode: -1,
-      errmsg: "支付回调失败",
-    };
-  }
-};
-
-const sendEmail = (event) => {
-  return new Promise(async (resolve, reject) => {
-    try {
+    if (event.resultCode === "SUCCESS" && event.returnCode === "SUCCESS") {
       //查询订单详情 给到邮件内容
       const { result = {} } = await cloud.callFunction({
         name: "orderController",
@@ -69,25 +37,73 @@ const sendEmail = (event) => {
 
       const orderInfo = result.resultData;
 
-      log.info({
-        name: "支付后查询订单详情",
-        value: orderInfo,
-      });
+      if (orderInfo.order_status === 1) {
+        log.info({
+          name: "订单状态【未支付】，准备更新订单状态",
+          event,
+          orderInfo,
+        });
 
-      cloud.callFunction({
-        name: "sendMailController",
-        data: {
-          action: "sendPickUpOrderEmail",
-          params: orderInfo,
-        },
-      });
-      resolve();
-    } catch (e) {
+        const orderInfoDb = db.collection("order_info");
+        const upd = {
+          pay_time: event.timeEnd.toString(),
+          pay_price: event.totalFee,
+          order_status: 2,
+          pay_serial_no: event.transactionId,
+        };
+        orderInfoDb
+          .where({
+            order_no: event.outTradeNo,
+          })
+          .update({
+            data: upd,
+          })
+          .then(async () => {
+            log.info({
+              name: "订单状态更新成功，准备发送邮件",
+              params: orderInfo,
+            });
+
+            sendEmail({ ...orderInfo, ...upd });
+
+            log.info({
+              name: "发送邮件后，返回payController【SUCCESS】",
+            });
+
+            return { errcode: 0, errmsg: "" };
+          });
+      } else {
+        log.info({
+          name: "非未支付订单，滤掉",
+          value: orderInfo,
+        });
+        return { errcode: 0, errmsg: "" };
+      }
+    } else {
       log.error({
-        func: "sendEmail",
-        abnormal: e,
+        name: "payController:支付回调失败",
+        value: event,
       });
-      reject(e);
+      return { errcode: -1, errmsg: "支付回调失败" };
     }
+  } catch (e) {
+    log.error({
+      func: "payController",
+      abnormal: e,
+    });
+    return {
+      errcode: -1,
+      errmsg: "FAIL",
+    };
+  }
+};
+
+const sendEmail = (orderInfo) => {
+  cloud.callFunction({
+    name: "sendMailController",
+    data: {
+      action: "sendPickUpOrderEmail",
+      params: orderInfo,
+    },
   });
 };

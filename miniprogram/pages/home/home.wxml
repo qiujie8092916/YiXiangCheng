@@ -7,40 +7,42 @@
         <view class="rowlb">
           <text class="name">小享兽</text><text class="eng">EY.Life</text>
         </view>
-        <text class="desc">专注高端用车服务</text>
+        <text class="desc">凡相遇 皆享受</text>
       </view>
     </view>
-    <text class="info">服务使用奔驰E系、宝马5系及同等级别车型</text>
+    <text class="info">专注服务企业员工 奔驰宝马品质出行</text>
   </view>
 </view>
-<view class="biz-block rowcc">
+<view
+  class="biz-block rowcc"
+  data-biz="charter"
+  hover-class="act-btn"
+  catchtap="goBizBooking"
+>
   <view class="rowsc fx-1">
     <view class="collc fx-1">
-      <text class="biz-name">包车</text>
-      <text class="biz-desc">专属司机，随走随停</text>
+      <text class="biz-name">享定制</text>
+      <text class="biz-desc">定制包车 享受当下</text>
     </view>
-    <view
-      class="btn flex-center"
-      hover-class="act-btn"
-      data-biz="charter"
-      catchtap="goBizBooking"
-      >预订</view
-    >
+    <view class="btn flex-center">
+      预订
+    </view>
   </view>
 </view>
-<view class="biz-block rowcc">
+<view
+  class="biz-block rowcc"
+  data-biz="commute"
+  hover-class="act-btn"
+  catchtap="goBizBooking"
+>
   <view class="rowsc fx-1">
     <view class="collc fx-1">
-      <text class="biz-name">通勤接送</text>
-      <text class="biz-desc">专属司机，随走随停</text>
+      <text class="biz-name">享出发</text>
+      <text class="biz-desc">送你上班 享你回家</text>
     </view>
-    <view
-      class="btn flex-center"
-      hover-class="act-btn"
-      data-biz="commute"
-      catchtap="goBizBooking"
-      >预订</view
-    >
+    <view class="btn flex-center">
+      预订
+    </view>
   </view>
 </view>
 <view class="biz-block rowcc">

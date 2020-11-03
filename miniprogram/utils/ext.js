@@ -1,52 +1,36 @@
-const moment = require("../vendor/moment");
+/**
+ * @description: 2020-10-18 23:20 to 2020年10月17日 23:20
+ */
+export const dateFormatYyMmDdHh = function (date) {
+  let splitTime = date.split("-"),
+    splitDay = splitTime[2].split(" "),
+    format =
+      splitTime[0] +
+      "年" +
+      splitTime[1] +
+      "月" +
+      splitDay[0] +
+      "日" +
+      " " +
+      splitDay[1];
 
-moment.locale("zh-cn");
-
-export const dateFormat = function (date = new Date(), type) {
-  switch (type) {
-    case "MD":
-      return moment(date).format("MMM Do");
-      break;
-    case "YMD":
-      return moment(date).format("YYYY-MM-DD");
-      break;
-    case "Hm":
-      return moment(date).format("HH:mm");
-      break;
-    case "YYYY年MM月DD日 HH:mm":
-      return moment(date).format("YYYY年MM月DD日 HH:mm");
-      break;
-    default:
-      return moment(date);
-  }
+  return format;
 };
 
-export const nextMonth = function () {
-  return moment().add(1, "month").format();
-};
+/**
+ * @description: 时间戳 to 2020年10月17日 23:20
+ */
+export const stampFormatYyMmDdHh = function (stamp) {
+  let Y = new Date(stamp).getFullYear(),
+    M = new Date(stamp).getMonth() + 1,
+    D = new Date(stamp).getDate(),
+    H = new Date(stamp).getHours(),
+    _M =
+      new Date(stamp).getMinutes() < 10
+        ? "0" + new Date(stamp).getMinutes()
+        : new Date(stamp).getMinutes();
 
-export const isSameDay = function (date) {
-  return moment().isSame(date, "day");
-};
-
-export const isBefore = function (date) {
-  return moment(date).isBefore();
-};
-
-export const isAfter = function (date) {
-  return moment(date).isAfter();
-};
-
-export const joinTime = function (time) {
-  return moment().format("YYYY-MM-DD") + " " + time;
-};
-
-export const normalDateformat = function (time) {
-  return moment(time).format("YYYY-MM-DD HH:mm");
-};
-
-export const currentDatetime = function () {
-  return moment().format("YYYY-MM-DD HH:mm");
+  return Y + "年" + M + "月" + D + "日" + " " + H + ":" + _M;
 };
 
 export const throttle = function (fn, delay) {

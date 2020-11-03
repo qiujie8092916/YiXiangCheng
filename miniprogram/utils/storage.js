@@ -3,9 +3,9 @@ class Storage {
 
   /**
    * @description: 默认缓存3分钟
-   * @param {type} key 缓存key
-   * @param {type} value 缓存value
-   * @param {type} expire 缓存持续时间 默认3分钟
+   * @param {string} key 缓存key
+   * @param {string} value 缓存value
+   * @param {number} expire 缓存持续时间 默认3分钟
    */
   setStorage(key, value, expire = 3) {
     let storageTime = new Date().getTime(),

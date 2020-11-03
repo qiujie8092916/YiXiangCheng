@@ -1,26 +1,26 @@
 <!--components/orderItem/orderItem.wxml-->
 <view
   bindtap="chooseCurOrder"
-  class="order-item {{status === 4 || status === 5 || status === 6 || status === 7 ? 'cancel-item' : status === 1 || status === 2 || status === 3 ? 'pay-item' : 'done-item'}}"
+  class="order-item {{status === orderStatusMap.CANCELED.key || status === orderStatusMap.REFUNDED.key ? 'cancel-item' : status === orderStatusMap.WAITPAY.key || status === orderStatusMap.WAITRECEIVING.key || status === orderStatusMap.RECEIVED.key || status === orderStatusMap.BILLING.key || status === orderStatusMap.REFUNDING.key ? 'pay-item' : 'done-item'}}"
 >
   <view class="order-header flex-between">
-    <view class="order-desc">{{orderStatusMap[status]}}</view>
+    <view class="order-desc">{{orderStatusReflection.value}}</view>
     <view class="order-money">¥{{money}}元</view>
   </view>
   <view class="order-border"></view>
   <view class="order-detail">
     <view wx:if="{{type === 'charter'}}" class="order-line">
-      <text>{{charterdepart}}</text>
-      <text class="split-tag">-</text>
-      <text>{{charterday}}天{{chartertime}}小时</text>
+      <view class="overflow-ellipsis-2 order-depart">{{charterdepart}}</view>
+      <!--      <text class="split-tag">-</text>-->
+      <view>{{chartertime}}小时/天 * {{charterday}}天</view>
     </view>
     <view wx:else class="order-line">
-      <text>{{commutedepart}}</text>
+      <view class="overflow-ellipsis-2 order-depart">{{commutedepart}}</view>
       <text class="split-tag">-></text>
       <text>{{commutedestination}}</text>
     </view>
     <view class="order-bottom flex-between">
-      <view class="order-time">{{useTime}}</view>
+      <view class="order-time">下单时间：{{createTime}}</view>
       <view class="order-type">{{travelType[type]}}</view>
     </view>
   </view>

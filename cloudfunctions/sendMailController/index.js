@@ -9,7 +9,9 @@ cloud.init({
 const log = cloud.logger();
 const db = cloud.database();
 
-const auth = { user: "835413463@qq.com", pass: "sousifbnpxujbbif" };
+// const auth = { user: "835413463@qq.com", pass: "sousifbnpxujbbif" };
+// const auth = { user: "835413463@qq.com", pass: "dlawzkgdyfkobdac" };
+const auth = { user: "514481826@qq.com", pass: "unfyrqaclylabhah" };
 const sendConfig = {
   auth,
   port: 465, // SMTP 端口
@@ -39,6 +41,9 @@ exports.main = async (event, context) => {
     }
     case "sendCancelOrderEmail": {
       return sendCancelOrderEmail(_params);
+    }
+    case "sendAutoAchieveOrderEmail": {
+      return sendAutoAchieveOrderEmail(_params);
     }
     default:
       return;
@@ -94,9 +99,9 @@ async function sendPickUpOrderEmail(params) {
       params.snapshotDetail.pick_info.name
     }<br/>${
       params.snapshotDetail.biz_type === 1
-        ? `<b>包车时长：</b>${params.charter_day}天${params.charter_duration}小时<br/>`
+        ? `<b>包车时长：</b>${params.charter_duration}小时/天 * ${params.charter_day}天<br/>`
         : ``
-    }<br/>
+    }
     ${
       params.snapshotDetail.biz_type === 2
         ? `<b>下车地点：</b>${params.snapshotDetail.drop_info.name}<br/>`
@@ -114,6 +119,7 @@ async function sendPickUpOrderEmail(params) {
   } catch (e) {
     log.error({
       func: "sendPickUpOrderEmail",
+      params: params,
       abnormal: e,
     });
     return {
@@ -161,6 +167,37 @@ async function sendCancelOrderEmail(params) {
   } catch (e) {
     log.error({
       func: "sendCancelOrderEmail",
+      abnormal: e,
+    });
+    return {
+      resultCode: -7,
+      resultData: null,
+      errMsg: e.toString(),
+    };
+  }
+}
+
+async function sendAutoAchieveOrderEmail(params) {
+  const { orderInfo, curReceivers } = params;
+  const mailtemplate = {
+    from: `"小享兽" <${auth.user}>`,
+    to: curReceivers,
+    subject: `【${
+      bussinessType[parseInt(orderInfo.order_no.slice(0, 1))]
+    }】订单自动完成`,
+    html: `<b>订单号：</b>${orderInfo.order_no}<br/><b>订单金额：</b>${
+      orderInfo.pay_price / 100
+    }元<br/><br/>已自动完单！请确认<br/><br/>勿回复`,
+  };
+  try {
+    await sendMailInstance.sendMail(mailtemplate);
+    return {
+      resultCode: 0,
+      resultData: true,
+    };
+  } catch (e) {
+    log.error({
+      func: "sendAutoAchieveOrderEmail",
       abnormal: e,
     });
     return {

@@ -2,8 +2,9 @@
   "usingComponents": {
     "logo-header": "/components/logoHeader/logoHeader",
     "poi-picker": "../../components/poiPicker/poiPicker",
+    "total-loss": "../../components/totalLoss/totalLoss",
     "area-address": "/components/areaAddress/areaAddress",
     "company-address": "../../components/companyAddress/companyAddress",
-    "date-picker": "../../components/datePicker/datePicker"
+    "calendar-picker": "../../components/calendarPicker/calendarPicker"
   }
 }

@@ -65,6 +65,12 @@ Page({
    */
   // onShareAppMessage: function () {},
 
+  goPrototol() {
+    wx.navigateTo({
+      url: "/pages/protocol/protocol",
+    });
+  },
+
   /**
    * 获取手机号
    */

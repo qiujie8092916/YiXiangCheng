@@ -7,34 +7,31 @@ page {
 
 .content {
   background: #fff;
-  height: 100%;
+  min-height: 100vh;
 }
 
 .poi-time {
-  padding-bottom: 35rpx;
-  margin-top: 60rpx;
+  margin-top: 35rpx;
 }
 
 .duration-con {
-  padding-left: 185rpx;
-  padding-right: 138rpx;
+  width: 502rpx;
+  display: flex;
+  margin-left: 162rpx;
+  box-sizing: border-box;
+  justify-content: space-between;
 }
 
 .duration-it {
-  width: 190rpx;
-  height: 80rpx;
+  width: 150rpx;
+  height: 65rpx;
+  font-size: 27rpx;
   color: $fontcolor;
   border-radius: 7rpx;
   border: 2rpx solid $gray;
 }
 
-.duration-it:first-child {
-  margin-right: 47rpx;
-}
-
 .duration-active {
-  width: 190rpx;
-  height: 80rpx;
   position: relative;
   color: $blue;
   background: rgba(255, 255, 255, 1);
@@ -49,9 +46,8 @@ page {
 }
 
 .register-info {
-  margin-top: 45rpx;
   padding-left: 162rpx;
-  padding-right: 95rpx;
+  padding-right: 92rpx;
 }
 
 .label {
@@ -91,12 +87,12 @@ page {
 }
 
 .marginbot {
-  margin-bottom: 20rpx;
+  margin-bottom: 35rpx;
 }
 
 .price {
-  margin-top: 286rpx;
-  margin-bottom: 91rpx;
+  margin-top: 10rpx;
+  margin-bottom: 45rpx;
 }
 
 .price-detail {
@@ -111,6 +107,7 @@ page {
 
 .pay {
   padding-bottom: 50rpx;
+  background-color: #ffffff;
 }
 
 .pay-btn {
@@ -137,4 +134,32 @@ page {
 
 .checkbox.error {
   border: initial;
+}
+
+.charter-day {
+  padding-left: 162rpx;
+  padding-right: 92rpx;
+}
+
+.day-picker {
+  height: 65rpx;
+  font-size: 27rpx;
+  border-radius: 5rpx;
+  padding-left: 24rpx;
+  padding-right: 24rpx;
+  border: 2rpx solid $gray;
+}
+
+.jiantou {
+  font-size: 22rpx;
+}
+
+._icon_ {
+  font-size: 40rpx;
+}
+
+.block {
+  width: 502rpx;
+  margin-left: 34rpx;
+  box-sizing: border-box;
 }

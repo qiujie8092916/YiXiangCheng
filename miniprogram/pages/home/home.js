@@ -61,9 +61,9 @@ Page({
           if (+result.resultCode !== 0) {
             console.error(result.errMsg);
             wx.hideLoading();
-            return wx.showToast({
-              icon: "none",
-              title: result.errMsg || "异常错误",
+            return wx.showModal({
+              showCancel: false,
+              content: result.errMsg || "异常错误",
             });
           }
 

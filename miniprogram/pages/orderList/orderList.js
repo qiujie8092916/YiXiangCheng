@@ -1,5 +1,9 @@
 // miniprogram/pages/orderList/orderList.js
+import { stampFormatYyMmDdHh } from "../../utils/ext";
+
 Page({
+  specifiedItem: null, //记录操作的订单号
+
   /**
    * 页面的初始数据
    */
@@ -15,7 +19,9 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {},
+  onLoad: function (options) {
+    this.init();
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -25,8 +31,15 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
-    this.init();
+  onShow() {
+    console.log(this.specifiedItem);
+    if (
+      this.specifiedItem &&
+      this.specifiedItem.index !== undefined &&
+      this.specifiedItem.id !== undefined
+    ) {
+      this.getOrderProfile();
+    }
   },
 
   /**
@@ -82,9 +95,39 @@ Page({
   },
 
   /**
+   * 获取订单详情
+   */
+  async getOrderProfile() {
+    const { result = {} } = await wx.cloud.callFunction({
+      name: "orderController",
+      data: {
+        action: "checkOrderDetail",
+        params: {
+          orderId: this.specifiedItem.id,
+        },
+      },
+    });
+    if (+result.resultCode !== 0) {
+      return wx.showToast({
+        icon: "none",
+        title: result.errMsg,
+      });
+    }
+
+    result.resultData.create_time_format = stampFormatYyMmDdHh(
+      result.resultData.create_time
+    );
+
+    console.log(result.resultData);
+    this.setData({
+      ["orderList[" + this.specifiedItem.index + "]"]: result.resultData,
+    });
+  },
+
+  /**
    * 获取订单列表
    */
-  getOrderList: async function () {
+  async getOrderList() {
     wx.showLoading({ title: "加载中" });
     try {
       const { result = {} } = await wx.cloud.callFunction({
@@ -109,6 +152,10 @@ Page({
       console.log(result);
       const { rows, data } = result.resultData;
 
+      data.forEach((it) => {
+        it.create_time_format = stampFormatYyMmDdHh(it.create_time);
+      });
+
       this.setData({
         rows,
         isInit: false,
@@ -127,7 +174,9 @@ Page({
   },
 
   chooseCurOrder(e) {
-    let orderId = e.target.dataset.id;
-    wx.navigateTo({ url: `/pages/orderDetail/orderDetail?orderId=${orderId}` });
+    this.specifiedItem = e.target.dataset;
+    wx.navigateTo({
+      url: `/pages/orderDetail/orderDetail?orderId=${this.specifiedItem.id}`,
+    });
   },
 });

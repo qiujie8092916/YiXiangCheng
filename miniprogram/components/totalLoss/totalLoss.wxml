@@ -1,0 +1,8 @@
+<!--components/totalLoss/totalLoss.wxml-->
+<view wx:if="{{time}}" class="total-loss rowcc">
+  <text class="iconfont tishi" />
+  <text class="total-loss-text">
+    <block wx:if="{{is_history}}">该订单一经预订，不可免费取消</block>
+    <block wx:else>该订单于{{time}}前可免费取消</block>
+  </text>
+</view>

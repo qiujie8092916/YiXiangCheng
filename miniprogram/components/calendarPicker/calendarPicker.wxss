@@ -1,0 +1,514 @@
+@charset "UTF-8";
+@font-face {
+  font-family: "iconfont";
+  src: url("//at.alicdn.com/t/font_1953349_a55jk231wpw.eot?t=1602609858316");
+  /* IE9 */
+  src: url("//at.alicdn.com/t/font_1953349_a55jk231wpw.eot?t=1602609858316#iefix")
+      format("embedded-opentype"),
+    url("data:application/x-font-woff2;charset=utf-8;base64,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")
+      format("woff2"),
+    url("//at.alicdn.com/t/font_1953349_a55jk231wpw.woff?t=1602609858316")
+      format("woff"),
+    url("//at.alicdn.com/t/font_1953349_a55jk231wpw.ttf?t=1602609858316")
+      format("truetype"),
+    url("//at.alicdn.com/t/font_1953349_a55jk231wpw.svg?t=1602609858316#iconfont")
+      format("svg");
+  /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.copy01:before {
+  content: "\e72b";
+}
+
+.lianxiren:before {
+  content: "\e612";
+}
+
+.dianhua1:before {
+  content: "\e695";
+}
+
+.shiliangzhinengduixiang-:before {
+  content: "\e6ad";
+}
+
+.jiazai:before {
+  content: "\e634";
+}
+
+.dingdan:before {
+  content: "\e609";
+}
+
+.chakantiezidingwei:before {
+  content: "\e65f";
+}
+
+.dalou:before {
+  content: "\e6bc";
+}
+
+.youxiajiaogouxuan:before {
+  content: "\e8b7";
+}
+
+.dianhua:before {
+  content: "\e62c";
+}
+
+.tubiao-:before {
+  content: "\e64f";
+}
+
+.shangxiajiantou-:before {
+  content: "\e60c";
+}
+
+.shijian:before {
+  content: "\e63f";
+}
+
+.shijian00:before {
+  content: "\e6ce";
+}
+
+.dizhi:before {
+  content: "\e628";
+}
+
+.wodedingdan:before {
+  content: "\e645";
+}
+
+/**app.wxss**/
+@font-face {
+  font-family: "iconfont";
+  src: url("//at.alicdn.com/t/font_1953349_a55jk231wpw.eot?t=1602609858316");
+  /* IE9 */
+  src: url("//at.alicdn.com/t/font_1953349_a55jk231wpw.eot?t=1602609858316#iefix")
+      format("embedded-opentype"),
+    url("data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAv8AAsAAAAAFYwAAAuvAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCFOgqaKJU+ATYCJANECyQABCAFhG0HgXkbMxKjoo5yUgRkf3nAk/EaL0Opt+raqhZLPJYBsccMa3AY594z7uWhXNtm+oyI6WOLB1G/n+494P8TdimxjCuxSlVtlKkwVVUxMrpAwmVqBP7vtOXGGDIPtbvkKdZS0+ea3/R3JJ23PJaHwliUQkgQjuFpm//ePTDujjhpM3/r7DVr19yhSyzcX5TfxM27rWFr4TisBBcdJv7olofP2/vbL54mEBRwZN1FCQUGgwJfbY4+8B/UOWVMkzJmd94DBAWb/2+/9lW9Uc3a9nJn9c0TDoPPLma7Poh6stA5NJraQzVBg9AslJ9/8lD6D6l/i+WMWWqCx5RrqOnvcjIEJHOOFY7rxxdSZwheUO1GwUi9kMJ0BIuQ6Bp2zVZ8EgvlvjwBD9HXy8cedVBsRZzq5rri5LTHHsf+rCX1HRuOArO9QIMdBAN5Gw3f1ATvREJqqpueAJZQ+jtWPSraNuwYOnRuZGxi6s3sb7vHj9LdFTEbsST/E4/gFEpDYlWaWjzNCGoiQmYgFO7+ZWkiv1EnwOG3KLepv20QFBc3QGhA3AEhQRyCYCEeglBBPIcqtDgCIUMcg+AhTkDQEKcgGIhvIASIMySgxt92AgT/j3oiIbTsLksI14jZEPuAdBdV1Cyl+auFGp5Scqwl4Jqmtamx323HjbXRCqFECbGVZYFKlWKCJCWiTC4nSalzwEM0ShEJmchXPduH8CVJDUKkxIckKS0ZIMZDVJBn+oKxxv4xkvODYahpIJftUZIOD0Rcr0ZidwMawZorpJLWHtatktjcII9123o1Fqn1wZUTAODL8Qki+u7Zk1cfEg3b4+unoZg7de1RlfNKtLTrGoSErZfz4Dh7m9z1OFnnVV3RUAxE+8i0u0QQXpn7jWrzTr2T8NZho+0qe8V6jbu+fAh6GONIw1zXnt3rcGqVziPRF7yM15frL8dpurvr225diz0ztNRrj0cwEsMYnBdSlB0dSg7YdUeHMzpVdpyvD9I0H48bgQYn0w9puWT5tt5mD833alyeHq3dTRRZ6+x2nnfQdfxivIZzVFk7nIK7s7seujxG1m7jOYe1Dph5zcSsZO3GuoPlcZ71vF0pXLVdD3LwKoLBDQQD9aaFOCAWDZ1h+NEj38h5xeMsBWwdLrU6IHRojDwhsaloO0PTBJN7biAUBxKIN/StegXvgPWXL+oA27PEmtHlDs5/AZubVRrqrEVrtoTvJQi7+/XZcatnLYcCh2cNH3wBtseqZhycGWQNebItxc2DabKz/SHYUKqtPUD0ArHkwWH0ZPJzSasnCHrygBQDnrkQxjWJlz5nutlh6KFLr36EzPDQI2t8ZRjTmsZdYkBn+th+2yA3kFolP5AVc8evXyYkT7gCoM/eDMGGWqKAQJxLzQCiM2fAcVCDox9dvtjhwT+9IiAi4HHnBAYC4saLGAyTHZGmfFdkM+Np49hV9qEc+zDNj8TR9ldNPn/7szCqLJBTXyS6vCXrAGDdMUR3bxAHn21RLAfxS6+XwsGOHsDBNspBot/WPKt0XcI7rrBXY7ovB9kIYra1nYdwLcAhpym2OjjeZn+tjWEJJEBDcCwTHIXJHWnBHdF7zf90GKXzgvVS4Ce0L6tyDxP5/PMkE7cUy183U6s8lPdQ98m80/s5kwdxTAIt5d6Vj3m1RVZPIKrvtbl1GMeWAb4t+6pK0AH7JO+o7eXF9UHwNPR6l/yBWpiuR2s8Ahx79XvFx2cVlkjFEtr0tH1wUjAGotF4V7ZG0eSxB3bi2fjOA9GSqIky/Dj2RwOVLafZw9LyM0+z/HChZZaUCpL3zaIYOciRUIEUCcYsXGYOUponBOsjpckhr0kje5n/a6FeIcl19cETzMogc7CoG3uIFWGHk0nzDTm4kP5CSNdmZIWTgRtLMWaKf07OgQPaQaeHTGlpHtKs2TpdOcnff/3Pz3gUwmTQmXQGAw5cE3kLn+cXFhYM5xmJKfI3jHZqye/L4/u3wed3as7WTJ6/YN68ceWL7+f8K5/+4sbf1t2l8pjSJcTa9ct/la5XL7O4phDiPP/au4FzHq6ThKcRacAnsc22Y8e/ObdMWOmJUqzv9/o5QXdr/fPExJR6S75mreTvYoB+qVDsit0dK4g8/405QRGwrw8SUDIx0W/Tpr6d5K7s39l1T3738ykfH35HutYzc3Kn63cZJjh6/ASZINcyXL4RV1pxXI37mL8i+yKCI4LYg0U+rDJVx4zrHNv5UozVlD/O8m+WpeDVvdNWDSVM+OTHRb+WlT4XKxTi5xJs0nMRAGA2KZxx0mo9Of0MedLHLNZq1uckBtnR+EF/oHj2X6XwI5o/82Dchk+2Gk35jEsYdd68Hoxmf6iXXkRRUeiiVC+tluVWKZ/kCnFxnDtE78Z5fG5Pv9VLexo/TA5N/nCaWy2VFcDWmVTuDnFznMtP5cY597i4JAibN/akgA/hwsnMaEkv4h88CJmcK42UDuk6Yyux1lasciRtsHN2oiw5JFlmDQe93VuArKiQKCCqWpAwp1J9VnT8q6+Oo2OIQQIFqGyaABfW7cOuXEV78dIvopfQcvPPo/FSbO/Vq3uxH3Og2QxzGDEXGz0sLs68is15ugMVBnIqueoBsMua1lPmSDMV/6c2iDqpDQ6fNDlg4Erqqu/8auJrnzBn7p0a6WeDXS/b5gE6kqHm6edRTCQN5u0tGvenrEQeTJmpP8e1yCvkukFz87zKeRWnW4ZT2UnJm3OvB4zWAtShd2tr35u/sH/gPfChRwRPaMOb37JPS5k1a97X5oXRK8pTapL+caGUSX7Rc+KnvQ70IPOgU+Orknd9/ZYHudHXb1Jdc7mrlM7w+Fd2IQBWY7tfASAiaOej3r2YXOKRJ2gHBUC4oKhHPZ4DgICY/EZuhdwEqSladV9FdkXfgdlGCH0s2hPt4eUT95Gz/w1dHU+TePUt/Dv1d6r3SAYBFi5cGxdO9lyYmItt4J0bMQYWEnDBPL+xtpP/eiNctnnzMsNBng6XZQ+9aTMj0gc8UZX8+kW695cS5RNqzKoJYbF+Ez+aBcIRK9SnCFMFVwoYHW3z5puIuDZCaMUdtr4pDg8Xg3uTI7TmW42/foOdMIEFC8lFz0QBAT8D94xDouJguOdYjPyl5qjo88/REXTUckcJIwJwR7CFd6JCQHokxAlIfTfcPaQChJVWCujJYySMT4O778PpuT+0OGjH36ceuGDaeCQ8fiz4zACmfDBdhuSbpkNqMkGgypZpH79x65ZM86XuR22wFmg90c6LNAbDxk9vnDx54U/QroipCLAK1Cf75BXRFXITqP2HBYJBE7ErgCun76Nl/HDdPkNLRsfZ6dB2wOgt19BkFnrcNjQ/dId2xIY2+xCZCtgAVgy96AF6IfQ6D5poaODyCa3zDSoK3akAVVkv2I+mj/FWA7ljVWOXy7J/8yP+C5a8cwTdilqd3lQhgSKyBOO3FtPeP7DLXEuprVzrtNKr3WqXSBUwvOWL3KhAkqNgrJbb9ndaqeetHq1KvSxS8QZYN7mvYAP3nUgrG2IH98PIZNvN3llHokQyAlveESmaviOV2ifWcP/BBu6/kVbfP+fgH6XI5DZGMrO1wOZFAiwDTpdbiraSjkrPmnH1JxB5wBLSTtZ7gyRFJampGXvbDUhIQmyRroSVZQ51EhXSa7YJBIGiUaI8sDPNhTVa6Lqz2FKzVUiaTiUAk9nYHLW0VUQ2RXKmzjQrn/8ECLkAk3S0u1F8AxIpnD9l0hgezjeC9Gr3UuqmVgRLRtRBddOEEqKuiYJAmhUqal7JA2wZjXuAMbKgU3+Or6CdXgrfe4G3r0PxUq0oihYjVpx4CRIlSZYildTSkGYMYqh6qmhrmI0AmdxgArLOk3puzsx56mLDsmLnogQpeI6bfOZJ1QOzY1jjONmGyaHtMp/JDGGHs8XWgBXOApUPthp5I0+iRFKcM1kLm1/L8mVD/kk/dQdTd3vJjJzUTqfMpEZkNIwKx1NbW2vF4VTJhAA=")
+      format("woff2"),
+    url("//at.alicdn.com/t/font_1953349_a55jk231wpw.woff?t=1602609858316")
+      format("woff"),
+    url("//at.alicdn.com/t/font_1953349_a55jk231wpw.ttf?t=1602609858316")
+      format("truetype"),
+    url("//at.alicdn.com/t/font_1953349_a55jk231wpw.svg?t=1602609858316#iconfont")
+      format("svg");
+  /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.copy01:before {
+  content: "\e72b";
+}
+
+.lianxiren:before {
+  content: "\e612";
+}
+
+.dianhua1:before {
+  content: "\e695";
+}
+
+.shiliangzhinengduixiang-:before {
+  content: "\e6ad";
+}
+
+.jiazai:before {
+  content: "\e634";
+}
+
+.dingdan:before {
+  content: "\e609";
+}
+
+.chakantiezidingwei:before {
+  content: "\e65f";
+}
+
+.dalou:before {
+  content: "\e6bc";
+}
+
+.youxiajiaogouxuan:before {
+  content: "\e8b7";
+}
+
+.dianhua:before {
+  content: "\e62c";
+}
+
+.tubiao-:before {
+  content: "\e64f";
+}
+
+.shangxiajiantou-:before {
+  content: "\e60c";
+}
+
+.shijian:before {
+  content: "\e63f";
+}
+
+.shijian00:before {
+  content: "\e6ce";
+}
+
+.dizhi:before {
+  content: "\e628";
+}
+
+.wodedingdan:before {
+  content: "\e645";
+}
+
+/** 全局常用样式 start */
+button {
+  padding: 0;
+  width: auto;
+  background: initial;
+  line-height: 2.55555556;
+}
+
+button:focus {
+  outline: 0;
+}
+
+/*button::after {*/
+/*  content: none;*/
+/*  border: none;*/
+/*}*/
+page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: #f2f2f7;
+  color: #222222;
+  font-family: PingFangSC-Regular, PingFang SC;
+}
+
+.full {
+  width: 100%;
+}
+
+/* 单行文本溢出省略 */
+.overflow-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 2行文本溢出省略 */
+.overflow-ellipsis-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+}
+
+/** btn点击样式 */
+.act-btn {
+  opacity: 0.7;
+}
+
+/** flex */
+.fx-1 {
+  flex: 1;
+  align-self: stretch;
+}
+
+.rowlt {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.rowlc {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.rowlb {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.rowls {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.rowrt {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.rowrc {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.rowrb {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.rowrs {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: stretch;
+}
+
+.rowct {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.rowcc {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.rowcb {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.rowcs {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.rowst {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.rowsc {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rowsb {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.rowss {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.collt {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.collc {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.collb {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.colls {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.colrt {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.colrc {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.colrb {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.colrs {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.colct {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.colcc {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.colcb {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.colcs {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/** 定位 */
+.rlt {
+  position: relative;
+}
+
+.abs {
+  position: absolute;
+}
+
+/** 全局常用样式 end */
+/** 骨架屏 start */
+.skeleton {
+  opacity: 1;
+  animation-fill-mode: both;
+  background-color: #f0f2f5;
+  color: transparent !important;
+  animation: bounce 1s ease-in 0s infinite normal both;
+}
+
+@keyframes bounce {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/** 骨架屏 end */
+/** 主题蓝 */
+/** border边框灰色 */
+/** 默认字体颜色 */
+.time {
+  width: 100%;
+}
+
+.icon {
+  font-size: 40rpx;
+}
+
+.time-con {
+  width: 500rpx;
+  margin-left: 34rpx;
+  font-size: 27rpx;
+  font-family: Helvetica;
+  color: #212b36;
+  background: white;
+}
+
+.picker {
+  width: 450rpx;
+  height: 65rpx;
+  color: #212b36;
+  padding-left: 24rpx;
+  padding-right: 24rpx;
+  border-radius: 5rpx;
+  border: 2rpx solid #cecece;
+}
+
+.time-picker {
+  margin-left: 20rpx;
+}
+
+.jiantou {
+  font-size: 22rpx;
+}

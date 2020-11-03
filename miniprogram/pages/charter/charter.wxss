@@ -9,40 +9,31 @@ page {
 
 .content {
   background: #fff;
-  padding-bottom: 50rpx;
-  height: 100%;
+  min-height: 100vh;
 }
 
 .poi-time {
-  padding-bottom: 35rpx;
-  margin-top: 60rpx;
-}
-.duration {
-  padding-left: 195rpx;
-  padding-right: 120rpx;
+  margin-top: 35rpx;
 }
 
 .duration-con {
+  width: 502rpx;
   display: flex;
-  flex-wrap: wrap;
+  margin-left: 162rpx;
+  box-sizing: border-box;
+  justify-content: space-between;
 }
 
 .duration-it {
-  width: 190rpx;
-  height: 80rpx;
+  width: 150rpx;
+  height: 65rpx;
+  font-size: 27rpx;
   color: #212b36;
   border-radius: 7rpx;
   border: 2rpx solid #cecece;
 }
 
-.duration-it:first-child {
-  margin-right: 45rpx;
-  margin-bottom: 30rpx;
-}
-
 .duration-active {
-  width: 190rpx;
-  height: 80rpx;
   position: relative;
   color: #3184c7;
   background: white;
@@ -56,15 +47,9 @@ page {
   bottom: -2rpx;
 }
 
-.charter-day {
-  margin-top: 45rpx;
-  padding-left: 162rpx;
-  padding-right: 95rpx;
-}
-
 .register-info {
   padding-left: 162rpx;
-  padding-right: 95rpx;
+  padding-right: 92rpx;
 }
 
 .label {
@@ -104,12 +89,12 @@ page {
 }
 
 .marginbot {
-  margin-bottom: 20rpx;
+  margin-bottom: 35rpx;
 }
 
 .price {
-  margin-top: 60rpx;
-  margin-bottom: 91rpx;
+  margin-top: 10rpx;
+  margin-bottom: 45rpx;
 }
 
 .price-detail {
@@ -122,13 +107,18 @@ page {
   color: #3184c7;
 }
 
+.pay {
+  padding-bottom: 50rpx;
+  background-color: #ffffff;
+}
+
 .pay-btn {
-  width: 609rpx;
-  height: 101rpx;
-  font-size: 33rpx;
+  width: 610rpx;
+  height: 100rpx;
+  font-size: 32rpx;
   border-radius: 5rpx;
   text-align: center;
-  line-height: 101rpx;
+  line-height: 100rpx;
   background: #3184c7;
   color: #fff;
 }
@@ -148,20 +138,30 @@ page {
   border: initial;
 }
 
-.picker-day {
-  width: 100%;
+.charter-day {
+  padding-left: 162rpx;
+  padding-right: 92rpx;
 }
 
 .day-picker {
   height: 65rpx;
-  color: #212b36;
+  font-size: 27rpx;
+  border-radius: 5rpx;
   padding-left: 24rpx;
   padding-right: 24rpx;
-  border-radius: 5rpx;
-  font-size: 27rpx;
   border: 2rpx solid #cecece;
 }
 
 .jiantou {
   font-size: 22rpx;
+}
+
+._icon_ {
+  font-size: 40rpx;
+}
+
+.block {
+  width: 502rpx;
+  margin-left: 34rpx;
+  box-sizing: border-box;
 }

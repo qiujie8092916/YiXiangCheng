@@ -7,6 +7,6 @@
     bindtap="choosePoi"
   >
     <view class="poi-name {{type}}">{{poi}}</view>
-    <view class="iconfont shangxiajiantou- jiantou"></view>
+    <!--    <view class="iconfont shangxiajiantou- jiantou"></view>-->
   </view>
 </view>

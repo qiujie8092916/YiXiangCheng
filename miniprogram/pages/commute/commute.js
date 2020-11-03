@@ -1,12 +1,16 @@
 // miniprogram/pages/commute/commute.js
-import { routeConfig } from "../../config";
+/**
+ * @summary
+ *  参考README之ChangeLog - 2020.09.29
+ *  独享/拼车的选点逻辑与之前相反
+ *  便捷修改，只改中文名，不改变量名
+ */
 import {
-  Order,
-  isAfter,
-  isBefore,
-  currentDatetime,
-  normalDateformat,
-} from "../../utils/index";
+  bussinessType,
+  routeConfig,
+  COMMUTE_USER_TIME_DURATION,
+} from "../../config";
+import { Order } from "../../utils/index";
 
 const QQMapWX = require("../../vendor/qqmap-wx-jssdk.min");
 const qqmapsdk = new QQMapWX({ key: routeConfig.key });
@@ -16,6 +20,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    bussinessType: bussinessType.commute,
     /**
      * 表单错误字段
      * @type string
@@ -49,11 +54,11 @@ Page({
     type: [
       {
         key: "sharing",
-        value: "拼车",
+        value: "独享", // "享拼",
       },
       {
         key: "individual",
-        value: "独享",
+        value: "享拼", // "独享",
       },
     ],
     activeType: "sharing",
@@ -62,24 +67,25 @@ Page({
      * @type Animation
      */
     shakeInvalidAnimate: {},
+    chartercars: [],
+    charterCarIdx: 0,
+    distance: 0,
+    duration: 0,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    /* qqmapsdk.direction({
-      mode: "driving",
-      from: "31.265786,121.434803",
-      to: "31.221023,121.354423",
-      success: (res) => {
-        console.log(res);
-      },
-    });*/
-
-    //TODO 更新skecth表结构
-    wx.showLoading({ title: "加载中" });
+    /**
+     * 全损时间obj
+     * @default null
+     * @type {?{ time: string, isHistory: boolean }}
+     */
+    this.loss_time_obj = null;
+    // 加载用户公司地址
     this.init();
+    // 创建动画
     this.createAnimation();
   },
 
@@ -91,9 +97,7 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
-    this.resetTime();
-  },
+  onShow: function () {},
 
   /**
    * 生命周期函数--监听页面隐藏
@@ -121,7 +125,10 @@ Page({
   // onShareAppMessage: function () {},
 
   async init() {
+    wx.showLoading({ title: "加载中" });
+
     try {
+      this.getCloudCarInfo();
       const { result = {} } = await wx.cloud.callFunction({
         name: "userController",
         data: {
@@ -134,6 +141,7 @@ Page({
       this.setData({
         companyAddress: result.resultData,
       });
+
       wx.hideLoading();
     } catch (e) {
       wx.hideLoading({
@@ -147,13 +155,32 @@ Page({
     }
   },
 
-  resetTime() {
-    if (!this.data.time || isBefore(normalDateformat(this.data.time))) {
-      this.selectComponent("#datePicker").formatDateAndTime();
-    }
+  /**
+   * 获取车型
+   */
+  getCloudCarInfo() {
+    wx.cloud
+      .callFunction({
+        name: "commonController",
+        data: {
+          action: "getCarInfoList",
+        },
+      })
+      .then((res) => {
+        if (res && res.result && res.result.resultData) {
+          this.setData({
+            chartercars: res.result.resultData,
+          });
+        } else {
+          console.log("获取车型失败");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
 
-  changeTime({ detail }) {
+  calendarChange({ detail }) {
     console.log(detail);
     this.setData({
       time: detail,
@@ -248,9 +275,22 @@ Page({
       qqmapsdk.direction({
         ...params,
         success: ({ result }) => {
+          console.log(result);
+          let _price =
+            (result.routes[0].distance / 1000) *
+              this.data.chartercars[this.data.charterCarIdx]
+                .commute_kilometre_price +
+            result.routes[0].duration *
+              this.data.chartercars[this.data.charterCarIdx].commute_min_price +
+            this.data.chartercars[this.data.charterCarIdx].commute_start_price;
+
+          console.log(_price, "_price");
+
           this.setData({
-            ["estimate." + this.data.activeType + ""]: result.routes[0]
-              .taxi_fare.fare,
+            ["estimate." + this.data.activeType + ""]:
+              this.data.activeType === "sharing"
+                ? _price.toFixed(2)
+                : (_price * 0.7).toFixed(2),
           });
           wx.hideLoading();
         },
@@ -322,16 +362,18 @@ Page({
 
     return {
       departure,
-      bizType: 2,
       destination,
-      total_price: 1, //this.data.estimate[this.data.activeType], // 实付金额
+      total_price: 1, //this.data.estimate[this.data.activeType] * 100, // 实付金额
+      bizType: this.data.bussinessType,
       commute_type: this.data.current === "goHome" ? 0 : 1, // 0-回家 1-上班
       commute_way: this.data.activeType === "sharing" ? 0 : 1, // 0-拼车 1-独享
-      departure_time:
-        this.data.time && isAfter(normalDateformat(this.data.time))
-          ? this.data.time
-          : currentDatetime(),
+      car_type: this.data.chartercars[this.data.charterCarIdx].type,
+      departure_time: this.data.time,
     };
+  },
+
+  changeLossTime({ detail }) {
+    this.loss_time_obj = detail;
   },
 
   /**
@@ -340,11 +382,70 @@ Page({
   async onsubmit() {
     if (!this.preSubmit()) return;
 
-    const is_subscribe = await Order.subscribeOrderStatus();
-
+    // wx.cloud
+    //   .callFunction({
+    //     name: "orderController",
+    //     data: {
+    //       action: "checkWaitPayOrder",
+    //     },
+    //   })
+    //   .then(async (res) => {
+    //     if (
+    //       res &&
+    //       res.result &&
+    //       res.result.resultData &&
+    //       res.result.resultData.length > 0
+    //     ) {
+    //       wx.showModal({
+    //         title: "提示",
+    //         content: "您还有未支付订单",
+    //         showCancel: false,
+    //       });
+    //     } else {
     const params = this.genParams();
+    if (Order.checkUserTime(bussinessType.commute, params.departure_time)) {
+      if (
+        await Order.checkLossToAlert({
+          biz_type: bussinessType.commute,
+          use_time: params.departure_time,
+          loss_time: this.loss_time_obj.time,
+          is_loss_time_history: this.loss_time_obj.isHistory,
+        })
+      ) {
+        console.info("下单");
+        const is_subscribe = await Order.subscribeOrderStatus();
+        this.createWaitPayOrder({ is_subscribe, ...params });
+      } else {
+        console.info("取消预订");
+      }
+    } else {
+      wx.showModal({
+        title: "",
+        showCancel: false,
+        content: `请选择未来${
+          COMMUTE_USER_TIME_DURATION[0] / 60 / 60 / 1000
+        }小时至${
+          COMMUTE_USER_TIME_DURATION[1] / 24 / 60 / 60 / 1000
+        }天内的用车时间`,
+      });
+    }
+    //   }
+    // })
+    // .catch((e) => {
+    //   wx.showModal({
+    //     title: "提示",
+    //     content: "请稍后重试",
+    //     showCancel: false,
+    //   });
+    // });
+  },
 
-    Order.createOrder({ is_subscribe, ...params }).then((prePayResult) => {
+  /**
+   * 下待支付订单
+   */
+  createWaitPayOrder(params) {
+    console.log(params, "下单参数");
+    Order.createOrder(params).then((prePayResult) => {
       Order.invokePay(prePayResult.outTradeNo, prePayResult.payment)
         .catch((e) => console.error(e))
         .finally(() => {
@@ -353,5 +454,18 @@ Page({
           });
         });
     });
+  },
+
+  bindCarChange(e) {
+    this.setData(
+      {
+        charterCarIdx: e.detail.value,
+      },
+      () => {
+        this.getEstimatePrice(
+          this.data.pickObj[this.data.activeType].coordinates
+        );
+      }
+    );
   },
 });

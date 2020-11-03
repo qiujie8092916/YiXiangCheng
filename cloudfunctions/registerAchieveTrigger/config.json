@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "openapi": []
+  },
+  "triggers": [
+    {
+      "name": "registerAchieveTrigger",
+      "type": "timer",
+      "config": "0 */1 * * * * *"
+    }
+  ]
+}

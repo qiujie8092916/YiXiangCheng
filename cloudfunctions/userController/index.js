@@ -195,11 +195,17 @@ async function isRegisterCommute(request) {
               errMsg: null,
             });
           } else if (user.status === 0) {
-            // 未通过审核
+            // 通勤正在审核（默认值）
             return resolve({
               resultCode: -1,
               resultData: null,
               errMsg: "管理员正在审核您的注册信息，请稍等...",
+            });
+          } else if (user.status === -1) {
+            return resolve({
+              resultCode: -2,
+              resultData: null,
+              errMsg: "审核被拒绝，请联系客服",
             });
           }
         }
@@ -303,7 +309,7 @@ async function doRegisterCommute(request) {
           await updateUserInfoFromCharterToCommute(request);
         }
       } else {
-        //为找到用户数据，则插入数据
+        // 未找到用户数据，则插入数据
         await addUserInfoToCommute(request);
       }
 

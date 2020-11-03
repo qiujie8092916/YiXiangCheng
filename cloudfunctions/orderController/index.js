@@ -178,6 +178,7 @@ const createPerpayRequest = async (request) => {
  * @param {String} request.outTradeNo 订单id
  * @param {String} request.departure_time 用车时间
  * @param {String} request.bizType 用车类型
+ * @param {String} request.car_type 车型
  * @param {String} request.charter_duration 包车时长（包车特殊字段）
  * @param {String} request.charter_day 包车天数（包车特殊字段）
  * @param {String} request.commute_way 通勤方式 0-拼车 1-独享（通勤特殊字段）
@@ -207,6 +208,7 @@ const createWaitPayOrder = async (request) => {
         data: {
           order_no: request.outTradeNo,
           use_time: request.departure_time,
+          car_type: request.car_type,
           order_status: 1,
           pay_serial_no: null,
           pay_time: null,
@@ -458,6 +460,24 @@ const checkOrderDetail = async (request) => {
           .done(),
         as: "refundDetail",
       })
+      .lookup({
+        from: "car_info",
+        let: {
+          car_type: "$car_type",
+        },
+        pipeline: $.pipeline()
+          .match(_.expr($.eq(["$type", "$$car_type"])))
+          .project({
+            _id: 0,
+            commute_kilometre_price: 0,
+            commute_discount: 0,
+            commute_min_price: 0,
+            commute_start_price: 0,
+            charter_hour_price: 0,
+          })
+          .done(),
+        as: "carDetail",
+      })
       .match({
         order_no: request.orderId,
       })
@@ -475,15 +495,18 @@ const checkOrderDetail = async (request) => {
         refund_time: 1,
         total_price: 1,
         commute_way: 1,
+        create_time: 1,
         is_subscribe: 1,
         order_status: 1,
         commute_type: 1,
         pay_serial_no: 1,
         charter_duration: 1,
         charter_day: 1,
+        car_type: 1,
         refundDetail: $.arrayElemAt(["$refundDetail", 0]),
         driverDetail: $.arrayElemAt(["$driverDetail", 0]),
         snapshotDetail: $.arrayElemAt(["$snapshotDetail", 0]),
+        carDetail: $.arrayElemAt(["$carDetail", 0]),
       })
       .end();
 
@@ -510,10 +533,12 @@ const checkOrderDetail = async (request) => {
  * @return {type}
  */
 const doCancelOrder = async (request) => {
-  let is_refund = false,
+  let order_status = 5,
     refund_id,
     refund_fee;
+
   console.log(request.orderId, "order_no");
+
   try {
     const {
       resultData: orderDetail,
@@ -527,53 +552,48 @@ const doCancelOrder = async (request) => {
     log.info({ name: "取消订单发起参数", ...orderDetail });
     console.log(orderDetail);
 
-    if (orderDetail.order_status === 1) {
-      // 未支付 可取消但不发邮件
-    } else if (orderDetail.order_status === 4) {
+    if (orderDetail.order_status === 4) {
       return {
         resultCode: -1,
         errMsg: "已上车，不能取消订单",
       };
-    } else if (orderDetail.order_status === 5) {
+    }
+
+    if (orderDetail.order_status === 5) {
       return {
         resultCode: -1,
         errMsg: "订单已取消，请勿重复取消订单",
       };
-    } else if (orderDetail.order_status === 6) {
+    }
+
+    if (orderDetail.order_status === 6) {
       return {
         resultCode: -1,
         errMsg: "订单已退款，请勿重复取消订单",
       };
-    } else if (orderDetail.order_status === 10) {
+    }
+
+    if (orderDetail.order_status === 10) {
       return {
         resultCode: -1,
         errMsg: "订单已完成，不能取消订单",
       };
-    } else {
-      is_refund = true;
+    }
 
-      await cloud.callFunction({
-        name: "sendMailController",
-        data: {
-          action: "sendCancelOrderEmail",
-          params: orderDetail,
-        },
-      });
-
-      // 已支付 可取消
+    //支付订单 并且 非全损取消：发起微信退款
+    if (orderDetail.order_status !== 1 && !request.isLoss) {
       const refundOrder = await createRefundOrder(orderDetail.order_no);
 
-      // 发起微信退款
       const { returnCode, returnMsg, ...rest } = await cloud.cloudPay.refund({
         sub_mch_id: wxPayComm.sub_mch_id, // 子商户号
         nonce_str: payRandomWord(), // 随机字符串
-        transaction_id: orderDetail.pay_serial_no, // 微信订单号（与商户订单号二选一填入）
+        // transaction_id: orderDetail.pay_serial_no, // 微信订单号（与商户订单号二选一填入）
         out_trade_no: orderDetail.order_no, // 商户订单号
         out_refund_no: refundOrder.refund_no, //商户退款单号？用订单号？
         total_fee: orderDetail.pay_price, // 订单金额（支付金额）
         refund_fee: orderDetail.pay_price, // 退款金额
         // refund_fee_type: 'CNY', // 货币种类
-        // refund_desc: '用户主动发起退款',  // 退款原因
+        refund_desc: "用户取消订单主动发起退款", // 退款原因
         // refund_account: // 退款资金来源
       });
 
@@ -588,28 +608,34 @@ const doCancelOrder = async (request) => {
           errMsg: returnMsg,
         };
       } else {
+        order_status = 6; //7; 隐藏退款中状态
         await updateRefundOrder(refund_id, rest);
       }
     }
 
-    // 更新订单状态
+    // 取消订单，更新订单状态
     await updateOrderStatusToCancel({
       order_no: request.orderId,
+      order_status,
       refund_id,
       refund_fee,
     });
 
-    if (is_refund) {
-      return {
-        resultCode: -2,
-        errMsg: "已发起退款，款项将会原路返回，请耐心等待",
-      };
-    } else {
-      return {
-        resultCode: 0,
-        resultData: true,
-      };
+    // 支付的订单发送取消订单的邮件
+    if (orderDetail.order_status !== 1) {
+      await cloud.callFunction({
+        name: "sendMailController",
+        data: {
+          action: "sendCancelOrderEmail",
+          params: orderDetail,
+        },
+      });
     }
+
+    return {
+      resultCode: 0,
+      resultData: true,
+    };
   } catch (e) {
     log.error({
       func: "doCancelOrder",
@@ -683,10 +709,15 @@ const updateRefundOrder = async (refund_id, rest) => {
 
 /**
  * @desc 取消订单，更新订单状态
- * @param {string} order_no
+ * @param {object} opt
+ * @param {number} opt.order_status - 订单状态
+ * @param {string} opt.order_no - 订单号
+ * @param {string} opt.refund_id - 退款单号
+ * @param {string} opt.refund_fee - 退款金额
  * @return {Promise<void|ErrorEvent>}
  */
 const updateOrderStatusToCancel = async ({
+  order_status = 5,
   order_no,
   refund_id,
   refund_fee,
@@ -699,7 +730,7 @@ const updateOrderStatusToCancel = async ({
       })
       .update({
         data: {
-          order_status: 5,
+          order_status,
           refund_fee: refund_fee || 0,
           refund_id: refund_id || null,
           refund_time: db.serverDate(),
@@ -830,6 +861,7 @@ const genOrderListSql = () => {
       refund_time: 1,
       total_price: 1,
       commute_way: 1,
+      create_time: 1,
       is_subscribe: 1,
       order_status: 1,
       commute_type: 1,

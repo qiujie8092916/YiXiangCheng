@@ -1,4 +1,6 @@
 // components/orderItem/orderItem.js
+import { orderStatusMap } from "../../config";
+
 Component({
   /**
    * 组件的属性列表
@@ -36,9 +38,27 @@ Component({
       type: String,
       value: "通勤目的地",
     },
-    useTime: {
+    createTime: {
       type: String,
-      value: "2020-09-01 09:00",
+      value: "2020-09-01 09:00", //下单时间
+    },
+  },
+
+  observers: {
+    status(val) {
+      if (val) {
+        const orderStatusReflection = Object.values(orderStatusMap).find(
+          (it) => {
+            return it.key === val;
+          }
+        );
+
+        console.log(orderStatusReflection);
+
+        this.setData({
+          orderStatusReflection,
+        });
+      }
     },
   },
 
@@ -46,18 +66,11 @@ Component({
    * 组件的初始数据
    */
   data: {
-    orderStatusMap: {
-      1: "待支付",
-      2: "待接单",
-      3: "已接单",
-      4: "已上车",
-      5: "已取消",
-      6: "已退款",
-      7: "已完成",
-    },
+    orderStatusMap: orderStatusMap,
+    orderStatusReflection: {},
     travelType: {
-      charter: "包车",
-      commute: "通勤用车",
+      charter: "享定制",
+      commute: "享出发",
     },
   },
 
